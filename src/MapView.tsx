@@ -22,7 +22,7 @@ function Map() {
       // Add a vector source from TileServer-GL
       map.current?.addSource("custom-vector", {
         type: "vector",
-        tiles: ["http://192.168.100.88:8080/data/output/{z}/{x}/{y}.pbf"], // debug local stage server address
+        tiles: ["http://51.38.134.205:8080/data/output/{z}/{x}/{y}.pbf"], // debug local stage server address
         minzoom: 0,
         maxzoom: 14,
       });
