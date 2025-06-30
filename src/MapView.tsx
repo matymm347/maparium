@@ -3,6 +3,7 @@ import * as maptilersdk from "@maptiler/sdk";
 import { useEffect, useRef } from "react";
 
 maptilersdk.config.apiKey = import.meta.env.VITE_MAP_TILER_API_KEY;
+const tileServerAddress = import.meta.env.TILE_SERVER_ADDRESS;
 
 function Map() {
   const map = useRef<maptilersdk.Map | null>(null);
@@ -22,7 +23,7 @@ function Map() {
       // Add a vector source from TileServer-GL
       map.current?.addSource("custom-vector", {
         type: "vector",
-        tiles: ["http://51.38.134.205:8080/data/output/{z}/{x}/{y}.pbf"], // debug local stage server address
+        tiles: [`http://${tileServerAddress}:8080/data/output/{z}/{x}/{y}.pbf`], // debug local stage server address
         minzoom: 0,
         maxzoom: 14,
       });
