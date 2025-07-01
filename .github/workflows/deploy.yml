@@ -1,0 +1,37 @@
+name: Deploy to VPS
+
+on:
+  push:
+    branches:
+      - main # change if your default branch is different
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18" # or your project node version
+
+      - name: Install dependencies and build
+        env:
+          VITE_MAP_TILER_API_KEY: ${{ secrets.VITE_MAP_TILER_API_KEY }}
+          VITE_TILE_SERVER_ADDRESS: ${{ secrets.VITE_TILE_SERVER_ADDRESS }}
+        run: |
+          npm install
+          npm run build
+
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.8.1
+        with:
+          ssh-private-key: ${{ secrets.TILE_SERVER_SSH_KEY }}
+
+      - name: Deploy to VPS
+        run: |
+          rsync -avz --delete ./build/ ubuntu@51.38.134.205:/var/www/powodziomierz/
+          ssh ubuntu@51.38.134.205 "sudo systemctl reload nginx"

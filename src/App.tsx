@@ -1,10 +1,14 @@
 import MapView from "./MapView";
+import Navbar from "./Navbar";
 
 function App() {
   return (
-    <div className="App">
-      <MapView />
-    </div>
+    <>
+      <div className="flex flex-col h-screen">
+        <Navbar />
+        <MapView />
+      </div>
+    </>
   );
 }
 

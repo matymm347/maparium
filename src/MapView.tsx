@@ -3,7 +3,7 @@ import * as maptilersdk from "@maptiler/sdk";
 import { useEffect, useRef } from "react";
 
 maptilersdk.config.apiKey = import.meta.env.VITE_MAP_TILER_API_KEY;
-const tileServerAddress = import.meta.env.TILE_SERVER_ADDRESS;
+const tileServerAddress = import.meta.env.VITE_TILE_SERVER_ADDRESS;
 
 function Map() {
   const map = useRef<maptilersdk.Map | null>(null);
