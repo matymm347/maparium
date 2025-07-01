@@ -38,5 +38,5 @@ jobs:
 
       - name: Deploy to VPS
         run: |
-          rsync -avz --delete ./dist/ ubuntu@51.38.134.205:/var/www/powodziomierz/
+          rsync -avz --delete -e "ssh -o StrictHostKeyChecking=no" ./dist/ ubuntu@51.38.134.205:/var/www/powodziomierz/ --rsync-path="sudo rsync"
           ssh ubuntu@51.38.134.205 "sudo systemctl reload nginx"
