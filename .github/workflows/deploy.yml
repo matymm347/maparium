@@ -31,12 +31,10 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.TILE_SERVER_SSH_KEY }}
 
-      - name: Add SSH host key to known_hosts
+      - name: Check list of files to update
         run: |
-          mkdir -p ~/.ssh
-          ssh-keyscan -H 51.38.134.205 >> ~/.ssh/known_hosts
+          ls -la ./dist/  # temporary debug line
 
       - name: Deploy to VPS
         run: |
-          rsync -avz --delete -e "ssh -o StrictHostKeyChecking=no" ./dist/ ubuntu@51.38.134.205:/var/www/powodziomierz/ --rsync-path="sudo rsync"
-          ssh ubuntu@51.38.134.205 "sudo systemctl reload nginx"
+          rsync -avz --delete -e "ssh -o StrictHostKeyChecking=no" ./dist/ ubuntu@51.38.134.205:/var/www/maparium/ --rsync-path="sudo rsync"
