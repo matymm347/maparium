@@ -16,7 +16,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: "18" # or your project node version
+          node-version: "18"
 
       - name: Install dependencies and build
         env:
@@ -31,10 +31,10 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.TILE_SERVER_SSH_KEY }}
 
-      - name: Check list of files to update
-        run: |
-          ls -la ./dist/  # temporary debug line
-
       - name: Deploy to VPS
         run: |
           rsync -avz --delete -e "ssh -o StrictHostKeyChecking=no" ./dist/ ubuntu@51.38.134.205:/var/www/maparium/ --rsync-path="sudo rsync"
+
+      - name: Fix ownership on VPS
+        run: |
+          ssh -o StrictHostKeyChecking=no ubuntu@51.38.134.205 "sudo chown -R www-data:www-data /var/www/maparium"
