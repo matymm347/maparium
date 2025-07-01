@@ -31,6 +31,11 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.TILE_SERVER_SSH_KEY }}
 
+      - name: Add SSH host key to known_hosts
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -H 51.38.134.205 >> ~/.ssh/known_hosts
+
       - name: Deploy to VPS
         run: |
           rsync -avz --delete ./build/ ubuntu@51.38.134.205:/var/www/powodziomierz/
