@@ -2,7 +2,6 @@ import "@maptiler/sdk/dist/maptiler-sdk.css";
 import * as maptilersdk from "@maptiler/sdk";
 import { useEffect, useRef } from "react";
 
-maptilersdk.config.apiKey = import.meta.env.VITE_MAP_TILER_API_KEY;
 const tileServerAddress = import.meta.env.VITE_TILE_SERVER_ADDRESS;
 
 function Map() {
@@ -13,22 +12,20 @@ function Map() {
 
     map.current = new maptilersdk.Map({
       container: "map-view",
-      style: maptilersdk.MapStyle.BASIC,
+      style: `http://${tileServerAddress}:8080/styles/basic/style.json`,
       center: [19.1451, 51.9194],
       zoom: 6.5,
       language: "pl",
     });
 
     map.current.on("load", () => {
-      // Add a vector source from TileServer-GL
       map.current?.addSource("custom-vector", {
         type: "vector",
-        tiles: [`http://${tileServerAddress}:8080/data/output/{z}/{x}/{y}.pbf`], // debug local stage server address
+        tiles: [`http://${tileServerAddress}:8080/data/flood/{z}/{x}/{y}.pbf`],
         minzoom: 0,
         maxzoom: 14,
       });
 
-      // Add and style a layer
       map.current?.addLayer({
         id: "custom-layer",
         type: "fill",
