@@ -3,7 +3,7 @@ name: Deploy to VPS
 on:
   push:
     branches:
-      - main # change if your default branch is different
+      - ci-test # change if your default branch is different
 
 jobs:
   deploy:

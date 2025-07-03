@@ -105,7 +105,7 @@ export default function AddressSearch() {
                 <CommandItem
                   key={place.value}
                   value={place.value}
-                  onSelect={(currentValue) => {
+                  onSelect={(currentValue: string) => {
                     setValue(currentValue === value ? "" : currentValue);
                     setOpen(false);
                   }}
