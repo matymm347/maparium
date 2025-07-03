@@ -1,14 +1,12 @@
 "use client";
 
 import { Layers2 } from "lucide-react";
-import FilledButton from "./FilledButton";
+import FilledButton from "./LayerSelection";
 
 import { Button } from "@/components/ui/button";
 import {
   Drawer,
-  DrawerClose,
   DrawerContent,
-  // DrawerDescription,
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
@@ -40,12 +38,7 @@ export default function LayerDrawer() {
             {/* <DrawerDescription>Choose map type and .</DrawerDescription> */}
           </DrawerHeader>
           <FilledButton />
-          <DrawerFooter>
-            <Button>Submit</Button>
-            <DrawerClose asChild>
-              <Button variant="outline">Cancel</Button>
-            </DrawerClose>
-          </DrawerFooter>
+          <DrawerFooter></DrawerFooter>
         </div>
       </DrawerContent>
     </Drawer>
