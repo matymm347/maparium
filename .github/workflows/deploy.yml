@@ -31,6 +31,9 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.TILE_SERVER_SSH_KEY }}
 
+      - name: Clean remote folder
+        run: ssh -o StrictHostKeyChecking=no ubuntu@51.38.134.205 "sudo rm -rf /var/www/maparium/*"
+
       - name: Deploy to VPS
         run: |
-          rsync -avz --delete -e "ssh -o StrictHostKeyChecking=no" ./dist/ ubuntu@51.38.134.205:/var/www/maparium/ --rsync-path="sudo rsync"
+          rsync -avz -e "ssh -o StrictHostKeyChecking=no" ./dist/ ubuntu@51.38.134.205:/var/www/maparium/ --rsync-path="sudo rsync"
