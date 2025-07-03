@@ -1,6 +1,8 @@
 import "maplibre-gl/dist/maplibre-gl.css";
 import maplibregl from "maplibre-gl";
+
 import { useEffect, useRef } from "react";
+import LayerDrawer from "./LayerDrawer";
 
 const tileServerAddress = import.meta.env.VITE_TILE_SERVER_ADDRESS;
 
@@ -29,7 +31,7 @@ function Map() {
       ],
     });
 
-    map.current.addControl(new maplibregl.NavigationControl(), "top-right");
+    map.current.addControl(new maplibregl.NavigationControl(), "bottom-right");
 
     // Add geolocate control to the map
     map.current.addControl(
@@ -38,7 +40,8 @@ function Map() {
           enableHighAccuracy: true,
         },
         trackUserLocation: true,
-      })
+      }),
+      "bottom-right"
     );
 
     map.current.on("load", () => {
@@ -77,6 +80,7 @@ export default function MapView() {
           width: "100vw",
         }}
       >
+        <LayerDrawer />
         <div
           id="map-view"
           style={{
