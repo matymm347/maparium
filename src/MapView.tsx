@@ -1,27 +1,42 @@
-import "@maptiler/sdk/dist/maptiler-sdk.css";
-import * as maptilersdk from "@maptiler/sdk";
+import "maplibre-gl/dist/maplibre-gl.css";
+import maplibregl from "maplibre-gl";
 import { useEffect, useRef } from "react";
 
 const tileServerAddress = import.meta.env.VITE_TILE_SERVER_ADDRESS;
 
 function Map() {
-  const map = useRef<maptilersdk.Map | null>(null);
+  const map = useRef<maplibregl.Map | null>(null);
 
   useEffect(() => {
     if (map.current) return;
 
-    map.current = new maptilersdk.Map({
+    map.current = new maplibregl.Map({
       container: "map-view",
-      style: `http://${tileServerAddress}:8080/styles/basic/style.json`,
+      style: `https://${tileServerAddress}/tiles/styles/basic/style.json`,
+      transformRequest: (url) => {
+        if (url.startsWith("/tiles/")) {
+          return {
+            url: `https://${tileServerAddress}${url}`,
+          };
+        }
+        return { url };
+      },
       center: [19.1451, 51.9194],
       zoom: 6.5,
-      language: "pl",
+      maxBounds: [
+        [2, 45], // Southwest coordinates
+        [40.6132, 60], // Northeast coordinates
+      ],
     });
+
+    map.current.addControl(new maplibregl.NavigationControl(), "top-right");
 
     map.current.on("load", () => {
       map.current?.addSource("custom-vector", {
         type: "vector",
-        tiles: [`http://${tileServerAddress}:8080/data/flood/{z}/{x}/{y}.pbf`],
+        tiles: [
+          `https://${tileServerAddress}/tiles/data/flood/{z}/{x}/{y}.pbf`,
+        ],
         minzoom: 0,
         maxzoom: 14,
       });
