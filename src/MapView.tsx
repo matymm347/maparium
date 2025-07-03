@@ -31,6 +31,16 @@ function Map() {
 
     map.current.addControl(new maplibregl.NavigationControl(), "top-right");
 
+    // Add geolocate control to the map
+    map.current.addControl(
+      new maplibregl.GeolocateControl({
+        positionOptions: {
+          enableHighAccuracy: true,
+        },
+        trackUserLocation: true,
+      })
+    );
+
     map.current.on("load", () => {
       map.current?.addSource("custom-vector", {
         type: "vector",

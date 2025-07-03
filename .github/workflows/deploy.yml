@@ -34,7 +34,3 @@ jobs:
       - name: Deploy to VPS
         run: |
           rsync -avz --delete -e "ssh -o StrictHostKeyChecking=no" ./dist/ ubuntu@51.38.134.205:/var/www/maparium/ --rsync-path="sudo rsync"
-
-      - name: Fix ownership on VPS
-        run: |
-          ssh -o StrictHostKeyChecking=no ubuntu@51.38.134.205 "sudo chown -R www-data:www-data /var/www/maparium"
