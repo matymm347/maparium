@@ -1,14 +1,12 @@
-"use client";
-
 import { Layers2 } from "lucide-react";
-import FilledButton from "./LayerSelection";
-
+import LayerSelection from "./LayerSelection";
 import { Button } from "@/components/ui/button";
 import {
   Drawer,
   DrawerContent,
   DrawerFooter,
   DrawerHeader,
+  DrawerDescription,
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
@@ -35,9 +33,11 @@ export default function LayerDrawer() {
         <div className="mx-auto w-full max-w-sm">
           <DrawerHeader>
             <DrawerTitle>Map Type</DrawerTitle>
-            {/* <DrawerDescription>Choose map type and .</DrawerDescription> */}
+            <DrawerDescription>
+              Choose map type and corresponding layers
+            </DrawerDescription>
           </DrawerHeader>
-          <FilledButton />
+          <LayerSelection />
           <DrawerFooter></DrawerFooter>
         </div>
       </DrawerContent>

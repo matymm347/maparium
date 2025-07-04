@@ -1,29 +1,11 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { DropletOff, Waves } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Button } from "./components/ui/button";
 import { cn } from "@/lib/utils";
-
-const LAYERS = [
-  {
-    id: "obszar_zagrozenia_pow_rzeki_10",
-    name: "River flood hazard area (10%)",
-    color: "#00C2FF",
-  },
-  {
-    id: "obszar_zagrozenia_pow_rzeki_1",
-    name: "River flood hazard area (1%)",
-    color: "#A259FF",
-  },
-  {
-    id: "obszar_zagrozenia_pow_rzeki_02",
-    name: "River flood hazard area (0.2%)",
-    color: "#FF3864",
-  },
-];
+import { LayersContext } from "./LayersContext";
 
 export default function LayerSelection() {
   const [activeButton, setActiveButton] = useState<string | null>(null);
-  const [selectedLayers, setSelectedLayers] = useState<string[]>([]);
 
   const toggleButton = (buttonId: string) => {
     setActiveButton((prev) => (prev === buttonId ? null : buttonId));
@@ -31,13 +13,7 @@ export default function LayerSelection() {
 
   const isActive = (buttonId: string) => activeButton === buttonId;
 
-  const toggleLayer = (layerId: string) => {
-    setSelectedLayers((prev) =>
-      prev.includes(layerId)
-        ? prev.filter((id) => id !== layerId)
-        : [...prev, layerId]
-    );
-  };
+  const { layers } = useContext(LayersContext);
 
   return (
     <div className="p-8 bg-background">
@@ -79,24 +55,19 @@ export default function LayerSelection() {
       </div>
       {/* Second row: layers with checkboxes */}
       <div className="flex flex-col gap-3 items-center">
-        {LAYERS.map((layer) => (
-          <label
-            key={layer.id}
-            className="flex items-center gap-3 cursor-pointer"
-          >
-            <input
-              type="checkbox"
-              checked={selectedLayers.includes(layer.id)}
-              onChange={() => toggleLayer(layer.id)}
-              className="accent-current"
-            />
-            <span>{layer.name}</span>
-            <span
-              className="inline-block w-4 h-4 rounded"
-              style={{ backgroundColor: layer.color }}
-            />
-          </label>
-        ))}
+        {Object.keys(layers.flood).map((key) => {
+          const layer = layers.flood[key];
+          return (
+            <label key={key} className="flex items-center gap-3 cursor-pointer">
+              <input type="checkbox" className="accent-current" />
+              <span>{layer.name}</span>
+              <span
+                className="inline-block w-4 h-4 rounded"
+                style={{ backgroundColor: layer.color }}
+              />
+            </label>
+          );
+        })}
       </div>
     </div>
   );

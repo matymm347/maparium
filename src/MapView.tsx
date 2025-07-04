@@ -1,10 +1,33 @@
 import "maplibre-gl/dist/maplibre-gl.css";
 import maplibregl from "maplibre-gl";
-
 import { useEffect, useRef } from "react";
 import LayerDrawer from "./LayerDrawer";
+import { LayersContext } from "./LayersContext";
 
 const tileServerAddress = import.meta.env.VITE_TILE_SERVER_ADDRESS;
+
+const layers = {
+  flood: {
+    probability_10: {
+      active: false,
+      name: "River flood hazard area (10%)",
+      layerName: "obszar_zagrozenia_powodziowego_10",
+      color: "#00C2FF",
+    },
+    probability_1: {
+      active: false,
+      name: "River flood hazard area (1%)",
+      layerName: "obszar_zagrozenia_powodziowego_1",
+      color: "#A259FF",
+    },
+    probability_02: {
+      active: false,
+      name: "River flood hazard area (0.2%)",
+      layerName: "obszar_zagrozenia_powodziowego_02",
+      color: "#FF3864",
+    },
+  },
+};
 
 function Map() {
   const map = useRef<maplibregl.Map | null>(null);
@@ -33,7 +56,6 @@ function Map() {
 
     map.current.addControl(new maplibregl.NavigationControl(), "bottom-right");
 
-    // Add geolocate control to the map
     map.current.addControl(
       new maplibregl.GeolocateControl({
         positionOptions: {
@@ -55,13 +77,13 @@ function Map() {
       });
 
       map.current?.addLayer({
-        id: "custom-layer",
+        id: "obszar_zagrozenia_powodziowego_10",
         type: "fill",
         source: "custom-vector",
-        "source-layer": "obszar_zagrozenia_powodziowego_1",
+        "source-layer": "obszar_zagrozenia_powodziowego_10",
         paint: {
-          "fill-color": "rgba(0, 120, 255, 0.4)",
-          "fill-outline-color": "#0078ff",
+          "fill-color": "#00C2FF",
+          "fill-opacity": 0.5,
         },
       });
     });
@@ -80,7 +102,10 @@ export default function MapView() {
           width: "100vw",
         }}
       >
-        <LayerDrawer />
+        <LayersContext.Provider value={{ layers }}>
+          <LayerDrawer />
+        </LayersContext.Provider>
+
         <div
           id="map-view"
           style={{
