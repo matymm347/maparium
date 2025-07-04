@@ -13,7 +13,20 @@ export default function LayerSelection() {
 
   const isActive = (buttonId: string) => activeButton === buttonId;
 
-  const { layers } = useContext(LayersContext);
+  const { layers, setLayers } = useContext(LayersContext);
+
+  const handleCheckboxChange = (key: string) => {
+    setLayers((prev) => ({
+      ...prev,
+      flood: {
+        ...prev.flood,
+        [key]: {
+          ...prev.flood[key],
+          active: !prev.flood[key].active,
+        },
+      },
+    }));
+  };
 
   return (
     <div className="p-8 bg-background">
@@ -59,7 +72,12 @@ export default function LayerSelection() {
           const layer = layers.flood[key];
           return (
             <label key={key} className="flex items-center gap-3 cursor-pointer">
-              <input type="checkbox" className="accent-current" />
+              <input
+                type="checkbox"
+                className="accent-current"
+                checked={layer.active}
+                onChange={() => handleCheckboxChange(key)}
+              />
               <span>{layer.name}</span>
               <span
                 className="inline-block w-4 h-4 rounded"

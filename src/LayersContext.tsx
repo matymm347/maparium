@@ -7,10 +7,16 @@ type FloodLayer = {
   color: string;
 };
 
-type Layers = {
+export type Layers = {
   flood: Record<string, FloodLayer>;
 };
 
-export const LayersContext = createContext<{ layers: Layers }>({
+type LayersContextType = {
+  layers: Layers;
+  setLayers: React.Dispatch<React.SetStateAction<Layers>>;
+};
+
+export const LayersContext = createContext<LayersContextType>({
   layers: { flood: {} },
+  setLayers: () => {},
 });

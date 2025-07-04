@@ -1,12 +1,13 @@
 import "maplibre-gl/dist/maplibre-gl.css";
 import maplibregl from "maplibre-gl";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import LayerDrawer from "./LayerDrawer";
 import { LayersContext } from "./LayersContext";
+import type { Layers } from "./LayersContext";
 
 const tileServerAddress = import.meta.env.VITE_TILE_SERVER_ADDRESS;
 
-const layers = {
+const initialLayers: Layers = {
   flood: {
     probability_10: {
       active: false,
@@ -29,45 +30,45 @@ const layers = {
   },
 };
 
-function Map() {
-  const map = useRef<maplibregl.Map | null>(null);
+export default function MapView() {
+  const [layers, setLayers] = useState(initialLayers);
+  const mapRef = useRef<maplibregl.Map | null>(null);
+  const isMapLoadedRef = useRef(false);
 
+  // Initialize the map
   useEffect(() => {
-    if (map.current) return;
+    if (mapRef.current) return;
 
-    map.current = new maplibregl.Map({
+    const map = new maplibregl.Map({
       container: "map-view",
       style: `https://${tileServerAddress}/tiles/styles/basic/style.json`,
       transformRequest: (url) => {
         if (url.startsWith("/tiles/")) {
-          return {
-            url: `https://${tileServerAddress}${url}`,
-          };
+          return { url: `https://${tileServerAddress}${url}` };
         }
         return { url };
       },
       center: [19.1451, 51.9194],
       zoom: 6.5,
       maxBounds: [
-        [2, 45], // Southwest coordinates
-        [40.6132, 60], // Northeast coordinates
+        [2, 45],
+        [40.6132, 60],
       ],
     });
 
-    map.current.addControl(new maplibregl.NavigationControl(), "bottom-right");
-
-    map.current.addControl(
+    map.addControl(new maplibregl.NavigationControl(), "bottom-right");
+    map.addControl(
       new maplibregl.GeolocateControl({
-        positionOptions: {
-          enableHighAccuracy: true,
-        },
+        positionOptions: { enableHighAccuracy: true },
         trackUserLocation: true,
       }),
       "bottom-right"
     );
 
-    map.current.on("load", () => {
-      map.current?.addSource("custom-vector", {
+    map.on("load", () => {
+      isMapLoadedRef.current = true;
+
+      map.addSource("custom-vector", {
         type: "vector",
         tiles: [
           `https://${tileServerAddress}/tiles/data/flood/{z}/{x}/{y}.pbf`,
@@ -76,48 +77,60 @@ function Map() {
         maxzoom: 14,
       });
 
-      map.current?.addLayer({
-        id: "obszar_zagrozenia_powodziowego_10",
-        type: "fill",
-        source: "custom-vector",
-        "source-layer": "obszar_zagrozenia_powodziowego_10",
-        paint: {
-          "fill-color": "#00C2FF",
-          "fill-opacity": 0.5,
-        },
-      });
+      mapRef.current = map;
     });
   }, []);
 
-  return null;
-}
+  // Update map layers on `layers` change
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || !isMapLoadedRef.current) return;
 
-export default function MapView() {
+    // Add or remove layers
+    Object.keys(initialLayers.flood).forEach((key) => {
+      const layerId = initialLayers.flood[key].name;
+
+      if (map.getLayer(layerId)) {
+        map.removeLayer(layerId);
+      }
+
+      if (layers.flood[key].active) {
+        map.addLayer({
+          id: layerId,
+          type: "fill",
+          source: "custom-vector",
+          "source-layer": layers.flood[key].layerName,
+          paint: {
+            "fill-color": layers.flood[key].color,
+            "fill-opacity": 0.5,
+          },
+        });
+      }
+    });
+  }, [layers]);
+
   return (
-    <>
-      <div
-        style={{
-          position: "relative",
-          height: "100vh",
-          width: "100vw",
-        }}
-      >
-        <LayersContext.Provider value={{ layers }}>
-          <LayerDrawer />
-        </LayersContext.Provider>
+    <div
+      style={{
+        position: "relative",
+        height: "100vh",
+        width: "100vw",
+      }}
+    >
+      <LayersContext.Provider value={{ layers, setLayers }}>
+        <LayerDrawer />
+      </LayersContext.Provider>
 
-        <div
-          id="map-view"
-          style={{
-            position: "absolute",
-            top: 0,
-            bottom: 0,
-            width: "100%",
-            height: "100%",
-          }}
-        ></div>
-      </div>
-      <Map />
-    </>
+      <div
+        id="map-view"
+        style={{
+          position: "absolute",
+          top: 0,
+          bottom: 0,
+          width: "100%",
+          height: "100%",
+        }}
+      ></div>
+    </div>
   );
 }
