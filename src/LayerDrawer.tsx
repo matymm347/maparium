@@ -1,5 +1,4 @@
 import { Layers2 } from "lucide-react";
-import LayerSelection from "./LayerSelection";
 import { Button } from "@/components/ui/button";
 import {
   Drawer,
@@ -11,7 +10,11 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 
-export default function LayerDrawer() {
+export default function LayerDrawer({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <Drawer>
       <DrawerTrigger asChild>
@@ -19,8 +22,8 @@ export default function LayerDrawer() {
         <div
           style={{
             position: "absolute",
-            top: 16,
-            right: 16,
+            bottom: 50,
+            left: 8,
             zIndex: 10,
           }}
         >
@@ -32,12 +35,12 @@ export default function LayerDrawer() {
       <DrawerContent>
         <div className="mx-auto w-full max-w-sm">
           <DrawerHeader>
-            <DrawerTitle>Map Type</DrawerTitle>
+            <DrawerTitle>Layers</DrawerTitle>
             <DrawerDescription>
               Choose map type and corresponding layers
             </DrawerDescription>
           </DrawerHeader>
-          <LayerSelection />
+          {children}
           <DrawerFooter></DrawerFooter>
         </div>
       </DrawerContent>

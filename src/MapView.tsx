@@ -2,38 +2,64 @@ import "maplibre-gl/dist/maplibre-gl.css";
 import maplibregl from "maplibre-gl";
 import { useEffect, useRef, useState } from "react";
 import LayerDrawer from "./LayerDrawer";
-import { LayersContext } from "./LayersContext";
-import type { Layers } from "./LayersContext";
+import LayerSelection from "./LayerSelection";
+import { layers } from "./layers";
 
 const tileServerAddress = import.meta.env.VITE_TILE_SERVER_ADDRESS;
 
-const initialLayers: Layers = {
-  flood: {
-    probability_10: {
-      active: false,
-      name: "River flood hazard area (10%)",
-      layerName: "obszar_zagrozenia_powodziowego_10",
-      color: "#00C2FF",
-    },
-    probability_1: {
-      active: false,
-      name: "River flood hazard area (1%)",
-      layerName: "obszar_zagrozenia_powodziowego_1",
-      color: "#A259FF",
-    },
-    probability_02: {
-      active: false,
-      name: "River flood hazard area (0.2%)",
-      layerName: "obszar_zagrozenia_powodziowego_02",
-      color: "#FF3864",
-    },
-  },
-};
+const initialLayers = layers;
+
+export type Layers = typeof initialLayers;
+export type LayerGroup = keyof typeof initialLayers;
+export type Layer<G extends LayerGroup> = keyof (typeof initialLayers)[G];
 
 export default function MapView() {
-  const [layers, setLayers] = useState(initialLayers);
+  const [layers, setLayers] = useState<Layers>(initialLayers);
   const mapRef = useRef<maplibregl.Map | null>(null);
   const isMapLoadedRef = useRef(false);
+
+  function handleLayerVisibilityChange(
+    type: LayerGroup,
+    layer: Layer<LayerGroup>,
+    visible: boolean
+  ) {
+    setLayers((prev) => ({
+      ...prev,
+      [type]: {
+        ...prev[type],
+        [layer]: {
+          ...prev[type][layer],
+          visible,
+        },
+      },
+    }));
+
+    // Update map layers immediately
+    const map = mapRef.current;
+    if (!map || !isMapLoadedRef.current) return;
+
+    const layerConfig = initialLayers[type][layer];
+    const layerId = layerConfig.name;
+
+    // Remove existing layer if it exists
+    if (map.getLayer(layerId)) {
+      map.removeLayer(layerId);
+    }
+
+    // Add layer if it should be visible
+    if (visible) {
+      map.addLayer({
+        id: layerId,
+        type: "fill",
+        source: "custom-vector",
+        "source-layer": layerConfig.layerName,
+        paint: {
+          "fill-color": layerConfig.color,
+          "fill-opacity": 0.5,
+        },
+      });
+    }
+  }
 
   // Initialize the map
   useEffect(() => {
@@ -49,11 +75,8 @@ export default function MapView() {
         return { url };
       },
       center: [19.1451, 51.9194],
-      zoom: 6.5,
-      maxBounds: [
-        [2, 45],
-        [40.6132, 60],
-      ],
+      zoom: 6,
+      minZoom: 6,
     });
 
     map.addControl(new maplibregl.NavigationControl(), "bottom-right");
@@ -81,34 +104,6 @@ export default function MapView() {
     });
   }, []);
 
-  // Update map layers on `layers` change
-  useEffect(() => {
-    const map = mapRef.current;
-    if (!map || !isMapLoadedRef.current) return;
-
-    // Add or remove layers
-    Object.keys(initialLayers.flood).forEach((key) => {
-      const layerId = initialLayers.flood[key].name;
-
-      if (map.getLayer(layerId)) {
-        map.removeLayer(layerId);
-      }
-
-      if (layers.flood[key].active) {
-        map.addLayer({
-          id: layerId,
-          type: "fill",
-          source: "custom-vector",
-          "source-layer": layers.flood[key].layerName,
-          paint: {
-            "fill-color": layers.flood[key].color,
-            "fill-opacity": 0.5,
-          },
-        });
-      }
-    });
-  }, [layers]);
-
   return (
     <div
       style={{
@@ -117,10 +112,12 @@ export default function MapView() {
         width: "100vw",
       }}
     >
-      <LayersContext.Provider value={{ layers, setLayers }}>
-        <LayerDrawer />
-      </LayersContext.Provider>
-
+      <LayerDrawer>
+        <LayerSelection
+          layers={layers}
+          handleLayerVisibilityChange={handleLayerVisibilityChange}
+        />
+      </LayerDrawer>
       <div
         id="map-view"
         style={{

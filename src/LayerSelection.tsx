@@ -1,10 +1,22 @@
-import { useState, useContext } from "react";
+import { useState } from "react";
 import { DropletOff, Waves } from "lucide-react";
 import { Button } from "./components/ui/button";
 import { cn } from "@/lib/utils";
-import { LayersContext } from "./LayersContext";
+import type { Layers, Layer, LayerGroup } from "./MapView";
 
-export default function LayerSelection() {
+type LayerSelectionProps = {
+  layers: Layers;
+  handleLayerVisibilityChange: (
+    type: LayerGroup,
+    layer: Layer<LayerGroup>,
+    visible: boolean
+  ) => void;
+};
+
+export default function LayerSelection({
+  layers,
+  handleLayerVisibilityChange,
+}: LayerSelectionProps) {
   const [activeButton, setActiveButton] = useState<string | null>(null);
 
   const toggleButton = (buttonId: string) => {
@@ -12,21 +24,6 @@ export default function LayerSelection() {
   };
 
   const isActive = (buttonId: string) => activeButton === buttonId;
-
-  const { layers, setLayers } = useContext(LayersContext);
-
-  const handleCheckboxChange = (key: string) => {
-    setLayers((prev) => ({
-      ...prev,
-      flood: {
-        ...prev.flood,
-        [key]: {
-          ...prev.flood[key],
-          active: !prev.flood[key].active,
-        },
-      },
-    }));
-  };
 
   return (
     <div className="p-8 bg-background">
@@ -68,24 +65,35 @@ export default function LayerSelection() {
       </div>
       {/* Second row: layers with checkboxes */}
       <div className="flex flex-col gap-3 items-center">
-        {Object.keys(layers.flood).map((key) => {
-          const layer = layers.flood[key];
-          return (
-            <label key={key} className="flex items-center gap-3 cursor-pointer">
-              <input
-                type="checkbox"
-                className="accent-current"
-                checked={layer.active}
-                onChange={() => handleCheckboxChange(key)}
-              />
-              <span>{layer.name}</span>
-              <span
-                className="inline-block w-4 h-4 rounded"
-                style={{ backgroundColor: layer.color }}
-              />
-            </label>
-          );
-        })}
+        {Object.entries(layers).map(([group, groupLayers]) =>
+          Object.keys(groupLayers).map((key) => {
+            const layer = groupLayers[key as keyof typeof groupLayers];
+            return (
+              <label
+                key={group + key}
+                className="flex items-center gap-3 cursor-pointer"
+              >
+                <input
+                  type="checkbox"
+                  className="accent-current"
+                  checked={layer.visible}
+                  onChange={() =>
+                    handleLayerVisibilityChange(
+                      group as LayerGroup,
+                      key as Layer<LayerGroup>,
+                      !layer.visible
+                    )
+                  }
+                />
+                <span>{layer.name}</span>
+                <span
+                  className="inline-block w-4 h-4 rounded"
+                  style={{ backgroundColor: layer.color }}
+                />
+              </label>
+            );
+          })
+        )}
       </div>
     </div>
   );
