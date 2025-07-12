@@ -1,19 +1,10 @@
 # 🗺️ Maparium
 
-**Maparium** is a lightweight and fast web application that provides real-time access to geospatial data across Poland. Built as a comprehensive GIS platform, it will offer multiple data layers including flood predictions, drought visualization, demographic data, and more - serving as a modern alternative to slow and difficult-to-use official portals.
+**Maparium** is a lightweight web application that provides access to geospatial data across Poland. Built as a comprehensive GIS platform, it offers multiple data layers, including flood predictions, drought visualization, demographic data, and more—serving as a modern alternative to slow and difficult-to-use official portals.
 
-Designed for everyday citizens, students, journalists, and curious minds. The official "Hydroportal", although feature-rich for GIS professionals and government officials, is way too slow and hard to read for spontaneous use. Maparium's mission is to make this GIS data as accessible and intuitive as possible.
+Designed for everyday citizens, students, journalists, and curious minds, Maparium aims to make GIS data accessible and intuitive. While official government websites are feature-rich for GIS professionals and officials, they are often too slow and complex for spontaneous use. Maparium's mission is to simplify access to this data.
 
-Built with **React (TypeScript)** and **Vite**, it features a hybrid mapping setup that combines a **MapTiler** basemap with **custom geospatial data layers** served via a self-hosted **TileServer-GL** instance.
-
-At its current demo stage, the app displays a fullscreen interactive map with expandable data layer functionality.
-
----
-
-## Features
-
-- 🌊 **Flood hazard map**
-- 🖥 **Vector Tiles**: Hosted via self-managed **TileServer-GL**
+Built with **React (TypeScript)** and **Vite** for the frontend, Protomaps basemap, and custom pmtiles for the backend, the website currently works as a serverless solution.
 
 ---
 
@@ -22,11 +13,9 @@ At its current demo stage, the app displays a fullscreen interactive map with ex
 Here are some features planned for future development:
 
 - [ ] Additional environmental data layers (air quality, temperature, precipitation, demographics, drought areas)
-- [ ] Geolocation-based map centering
 - [ ] Search bar for quickly zooming to specific locations
 - [ ] Historical data comparison tools
-- [ ] Multilingual support (English & Polish)
-- [ ] Mobile-responsive design improvements
+- [ ] Polish language support
 
 Have an idea for a new data layer or feature? Feel free to open an issue or contribute!
 
@@ -36,7 +25,7 @@ Have an idea for a new data layer or feature? Feel free to open an issue or cont
 
 ### Environmental
 
-- **Flood hazard map**: Areas of flood hazard for rivers where the probability of river flooding is moderate and equals 1% (once every 100 years)
+- **Flood hazard map**: Areas of flood hazard for rivers and seas with varying probabilities or levee breaches
 
 _More layers are continuously being added._
 
@@ -45,9 +34,8 @@ _More layers are continuously being added._
 ## Tech Stack
 
 - **Frontend**: React + TypeScript + Vite
-- **Mapping**: MapTiler base map + custom vector layers
-- **Tile Server**: TileServer-GL (self-hosted)
-- **Data pre-processing**: QGIS, tippecanoe
+- **Mapping**: Protomaps base map and custom pmtiles for all additional layers
+- **Data pre-processing**: QGIS, tippecanoe, planetiler
 
 ---
 
@@ -67,25 +55,12 @@ _More layers are continuously being added._
    npm install
    ```
 
-2. **Environment Setup**
+2. **Pmtiles**
 
-   ```bash
-   cp .env.example .env
-   # Configure your MapTiler API key and tile server endpoints
-   ```
-
-3. **Development Server**
-
-   ```bash
-   npm run dev
-   ```
-
-4. **Tile server**
-
-   Use your preffered way of hosting mbtiles. Maparium is using TileServer-GL [TileServer-GL GitHub](https://github.com/maptiler/tileserver-gl).
+   Data preprocessing and hosting pmtiles are beyond the scope of this README. Proper instructions will be provided in the future. If you want to contribute to the frontend, Vite is configured so that the development build uses the Maparium server to display tiles.
 
 ---
 
 ## Data Source
 
-Maparium aggregates data from various Polish governmental through https://dane.gov.pl/pl
+Maparium aggregates data from various Polish governmental sources through [dane.gov.pl](https://dane.gov.pl/pl).

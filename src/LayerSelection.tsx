@@ -6,9 +6,9 @@ import type { Layers, Layer, LayerGroup } from "./MapView";
 
 type LayerSelectionProps = {
   layers: Layers;
-  handleLayerVisibilityChange: (
-    type: LayerGroup,
-    layer: Layer<LayerGroup>,
+  handleLayerVisibilityChange: <T extends LayerGroup>(
+    type: T,
+    layer: Layer<T>,
     visible: boolean
   ) => void;
 };
@@ -17,13 +17,28 @@ export default function LayerSelection({
   layers,
   handleLayerVisibilityChange,
 }: LayerSelectionProps) {
-  const [activeButton, setActiveButton] = useState<string | null>(null);
+  const [activeButton, setActiveButton] = useState<string | null>("bookmark");
 
   const toggleButton = (buttonId: string) => {
     setActiveButton((prev) => (prev === buttonId ? null : buttonId));
   };
 
   const isActive = (buttonId: string) => activeButton === buttonId;
+
+  // Filter layers based on active button
+  const getFilteredLayers = () => {
+    if (!activeButton) return layers;
+
+    if (activeButton === "heart") {
+      // Show only drought layers
+      return { drought: layers.drought };
+    } else if (activeButton === "bookmark") {
+      // Show only flood layers
+      return { flood: layers.flood };
+    }
+
+    return layers;
+  };
 
   return (
     <div className="p-8 bg-background">
@@ -65,9 +80,19 @@ export default function LayerSelection({
       </div>
       {/* Second row: layers with checkboxes */}
       <div className="flex flex-col gap-3 items-center">
-        {Object.entries(layers).map(([group, groupLayers]) =>
+        {!activeButton && (
+          <p className="text-muted-foreground text-center mb-4">
+            Select a category above to view available layers
+          </p>
+        )}
+        {Object.entries(getFilteredLayers()).map(([group, groupLayers]) =>
           Object.keys(groupLayers).map((key) => {
-            const layer = groupLayers[key as keyof typeof groupLayers];
+            const layer = groupLayers[key as keyof typeof groupLayers] as {
+              visible: boolean;
+              name: string;
+              layerName: string;
+              color: string;
+            };
             return (
               <label
                 key={group + key}

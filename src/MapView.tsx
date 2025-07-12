@@ -25,9 +25,9 @@ export default function MapView() {
     return `pmtiles://https://maparium.pl/tiles/${filename}`;
   };
 
-  function handleLayerVisibilityChange(
-    type: LayerGroup,
-    layer: Layer<LayerGroup>,
+  function handleLayerVisibilityChange<T extends LayerGroup>(
+    type: T,
+    layer: Layer<T>,
     visible: boolean
   ) {
     setActiveLayers((prev) => ({
@@ -45,7 +45,12 @@ export default function MapView() {
     const map = mapRef.current;
     if (!map || !isMapLoadedRef.current) return;
 
-    const layerConfig = initialLayers[type][layer];
+    const layerConfig = initialLayers[type][layer] as {
+      visible: boolean;
+      name: string;
+      layerName: string;
+      color: string;
+    };
     const layerId = layerConfig.name;
 
     // Remove existing layer if it exists
@@ -58,7 +63,7 @@ export default function MapView() {
       map.addLayer({
         id: layerId,
         type: "fill",
-        source: "custom-vector",
+        source: type,
         "source-layer": layerConfig.layerName,
         paint: {
           "fill-color": layerConfig.color,
@@ -112,9 +117,14 @@ export default function MapView() {
     map.on("load", () => {
       isMapLoadedRef.current = true;
 
-      map.addSource("custom-vector", {
+      map.addSource("flood", {
         type: "vector",
         url: getTileUrl("flood.pmtiles"),
+      });
+
+      map.addSource("drought", {
+        type: "vector",
+        url: getTileUrl("drought.pmtiles"),
       });
 
       mapRef.current = map;
