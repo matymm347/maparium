@@ -14,5 +14,12 @@ export default defineConfig({
   server: {
     host: true,
     port: 5173,
+    proxy: {
+      "/tiles": {
+        target: "https://maparium.pl",
+        changeOrigin: true,
+        secure: true,
+      },
+    },
   },
 });

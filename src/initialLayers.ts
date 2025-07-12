@@ -1,4 +1,4 @@
-const layers = {
+const initialLayers = {
   flood: {
     river_probability_10: {
       visible: false,
@@ -45,4 +45,4 @@ const layers = {
   },
 };
 
-export { layers };
+export { initialLayers };
