@@ -16,6 +16,15 @@ export default function MapView() {
   const mapRef = useRef<maplibregl.Map | null>(null);
   const isMapLoadedRef = useRef(false);
 
+  // Get base URL for tiles based on environment
+  const getTileUrl = (filename: string) => {
+    if (import.meta.env.DEV) {
+      return `pmtiles:///tiles/${filename}`;
+    }
+    // In production, use absolute URL or configure your server to serve these files
+    return `pmtiles://https://maparium.pl/tiles/${filename}`;
+  };
+
   function handleLayerVisibilityChange(
     type: LayerGroup,
     layer: Layer<LayerGroup>,
@@ -77,7 +86,7 @@ export default function MapView() {
         sources: {
           protomaps: {
             type: "vector",
-            url: "pmtiles:///tiles/poland_basemap.pmtiles",
+            url: getTileUrl("poland_basemap.pmtiles"),
             attribution:
               '<a href="https://protomaps.com">Protomaps</a> © <a href="https://openstreetmap.org">OpenStreetMap</a>',
           },
@@ -105,7 +114,7 @@ export default function MapView() {
 
       map.addSource("custom-vector", {
         type: "vector",
-        url: `pmtiles:///tiles/flood.pmtiles`,
+        url: getTileUrl("flood.pmtiles"),
       });
 
       mapRef.current = map;

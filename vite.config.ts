@@ -22,4 +22,10 @@ export default defineConfig({
       },
     },
   },
+  build: {
+    rollupOptions: {
+      external: [],
+    },
+  },
+  assetsInclude: ["**/*.pmtiles"],
 });
