@@ -58,8 +58,8 @@ export default function MapView() {
       map.removeLayer(layerId);
     }
 
-    // Add layer if it should be visible
-    if (visible) {
+    // Add flood layer if it should be visible
+    if (type === "flood" && visible) {
       map.addLayer({
         id: layerId,
         type: "fill",
@@ -68,6 +68,31 @@ export default function MapView() {
         paint: {
           "fill-color": layerConfig.color,
           "fill-opacity": 0.5,
+        },
+      });
+    }
+
+    if (type === "drought" && visible) {
+      map.addLayer({
+        id: layerId,
+        type: "fill",
+        source: type,
+        "source-layer": layerConfig.layerName,
+        paint: {
+          "fill-color": [
+            "case",
+            ["==", ["get", "class"], 1], // (lowest risk)
+            "#A8E6A1",
+            ["==", ["get", "class"], 2],
+            "#FFF59D",
+            ["==", ["get", "class"], 3],
+            "#FFCC80",
+            ["==", ["get", "class"], 4], // (highest risk)
+            "#FF9E9E",
+            "#CCCCCC", // unknown values
+          ],
+          "fill-opacity": 0.5,
+          "fill-outline-color": "transparent",
         },
       });
     }
