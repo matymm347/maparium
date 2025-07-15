@@ -116,18 +116,17 @@ export default function MapView() {
         sources: {
           protomaps: {
             type: "vector",
-            url: getTileUrl("poland_basemap.pmtiles"),
+            url: getTileUrl("poland_basemap_z13.pmtiles"),
             attribution:
               '<a href="https://protomaps.com">Protomaps</a> © <a href="https://openstreetmap.org">OpenStreetMap</a>',
           },
         },
-        layers: layers("protomaps", namedFlavor("light"), { lang: "en" }),
+        layers: layers("protomaps", namedFlavor("grayscale"), { lang: "en" }),
       },
       // ceil to avoid blurry tiles on non integer ratios
       pixelRatio: Math.ceil(window.devicePixelRatio),
       center: [19.1451, 51.9194],
       zoom: 6,
-      minZoom: 6,
     });
 
     map.addControl(new maplibregl.NavigationControl(), "bottom-right");
@@ -150,6 +149,27 @@ export default function MapView() {
       map.addSource("drought", {
         type: "vector",
         url: getTileUrl("drought.pmtiles"),
+      });
+
+      // radar testing
+      map.addSource("radar", {
+        type: "image",
+        url: "/corrected_test_sharp_3600x3600.webp",
+        coordinates: [
+          [11.833929, 56.29577], // top-left
+          [26.184176, 56.229947], // top-right
+          [25.106189, 47.973201], // bottom-right
+          [12.416322, 48.087229], // bottom-left
+        ],
+      });
+
+      map.addLayer({
+        id: "radar-layer",
+        type: "raster",
+        source: "radar",
+        paint: {
+          "raster-opacity": 0.7,
+        },
       });
 
       mapRef.current = map;
