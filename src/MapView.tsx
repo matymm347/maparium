@@ -121,7 +121,7 @@ export default function MapView() {
               '<a href="https://protomaps.com">Protomaps</a> © <a href="https://openstreetmap.org">OpenStreetMap</a>',
           },
         },
-        layers: layers("protomaps", namedFlavor("grayscale"), { lang: "en" }),
+        layers: layers("protomaps", namedFlavor("light"), { lang: "en" }),
       },
       // ceil to avoid blurry tiles on non integer ratios
       pixelRatio: Math.ceil(window.devicePixelRatio),
@@ -154,7 +154,7 @@ export default function MapView() {
       // radar testing
       map.addSource("radar", {
         type: "image",
-        url: "/corrected_test_sharp_3600x3600.webp",
+        url: "https://maparium.pl/radarimages/sharp_radar_sharp_3600x3600.webp",
         coordinates: [
           [11.833929, 56.29577], // top-left
           [26.184176, 56.229947], // top-right
