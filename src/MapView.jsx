@@ -1,35 +1,27 @@
 import "maplibre-gl/dist/maplibre-gl.css";
 import maplibregl from "maplibre-gl";
-import { Protocol } from "pmtiles";
 import { useEffect, useRef, useState } from "react";
 import { layers, namedFlavor } from "@protomaps/basemaps";
 import LayerDrawer from "./LayerDrawer";
 import LayerSelection from "./LayerSelection";
 import { initialLayers } from "./initialLayers";
 
-export type Layers = typeof initialLayers;
-export type LayerGroup = keyof typeof initialLayers;
-export type Layer<G extends LayerGroup> = keyof (typeof initialLayers)[G];
-
 export default function MapView() {
-  const [activeLayers, setActiveLayers] = useState<Layers>(initialLayers);
-  const mapRef = useRef<maplibregl.Map | null>(null);
+  const [activeLayers, setActiveLayers] = useState(initialLayers);
+  const mapRef = useRef(null);
   const isMapLoadedRef = useRef(false);
 
-  // Get base URL for tiles based on environment
-  const getTileUrl = (filename: string) => {
+  // Get base URL for Martin server based on environment
+  const getMartinUrl = () => {
     if (import.meta.env.DEV) {
-      return `pmtiles:///tiles/${filename}`;
+      // In development, use VPS with HTTPS through nginx
+      return "https://maparium.pl/tiles";
     }
-    // In production, use absolute URL or configure your server to serve these files
-    return `pmtiles://https://maparium.pl/tiles/${filename}`;
+    // In production, use relative path (same domain)
+    return "/tiles";
   };
 
-  function handleLayerVisibilityChange<T extends LayerGroup>(
-    type: T,
-    layer: Layer<T>,
-    visible: boolean
-  ) {
+  function handleLayerVisibilityChange(type, layer, visible) {
     setActiveLayers((prev) => ({
       ...prev,
       [type]: {
@@ -45,12 +37,7 @@ export default function MapView() {
     const map = mapRef.current;
     if (!map || !isMapLoadedRef.current) return;
 
-    const layerConfig = initialLayers[type][layer] as {
-      visible: boolean;
-      name: string;
-      layerName: string;
-      color: string;
-    };
+    const layerConfig = initialLayers[type][layer];
     const layerId = layerConfig.name;
 
     // Remove existing layer if it exists
@@ -102,9 +89,7 @@ export default function MapView() {
   useEffect(() => {
     if (mapRef.current) return;
 
-    // Register PMTiles protocol
-    const protocol = new Protocol();
-    maplibregl.addProtocol("pmtiles", protocol.tile);
+    const martinUrl = getMartinUrl();
 
     const map = new maplibregl.Map({
       container: "map-view",
@@ -116,18 +101,23 @@ export default function MapView() {
         sources: {
           protomaps: {
             type: "vector",
-            url: getTileUrl("poland_basemap_z13.pmtiles"),
+            tiles: [`${martinUrl}/planet_z9/{z}/{x}/{y}`],
+            minzoom: 0,
+            maxzoom: 14,
             attribution:
               '<a href="https://protomaps.com">Protomaps</a> © <a href="https://openstreetmap.org">OpenStreetMap</a>',
           },
         },
-        layers: layers("protomaps", namedFlavor("light"), { lang: "en" }),
+        layers: layers("protomaps", namedFlavor("white"), { lang: "en" }),
       },
       // ceil to avoid blurry tiles on non integer ratios
       pixelRatio: Math.ceil(window.devicePixelRatio),
       center: [19.1451, 51.9194],
-      zoom: 6,
+      zoom: 2,
     });
+
+    // Store map reference immediately to prevent duplicate instances
+    mapRef.current = map;
 
     map.addControl(new maplibregl.NavigationControl(), "bottom-right");
     map.addControl(
@@ -138,45 +128,35 @@ export default function MapView() {
       "bottom-right"
     );
 
+    map.on("style.load", () => {
+      map.setProjection({
+        type: "globe", // Set projection to globe
+      });
+    });
+
     map.on("load", () => {
       isMapLoadedRef.current = true;
 
       map.addSource("flood", {
         type: "vector",
-        url: getTileUrl("flood.pmtiles"),
+        tiles: [`${martinUrl}/flood/{z}/{x}/{y}`],
+        minzoom: 0,
+        maxzoom: 14,
       });
 
       map.addSource("drought", {
         type: "vector",
-        url: getTileUrl("drought.pmtiles"),
+        tiles: [`${martinUrl}/drought/{z}/{x}/{y}`],
+        minzoom: 0,
+        maxzoom: 14,
       });
-
-      // radar testing
-      map.addSource("radar", {
-        type: "image",
-        url: "https://maparium.pl/radarimages/sharp_radar_sharp_3600x3600.webp",
-        coordinates: [
-          [11.833929, 56.29577], // top-left
-          [26.184176, 56.229947], // top-right
-          [25.106189, 47.973201], // bottom-right
-          [12.416322, 48.087229], // bottom-left
-        ],
-      });
-
-      map.addLayer({
-        id: "radar-layer",
-        type: "raster",
-        source: "radar",
-        paint: {
-          "raster-opacity": 0.7,
-        },
-      });
-
-      mapRef.current = map;
     });
 
     return () => {
-      maplibregl.removeProtocol("pmtiles");
+      if (mapRef.current) {
+        mapRef.current.remove();
+        mapRef.current = null;
+      }
     };
   }, []);
 
@@ -202,6 +182,7 @@ export default function MapView() {
           bottom: 0,
           width: "100%",
           height: "100%",
+          backgroundColor: "#f3f4f6",
         }}
       ></div>
     </div>

@@ -10,11 +10,7 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 
-export default function LayerDrawer({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function LayerDrawer({ children }) {
   return (
     <Drawer>
       <DrawerTrigger asChild>

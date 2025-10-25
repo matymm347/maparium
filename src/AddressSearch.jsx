@@ -72,7 +72,7 @@ const places = [
 export default function AddressSearch() {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState("");
-  const triggerRef = useRef<HTMLButtonElement>(null);
+  const triggerRef = useRef(null);
 
   return (
     <div className="min-w-[100px] max-w-[300px] w-full">

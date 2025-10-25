@@ -33,4 +33,4 @@ jobs:
 
       - name: Deploy to VPS
         run: |
-          rsync -avz --delete --exclude='tiles/' -e "ssh -o StrictHostKeyChecking=no" ./dist/ ubuntu@51.38.134.205:/var/www/maparium/ --rsync-path="sudo rsync"
+          rsync -avz --delete --exclude='tiles/' --exclude='radarimages/' -e "ssh -o StrictHostKeyChecking=no" ./dist/ ubuntu@51.38.134.205:/var/www/maparium/ --rsync-path="sudo rsync"

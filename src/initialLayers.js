@@ -75,6 +75,14 @@ const initialLayers = {
       color: "#FF0000",
     },
   },
+  radar: {
+    radar: {
+      visible: false,
+      name: "Radar imagery",
+      layerName: "",
+      color: "",
+    },
+  },
 };
 
 export { initialLayers };
