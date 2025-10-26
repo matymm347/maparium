@@ -83,6 +83,52 @@ export default function MapView() {
         },
       });
     }
+
+    if (type === "powerplants" && visible) {
+      map.addLayer({
+        id: layerId,
+        type: "circle",
+        source: type,
+        "source-layer": layerConfig.layerName,
+        paint: {
+          // Larger radius for better visibility
+          "circle-radius": [
+            "interpolate",
+            ["exponential", 1.5],
+            ["zoom"],
+            0,
+            1.5,
+            4,
+            2.5,
+            8,
+            4,
+            12,
+            6,
+            16,
+            10,
+          ],
+          "circle-color": layerConfig.color,
+          "circle-stroke-width": [
+            "interpolate",
+            ["linear"],
+            ["zoom"],
+            0,
+            0.5,
+            8,
+            0.8,
+            12,
+            1,
+            16,
+            1.5,
+          ],
+          "circle-stroke-color": "#333333",
+          // Full opacity for better visibility
+          "circle-opacity": 0.85,
+          // Minimal blur only at very low zoom
+          "circle-blur": ["interpolate", ["linear"], ["zoom"], 0, 0.3, 2, 0],
+        },
+      });
+    }
   }
 
   // Initialize the map
@@ -111,7 +157,7 @@ export default function MapView() {
         layers: layers("protomaps", namedFlavor("white"), { lang: "en" }),
       },
       // ceil to avoid blurry tiles on non integer ratios
-      pixelRatio: Math.ceil(window.devicePixelRatio),
+      // pixelRatio: Math.ceil(window.devicePixelRatio),
       center: [19.1451, 51.9194],
       zoom: 2,
     });
@@ -147,6 +193,13 @@ export default function MapView() {
       map.addSource("drought", {
         type: "vector",
         tiles: [`${martinUrl}/drought/{z}/{x}/{y}`],
+        minzoom: 0,
+        maxzoom: 14,
+      });
+
+      map.addSource("powerplants", {
+        type: "vector",
+        tiles: [`${martinUrl}/powerplants/{z}/{x}/{y}`],
         minzoom: 0,
         maxzoom: 14,
       });

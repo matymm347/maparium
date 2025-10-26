@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { DropletOff, Waves } from "lucide-react";
+import { DropletOff, Waves, Zap } from "lucide-react";
 import { Button } from "./components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -25,6 +25,9 @@ export default function LayerSelection({
     } else if (activeButton === "flood") {
       // Show only flood layers
       return { flood: layers.flood };
+    } else if (activeButton === "powerplants") {
+      // Show only powerplants layers
+      return { powerplants: layers.powerplants };
     }
 
     return layers;
@@ -67,6 +70,26 @@ export default function LayerSelection({
             />
           </Button>
           <p className="mt-2 text-center">Flood</p>
+        </div>
+        <div className="flex flex-col items-center">
+          <Button
+            variant={isActive("powerplants") ? "default" : "outline"}
+            size="icon"
+            className={cn(
+              "w-[50px] h-[50px] transition-all duration-200",
+              isActive("powerplants") &&
+                "bg-yellow-500 hover:bg-yellow-600 border-yellow-500"
+            )}
+            onClick={() => toggleButton("powerplants")}
+          >
+            <Zap
+              className={cn(
+                "w-5 h-5",
+                isActive("powerplants") && "fill-current"
+              )}
+            />
+          </Button>
+          <p className="mt-2 text-center">Power</p>
         </div>
       </div>
       {/* Second row: layers with checkboxes */}

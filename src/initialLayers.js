@@ -75,6 +75,14 @@ const initialLayers = {
       color: "#FF0000",
     },
   },
+  powerplants: {
+    all: {
+      visible: false,
+      name: "All Power Plants",
+      layerName: "powerplants",
+      color: "#FFD700",
+    },
+  },
   radar: {
     radar: {
       visible: false,
