@@ -17,8 +17,8 @@ export default function MapView() {
       // In development, use VPS with HTTPS through nginx
       return "https://maparium.pl/tiles";
     }
-    // In production, use relative path (same domain)
-    return "/tiles";
+    // In production, use absolute URL with current origin
+    return `${window.location.origin}/tiles`;
   };
 
   function handleLayerVisibilityChange(type, layer, visible) {
