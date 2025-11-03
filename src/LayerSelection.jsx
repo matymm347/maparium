@@ -25,9 +25,9 @@ export default function LayerSelection({
     } else if (activeButton === "flood") {
       // Show only flood layers
       return { flood: layers.flood };
-    } else if (activeButton === "powerplants") {
-      // Show only powerplants layers
-      return { powerplants: layers.powerplants };
+    } else if (activeButton === "nuclear_powerplants") {
+      // Show only nuclear powerplants layers
+      return { nuclear_powerplants: layers.nuclear_powerplants };
     }
 
     return layers;
@@ -73,19 +73,19 @@ export default function LayerSelection({
         </div>
         <div className="flex flex-col items-center">
           <Button
-            variant={isActive("powerplants") ? "default" : "outline"}
+            variant={isActive("nuclear_powerplants") ? "default" : "outline"}
             size="icon"
             className={cn(
               "w-[50px] h-[50px] transition-all duration-200",
-              isActive("powerplants") &&
+              isActive("nuclear_powerplants") &&
                 "bg-yellow-500 hover:bg-yellow-600 border-yellow-500"
             )}
-            onClick={() => toggleButton("powerplants")}
+            onClick={() => toggleButton("nuclear_powerplants")}
           >
             <Zap
               className={cn(
                 "w-5 h-5",
-                isActive("powerplants") && "fill-current"
+                isActive("nuclear_powerplants") && "fill-current"
               )}
             />
           </Button>

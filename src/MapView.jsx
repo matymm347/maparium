@@ -84,7 +84,7 @@ export default function MapView() {
       });
     }
 
-    if (type === "powerplants" && visible) {
+    if (type === "nuclear_powerplants" && visible) {
       map.addLayer({
         id: layerId,
         type: "circle",
@@ -147,14 +147,14 @@ export default function MapView() {
         sources: {
           protomaps: {
             type: "vector",
-            tiles: [`${martinUrl}/planet_z9/{z}/{x}/{y}`],
+            tiles: [`${martinUrl}/planet_z12/{z}/{x}/{y}`],
             minzoom: 0,
             maxzoom: 14,
             attribution:
               '<a href="https://protomaps.com">Protomaps</a> © <a href="https://openstreetmap.org">OpenStreetMap</a>',
           },
         },
-        layers: layers("protomaps", namedFlavor("white"), { lang: "en" }),
+        layers: layers("protomaps", namedFlavor("black"), { lang: "en" }),
       },
       // ceil to avoid blurry tiles on non integer ratios
       // pixelRatio: Math.ceil(window.devicePixelRatio),
@@ -197,9 +197,9 @@ export default function MapView() {
         maxzoom: 14,
       });
 
-      map.addSource("powerplants", {
+      map.addSource("nuclear_powerplants", {
         type: "vector",
-        tiles: [`${martinUrl}/powerplants/{z}/{x}/{y}`],
+        tiles: [`${martinUrl}/nuclear_powerplants/{z}/{x}/{y}`],
         minzoom: 0,
         maxzoom: 14,
       });
@@ -235,7 +235,7 @@ export default function MapView() {
           bottom: 0,
           width: "100%",
           height: "100%",
-          backgroundColor: "#f3f4f6",
+          backgroundColor: "#1a1a1a",
         }}
       ></div>
     </div>

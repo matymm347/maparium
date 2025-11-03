@@ -75,11 +75,11 @@ const initialLayers = {
       color: "#FF0000",
     },
   },
-  powerplants: {
+  nuclear_powerplants: {
     all: {
       visible: false,
-      name: "All Power Plants",
-      layerName: "powerplants",
+      name: "All Nuclear Power Plants",
+      layerName: "nuclear_powerplants",
       color: "#FFD700",
     },
   },
