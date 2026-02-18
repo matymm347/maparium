@@ -129,6 +129,33 @@ export default function MapView() {
         },
       });
     }
+
+    if (type === "churches" && visible) {
+      map.addLayer({
+        id: layerId,
+        type: "circle",
+        source: type,
+        "source-layer": layerConfig.layerName,
+        paint: {
+          // slightly smaller points than nuclear plants
+          "circle-radius": [
+            "interpolate",
+            ["exponential", 2],
+            ["zoom"],
+            0,
+            1,
+            6,
+            2,
+            10,
+            3,
+            16,
+            5,
+          ],
+          "circle-color": layerConfig.color,
+          "circle-opacity": 0.9,
+        },
+      });
+    }
   }
 
   // Initialize the map
@@ -171,7 +198,7 @@ export default function MapView() {
         positionOptions: { enableHighAccuracy: true },
         trackUserLocation: true,
       }),
-      "bottom-right"
+      "bottom-right",
     );
 
     map.on("style.load", () => {
@@ -200,6 +227,13 @@ export default function MapView() {
       map.addSource("nuclear_powerplants", {
         type: "vector",
         tiles: [`${martinUrl}/nuclear_powerplants/{z}/{x}/{y}`],
+        minzoom: 0,
+        maxzoom: 14,
+      });
+
+      map.addSource("churches", {
+        type: "vector",
+        tiles: [`${martinUrl}/churches/{z}/{x}/{y}`],
         minzoom: 0,
         maxzoom: 14,
       });

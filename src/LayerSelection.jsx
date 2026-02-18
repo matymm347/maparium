@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { DropletOff, Waves, Zap } from "lucide-react";
+import { DropletOff, Waves, Zap, MapPin } from "lucide-react";
 import { Button } from "./components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -28,6 +28,9 @@ export default function LayerSelection({
     } else if (activeButton === "nuclear_powerplants") {
       // Show only nuclear powerplants layers
       return { nuclear_powerplants: layers.nuclear_powerplants };
+    } else if (activeButton === "churches") {
+      // Show only churches layers
+      return { churches: layers.churches };
     }
 
     return layers;
@@ -44,7 +47,7 @@ export default function LayerSelection({
             className={cn(
               "w-[50px] h-[50px] transition-all duration-200",
               isActive("drought") &&
-                "bg-red-500 hover:bg-red-600 border-red-500"
+                "bg-red-500 hover:bg-red-600 border-red-500",
             )}
             onClick={() => toggleButton("drought")}
           >
@@ -61,7 +64,7 @@ export default function LayerSelection({
             className={cn(
               "w-[50px] h-[50px] transition-all duration-200",
               isActive("flood") &&
-                "bg-blue-500 hover:bg-blue-600 border-blue-500"
+                "bg-blue-500 hover:bg-blue-600 border-blue-500",
             )}
             onClick={() => toggleButton("flood")}
           >
@@ -78,18 +81,36 @@ export default function LayerSelection({
             className={cn(
               "w-[50px] h-[50px] transition-all duration-200",
               isActive("nuclear_powerplants") &&
-                "bg-yellow-500 hover:bg-yellow-600 border-yellow-500"
+                "bg-yellow-500 hover:bg-yellow-600 border-yellow-500",
             )}
             onClick={() => toggleButton("nuclear_powerplants")}
           >
             <Zap
               className={cn(
                 "w-5 h-5",
-                isActive("nuclear_powerplants") && "fill-current"
+                isActive("nuclear_powerplants") && "fill-current",
               )}
             />
           </Button>
           <p className="mt-2 text-center">Power</p>
+        </div>
+
+        <div className="flex flex-col items-center">
+          <Button
+            variant={isActive("churches") ? "default" : "outline"}
+            size="icon"
+            className={cn(
+              "w-[50px] h-[50px] transition-all duration-200",
+              isActive("churches") &&
+                "bg-emerald-500 hover:bg-emerald-600 border-emerald-500",
+            )}
+            onClick={() => toggleButton("churches")}
+          >
+            <MapPin
+              className={cn("w-5 h-5", isActive("churches") && "fill-current")}
+            />
+          </Button>
+          <p className="mt-2 text-center">Churches</p>
         </div>
       </div>
       {/* Second row: layers with checkboxes */}
@@ -122,7 +143,7 @@ export default function LayerSelection({
                 />
               </label>
             );
-          })
+          }),
         )}
       </div>
     </div>

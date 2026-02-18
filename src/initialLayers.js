@@ -83,6 +83,14 @@ const initialLayers = {
       color: "#FFD700",
     },
   },
+  churches: {
+    all: {
+      visible: false,
+      name: "Churches",
+      layerName: "churches",
+      color: "#7C3AED",
+    },
+  },
   radar: {
     radar: {
       visible: false,
