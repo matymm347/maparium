@@ -6,6 +6,42 @@ import LayerDrawer from "./LayerDrawer";
 import LayerSelection from "./LayerSelection";
 import { initialLayers } from "./initialLayers";
 
+function buildLayerConfig(layersData) {
+  const layerConfig = {};
+  for (const group in layersData) {
+    layerConfig[group] = {};
+    layerConfig[group].lucideIcon = layersData[group]["lucideIcon"];
+    layerConfig[group].layers = {};
+
+    for (const layer in layersData[group]) {
+      // Loop only for layers, skip additional group specifig entries
+      if (
+        layer == "folder_name" ||
+        layer == "osmium filter" ||
+        layer == "lucideIcon"
+      ) {
+        continue;
+      }
+
+      const currentLayerData = layersData[group][layer];
+
+      let postprocessing = false;
+      if (currentLayerData["postprocessing"]) {
+        postprocessing = true;
+      }
+
+      layerConfig[group].layers[layer] = {
+        fileName: currentLayerData["fileName"],
+        description: currentLayerData["description"],
+        postprocessing: postprocessing,
+        visible: false,
+        style: currentLayerData["style"],
+      };
+    }
+  }
+  return layerConfig;
+}
+
 export default function MapView() {
   const [activeLayers, setActiveLayers] = useState(initialLayers);
   const mapRef = useRef(null);
