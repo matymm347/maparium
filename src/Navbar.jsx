@@ -10,7 +10,7 @@ export default function Navbar() {
         <div className="flex items-center justify-between w-full sm:w-auto sm:flex-1">
           {/* Logo */}
           <div className="flex items-center gap-2">
-            <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600"></div>
+            <div className="h-8 w-8 rounded-lg bg-linear-to-br from-blue-500 to-purple-600"></div>
             <span className="text-xl font-semibold text-gray-900">
               Maparium
             </span>

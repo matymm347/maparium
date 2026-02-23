@@ -149,7 +149,6 @@
     },
     "Nuclear plants": {
       "osmium filter": "plant:source=nuclear",
-
       "postprocessing": {
         "point on surface": {
           "columns": ["name", "operator"],
