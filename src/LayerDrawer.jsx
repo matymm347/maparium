@@ -12,7 +12,7 @@ import {
 
 export default function LayerDrawer({ children }) {
   return (
-    <Drawer>
+    <Drawer direction="left">
       <DrawerTrigger asChild>
         {/* Button overlay */}
         <div
@@ -33,7 +33,7 @@ export default function LayerDrawer({ children }) {
           <DrawerHeader>
             <DrawerTitle>Layers</DrawerTitle>
             <DrawerDescription>
-              Choose map type and corresponding layers
+              Choose type and corresponding layers
             </DrawerDescription>
           </DrawerHeader>
           {children}

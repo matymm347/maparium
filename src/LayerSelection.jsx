@@ -1,151 +1,61 @@
 import { useState } from "react";
-import { DropletOff, Waves, Zap, MapPin } from "lucide-react";
-import { Button } from "./components/ui/button";
-import { cn } from "@/lib/utils";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { LayerIconMap } from "./LayerIconMap";
+import { Checkbox } from "@/components/ui/checkbox";
 
-export default function LayerSelection({
-  layers,
-  handleLayerVisibilityChange,
-}) {
-  const [activeButton, setActiveButton] = useState("flood");
-
-  const toggleButton = (buttonId) => {
-    setActiveButton((prev) => (prev === buttonId ? null : buttonId));
-  };
-
-  const isActive = (buttonId) => activeButton === buttonId;
-
-  // Filter layers based on active button
-  const getFilteredLayers = () => {
-    if (!activeButton) return layers;
-
-    if (activeButton === "drought") {
-      // Show only drought layers
-      return { drought: layers.drought };
-    } else if (activeButton === "flood") {
-      // Show only flood layers
-      return { flood: layers.flood };
-    } else if (activeButton === "nuclear_powerplants") {
-      // Show only nuclear powerplants layers
-      return { nuclear_powerplants: layers.nuclear_powerplants };
-    } else if (activeButton === "churches") {
-      // Show only churches layers
-      return { churches: layers.churches };
-    }
-
-    return layers;
-  };
-
+export default function LayerSelection({ layerConfig, updateLayerVisibility }) {
   return (
-    <div className="p-8 bg-background">
-      {/* First row: group buttons */}
-      <div className="flex flex-wrap gap-4 justify-center mb-6">
-        <div className="flex flex-col items-center">
-          <Button
-            variant={isActive("drought") ? "default" : "outline"}
-            size="icon"
-            className={cn(
-              "w-[50px] h-[50px] transition-all duration-200",
-              isActive("drought") &&
-                "bg-red-500 hover:bg-red-600 border-red-500",
-            )}
-            onClick={() => toggleButton("drought")}
-          >
-            <DropletOff
-              className={cn("w-5 h-5", isActive("drought") && "fill-current")}
-            />
-          </Button>
-          <p className="mt-2 text-center">Drought</p>
-        </div>
-        <div className="flex flex-col items-center">
-          <Button
-            variant={isActive("flood") ? "default" : "outline"}
-            size="icon"
-            className={cn(
-              "w-[50px] h-[50px] transition-all duration-200",
-              isActive("flood") &&
-                "bg-blue-500 hover:bg-blue-600 border-blue-500",
-            )}
-            onClick={() => toggleButton("flood")}
-          >
-            <Waves
-              className={cn("w-5 h-5", isActive("flood") && "fill-current")}
-            />
-          </Button>
-          <p className="mt-2 text-center">Flood</p>
-        </div>
-        <div className="flex flex-col items-center">
-          <Button
-            variant={isActive("nuclear_powerplants") ? "default" : "outline"}
-            size="icon"
-            className={cn(
-              "w-[50px] h-[50px] transition-all duration-200",
-              isActive("nuclear_powerplants") &&
-                "bg-yellow-500 hover:bg-yellow-600 border-yellow-500",
-            )}
-            onClick={() => toggleButton("nuclear_powerplants")}
-          >
-            <Zap
-              className={cn(
-                "w-5 h-5",
-                isActive("nuclear_powerplants") && "fill-current",
-              )}
-            />
-          </Button>
-          <p className="mt-2 text-center">Power</p>
-        </div>
-
-        <div className="flex flex-col items-center">
-          <Button
-            variant={isActive("churches") ? "default" : "outline"}
-            size="icon"
-            className={cn(
-              "w-[50px] h-[50px] transition-all duration-200",
-              isActive("churches") &&
-                "bg-emerald-500 hover:bg-emerald-600 border-emerald-500",
-            )}
-            onClick={() => toggleButton("churches")}
-          >
-            <MapPin
-              className={cn("w-5 h-5", isActive("churches") && "fill-current")}
-            />
-          </Button>
-          <p className="mt-2 text-center">Churches</p>
-        </div>
-      </div>
-      {/* Second row: layers with checkboxes */}
-      <div className="flex flex-col gap-3 items-center">
-        {!activeButton && (
-          <p className="text-muted-foreground text-center mb-4">
-            Select a category above to view available layers
-          </p>
-        )}
-        {Object.entries(getFilteredLayers()).map(([group, groupLayers]) =>
-          Object.keys(groupLayers).map((key) => {
-            const layer = groupLayers[key];
+    <Accordion type="multiple" collapsible="true" defaultValue="item-1">
+      <div className="h-[80vh] w-full">
+        <ScrollArea className="h-full w-full rounded-md border p-4">
+          {Object.keys(layerConfig).map((group) => {
+            const Icon = LayerIconMap[layerConfig[group]["lucideIcon"]];
             return (
-              <label
-                key={group + key}
-                className="flex items-center gap-3 cursor-pointer"
-              >
-                <input
-                  type="checkbox"
-                  className="accent-current"
-                  checked={layer.visible}
-                  onChange={() =>
-                    handleLayerVisibilityChange(group, key, !layer.visible)
-                  }
-                />
-                <span>{layer.name}</span>
-                <span
-                  className="inline-block w-4 h-4 rounded"
-                  style={{ backgroundColor: layer.color }}
-                />
-              </label>
+              <AccordionItem value={group} key={group}>
+                <AccordionTrigger>
+                  <div className="flex">
+                    <div className="flex items-center mr-2">
+                      <Icon size={18} />
+                    </div>
+                    <div className="flex items-center">{group}</div>
+                  </div>
+                </AccordionTrigger>
+                <AccordionContent className="ml-8">
+                  {Object.keys(layerConfig[group]["layers"]).map((layer) => {
+                    return (
+                      <div className="flex items-center" key={layer}>
+                        <div className="mr-2 my-2">
+                          <Checkbox
+                            checked={
+                              layerConfig[group]["layers"][layer]["visible"]
+                            }
+                            onCheckedChange={() =>
+                              updateLayerVisibility(layerConfig, group, layer)
+                            }
+                          />
+                        </div>
+                        <p
+                          onClick={() =>
+                            updateLayerVisibility(layerConfig, group, layer)
+                          }
+                        >
+                          {layer}
+                        </p>
+                      </div>
+                    );
+                  })}
+                </AccordionContent>
+              </AccordionItem>
             );
-          }),
-        )}
+          })}
+        </ScrollArea>
       </div>
-    </div>
+    </Accordion>
   );
 }

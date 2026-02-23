@@ -4,46 +4,12 @@ import { useEffect, useRef, useState } from "react";
 import { layers, namedFlavor } from "@protomaps/basemaps";
 import LayerDrawer from "./LayerDrawer";
 import LayerSelection from "./LayerSelection";
-import { initialLayers } from "./initialLayers";
-
-function buildLayerConfig(layersData) {
-  const layerConfig = {};
-  for (const group in layersData) {
-    layerConfig[group] = {};
-    layerConfig[group].lucideIcon = layersData[group]["lucideIcon"];
-    layerConfig[group].layers = {};
-
-    for (const layer in layersData[group]) {
-      // Loop only for layers, skip additional group specifig entries
-      if (
-        layer == "folder_name" ||
-        layer == "osmium filter" ||
-        layer == "lucideIcon"
-      ) {
-        continue;
-      }
-
-      const currentLayerData = layersData[group][layer];
-
-      let postprocessing = false;
-      if (currentLayerData["postprocessing"]) {
-        postprocessing = true;
-      }
-
-      layerConfig[group].layers[layer] = {
-        fileName: currentLayerData["fileName"],
-        description: currentLayerData["description"],
-        postprocessing: postprocessing,
-        visible: false,
-        style: currentLayerData["style"],
-      };
-    }
-  }
-  return layerConfig;
-}
+import initialLayers from "./layers.json";
 
 export default function MapView() {
-  const [activeLayers, setActiveLayers] = useState(initialLayers);
+  const [layerConfig, setLayerConfig] = useState(
+    buildLayerConfig(initialLayers),
+  );
   const mapRef = useRef(null);
   const isMapLoadedRef = useRef(false);
 
@@ -57,123 +23,100 @@ export default function MapView() {
     return `${window.location.origin}/tiles`;
   };
 
-  function handleLayerVisibilityChange(type, layer, visible) {
-    setActiveLayers((prev) => ({
-      ...prev,
-      [type]: {
-        ...prev[type],
-        [layer]: {
-          ...prev[type][layer],
-          visible,
+  function buildLayerConfig(layersData) {
+    const layerConfig = {};
+    for (const group in layersData) {
+      layerConfig[group] = {};
+      layerConfig[group].lucideIcon = layersData[group]["lucideIcon"];
+      layerConfig[group].layers = {};
+
+      for (const layer in layersData[group]) {
+        // Loop only for layers, skip additional group specifig entries
+        if (
+          layer == "folder_name" ||
+          layer == "osmium filter" ||
+          layer == "lucideIcon"
+        ) {
+          continue;
+        }
+
+        const currentLayerData = layersData[group][layer];
+
+        let postprocessing = false;
+        if (currentLayerData["postprocessing"]) {
+          postprocessing = true;
+        }
+
+        layerConfig[group].layers[layer] = {
+          fileName: currentLayerData["fileName"],
+          description: currentLayerData["description"],
+          postprocessing: postprocessing,
+          visible: false,
+          style: currentLayerData["style"],
+        };
+      }
+    }
+    return layerConfig;
+  }
+
+  function updateLayerVisibility(layerConfig, group, layer) {
+    const visible = layerConfig[group]["layers"][layer]["visible"];
+
+    const updatedLayerConfig = {
+      ...layerConfig,
+      [group]: {
+        ...layerConfig[group],
+        layers: {
+          ...layerConfig[group]["layers"],
+          [layer]: {
+            ...layerConfig[group]["layers"][layer],
+            visible: !visible,
+          },
         },
       },
-    }));
+    };
 
-    // Update map layers immediately
+    setLayerConfig(updatedLayerConfig);
+
+    // Update map layers
     const map = mapRef.current;
     if (!map || !isMapLoadedRef.current) return;
 
-    const layerConfig = initialLayers[type][layer];
-    const layerId = layerConfig.name;
+    const layerId = layer;
+    const layerSource = layerConfig[group]["layers"][layer]["fileName"];
+    let layerSourceCut = layerSource;
+    if (layerSource.endsWith(".mbtiles")) {
+      layerSourceCut = layerSource.replace(".mbtiles", "");
+    } else if (layerSource.endsWith(".pmtiles")) {
+      layerSourceCut = layerSource.replace(".pmtiles", "");
+    }
+    const layerColor = layerConfig[group]["layers"][layer]["style"]["color"];
+    const martinUrl = getMartinUrl();
+    const sourceName = `source_${layerId}`;
 
-    // Remove existing layer if it exists
+    // Remove existing layer and source if they exist
     if (map.getLayer(layerId)) {
       map.removeLayer(layerId);
     }
-
-    // Add flood layer if it should be visible
-    if (type === "flood" && visible) {
-      map.addLayer({
-        id: layerId,
-        type: "fill",
-        source: type,
-        "source-layer": layerConfig.layerName,
-        paint: {
-          "fill-color": layerConfig.color,
-          "fill-opacity": 0.5,
-        },
-      });
+    if (map.getSource(sourceName)) {
+      map.removeSource(sourceName);
     }
 
-    if (type === "drought" && visible) {
-      map.addLayer({
-        id: layerId,
-        type: "fill",
-        source: type,
-        "source-layer": layerConfig.layerName,
-        paint: {
-          "fill-color": [
-            "case",
-            ["==", ["get", "class"], 1], // (lowest risk)
-            "#A8E6A1",
-            ["==", ["get", "class"], 2],
-            "#FFF59D",
-            ["==", ["get", "class"], 3],
-            "#FFCC80",
-            ["==", ["get", "class"], 4], // (highest risk)
-            "#FF9E9E",
-            "#CCCCCC", // unknown values
-          ],
-          "fill-opacity": 0.5,
-          "fill-outline-color": "transparent",
-        },
+    if (!visible) {
+      // Add source and layer only if making visible
+      map.addSource(sourceName, {
+        type: "vector",
+        tiles: [`${martinUrl}/${layerSourceCut}/{z}/{x}/{y}`],
+        minzoom: 0,
+        maxzoom: 12,
       });
-    }
 
-    if (type === "nuclear_powerplants" && visible) {
       map.addLayer({
         id: layerId,
         type: "circle",
-        source: type,
-        "source-layer": layerConfig.layerName,
+        source: sourceName,
+        "source-layer": layerSourceCut,
         paint: {
-          // Larger radius for better visibility
-          "circle-radius": [
-            "interpolate",
-            ["exponential", 1.5],
-            ["zoom"],
-            0,
-            1.5,
-            4,
-            2.5,
-            8,
-            4,
-            12,
-            6,
-            16,
-            10,
-          ],
-          "circle-color": layerConfig.color,
-          "circle-stroke-width": [
-            "interpolate",
-            ["linear"],
-            ["zoom"],
-            0,
-            0.5,
-            8,
-            0.8,
-            12,
-            1,
-            16,
-            1.5,
-          ],
-          "circle-stroke-color": "#333333",
-          // Full opacity for better visibility
-          "circle-opacity": 0.85,
-          // Minimal blur only at very low zoom
-          "circle-blur": ["interpolate", ["linear"], ["zoom"], 0, 0.3, 2, 0],
-        },
-      });
-    }
-
-    if (type === "churches" && visible) {
-      map.addLayer({
-        id: layerId,
-        type: "circle",
-        source: type,
-        "source-layer": layerConfig.layerName,
-        paint: {
-          // slightly smaller points than nuclear plants
           "circle-radius": [
             "interpolate",
             ["exponential", 2],
@@ -187,7 +130,7 @@ export default function MapView() {
             16,
             5,
           ],
-          "circle-color": layerConfig.color,
+          "circle-color": layerColor,
           "circle-opacity": 0.9,
         },
       });
@@ -245,34 +188,6 @@ export default function MapView() {
 
     map.on("load", () => {
       isMapLoadedRef.current = true;
-
-      map.addSource("flood", {
-        type: "vector",
-        tiles: [`${martinUrl}/flood/{z}/{x}/{y}`],
-        minzoom: 0,
-        maxzoom: 14,
-      });
-
-      map.addSource("drought", {
-        type: "vector",
-        tiles: [`${martinUrl}/drought/{z}/{x}/{y}`],
-        minzoom: 0,
-        maxzoom: 14,
-      });
-
-      map.addSource("nuclear_powerplants", {
-        type: "vector",
-        tiles: [`${martinUrl}/nuclear_powerplants/{z}/{x}/{y}`],
-        minzoom: 0,
-        maxzoom: 14,
-      });
-
-      map.addSource("churches", {
-        type: "vector",
-        tiles: [`${martinUrl}/churches/{z}/{x}/{y}`],
-        minzoom: 0,
-        maxzoom: 14,
-      });
     });
 
     return () => {
@@ -293,8 +208,8 @@ export default function MapView() {
     >
       <LayerDrawer>
         <LayerSelection
-          layers={activeLayers}
-          handleLayerVisibilityChange={handleLayerVisibilityChange}
+          layerConfig={layerConfig}
+          updateLayerVisibility={updateLayerVisibility}
         />
       </LayerDrawer>
       <div

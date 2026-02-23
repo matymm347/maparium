@@ -3,7 +3,7 @@
     "folder_name": "power",
     "osmium filter": "power",
     "lucideIcon": "Zap",
-    "Biogas": {
+    "Biogas plants": {
       "osmium filter": "plant:source=biogas",
       "postprocessing": {
         "point on surface": {
@@ -17,7 +17,7 @@
         "color": "#7C3AED"
       }
     },
-    "Diesel": {
+    "Diesel plants": {
       "osmium filter": "plant:source=diesel",
       "postprocessing": {
         "point on surface": {
@@ -31,7 +31,7 @@
         "color": "#7C3AED"
       }
     },
-    "Wind": {
+    "Wind plants": {
       "osmium filter": "plant:source=wind",
       "postprocessing": {
         "point on surface": {
@@ -45,7 +45,7 @@
         "color": "#7C3AED"
       }
     },
-    "Solar": {
+    "Solar plants": {
       "osmium filter": "plant:source=solar",
       "postprocessing": {
         "point on surface": {
@@ -59,7 +59,7 @@
         "color": "#7C3AED"
       }
     },
-    "Biomass": {
+    "Biomass plants": {
       "osmium filter": "plant:source=biomass",
 
       "postprocessing": {
@@ -74,7 +74,7 @@
         "color": "#7C3AED"
       }
     },
-    "Hydro": {
+    "Hydro plants": {
       "osmium filter": "plant:source=hydro",
 
       "postprocessing": {
@@ -89,7 +89,7 @@
         "color": "#7C3AED"
       }
     },
-    "Coal": {
+    "Coal plants": {
       "osmium filter": "plant:source=coal",
       "postprocessing": {
         "point on surface": {
@@ -103,7 +103,7 @@
         "color": "#7C3AED"
       }
     },
-    "Gas": {
+    "Gas plants": {
       "osmium filter": "plant:source=gas",
       "postprocessing": {
         "point on surface": {
@@ -117,7 +117,7 @@
         "color": "#7C3AED"
       }
     },
-    "Oil": {
+    "Oil plants": {
       "osmium filter": "plant:source=oil",
 
       "postprocessing": {
@@ -132,7 +132,7 @@
         "color": "#7C3AED"
       }
     },
-    "Geothermal": {
+    "Geothermal plants": {
       "osmium filter": "plant:source=geothermal",
 
       "postprocessing": {
@@ -147,7 +147,7 @@
         "color": "#7C3AED"
       }
     },
-    "Nuclear": {
+    "Nuclear plants": {
       "osmium filter": "plant:source=nuclear",
 
       "postprocessing": {
@@ -162,7 +162,7 @@
         "color": "#7C3AED"
       }
     },
-    "Flywheel": {
+    "Flywheel plants": {
       "osmium filter": "plant:source=flywheel",
 
       "postprocessing": {
@@ -177,7 +177,7 @@
         "color": "#7C3AED"
       }
     },
-    "Waste": {
+    "Waste plants": {
       "osmium filter": "plant:source=waste",
 
       "postprocessing": {
@@ -192,7 +192,7 @@
         "color": "#7C3AED"
       }
     },
-    "Battery": {
+    "Battery plants": {
       "osmium filter": "plant:source=battery",
 
       "postprocessing": {
@@ -207,7 +207,7 @@
         "color": "#7C3AED"
       }
     },
-    "Tidal": {
+    "Tidal plants": {
       "osmium filter": "plant:source=tidal",
 
       "postprocessing": {
