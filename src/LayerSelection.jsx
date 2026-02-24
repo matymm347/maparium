@@ -13,7 +13,7 @@ export default function LayerSelection({ layerConfig, updateLayerVisibility }) {
   return (
     <Accordion type="multiple" collapsible="true" defaultValue="item-1">
       <div className="h-[80vh] w-full">
-        <ScrollArea className="h-full w-full rounded-md border p-4">
+        <ScrollArea className="h-full w-full rounded-md border border-neutral-800 p-4 bg-neutral-900 text-white">
           {Object.keys(layerConfig).map((group) => {
             const Icon = LayerIconMap[layerConfig[group]["lucideIcon"]];
             return (
@@ -34,6 +34,11 @@ export default function LayerSelection({ layerConfig, updateLayerVisibility }) {
                           <Checkbox
                             checked={
                               layerConfig[group]["layers"][layer]["visible"]
+                            }
+                            color={
+                              layerConfig[group]["layers"][layer]["style"][
+                                "color"
+                              ]
                             }
                             onCheckedChange={() =>
                               updateLayerVisibility(layerConfig, group, layer)

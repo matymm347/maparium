@@ -12,9 +12,11 @@
         }
       },
       "fileName": "biogas_plants.mbtiles",
+      "type": "circle",
+      "radius": 2,
       "description": "Biogas power plant",
       "style": {
-        "color": "#7C3AED"
+        "color": "#FF006E"
       }
     },
     "Diesel plants": {
@@ -26,23 +28,11 @@
         }
       },
       "fileName": "diesel_plants.mbtiles",
+      "type": "circle",
+      "radius": 2,
       "description": "Diesel-fired power plant",
       "style": {
-        "color": "#7C3AED"
-      }
-    },
-    "Wind plants": {
-      "osmium filter": "plant:source=wind",
-      "postprocessing": {
-        "point on surface": {
-          "columns": ["name", "operator"],
-          "group by": "name"
-        }
-      },
-      "fileName": "wind_plants.mbtiles",
-      "description": "Wind farm",
-      "style": {
-        "color": "#7C3AED"
+        "color": "#00D9FF"
       }
     },
     "Solar plants": {
@@ -54,9 +44,11 @@
         }
       },
       "fileName": "solar_plants.mbtiles",
+      "type": "circle",
+      "radius": 1,
       "description": "Solar power plant",
       "style": {
-        "color": "#7C3AED"
+        "color": "#3A86FF"
       }
     },
     "Biomass plants": {
@@ -69,9 +61,11 @@
         }
       },
       "fileName": "biomass_plants.mbtiles",
+      "type": "circle",
+      "radius": 2,
       "description": "Biomass power plant, biogas plant",
       "style": {
-        "color": "#7C3AED"
+        "color": "#8338EC"
       }
     },
     "Hydro plants": {
@@ -84,9 +78,11 @@
         }
       },
       "fileName": "hydro_plants.mbtiles",
+      "type": "circle",
+      "radius": 1,
       "description": "Hydroelectric power station",
       "style": {
-        "color": "#7C3AED"
+        "color": "#FFBE0B"
       }
     },
     "Coal plants": {
@@ -98,9 +94,11 @@
         }
       },
       "fileName": "coal_plants.mbtiles",
+      "type": "circle",
+      "radius": 2,
       "description": "Coal-fired power station",
       "style": {
-        "color": "#7C3AED"
+        "color": "#FF1654"
       }
     },
     "Gas plants": {
@@ -112,9 +110,11 @@
         }
       },
       "fileName": "gas_plants.mbtiles",
+      "type": "circle",
+      "radius": 1,
       "description": "Gas-fired power station",
       "style": {
-        "color": "#7C3AED"
+        "color": "#06FFA5"
       }
     },
     "Oil plants": {
@@ -127,9 +127,11 @@
         }
       },
       "fileName": "oil_plants.mbtiles",
+      "type": "circle",
+      "radius": 2,
       "description": "Oil-fired power plant",
       "style": {
-        "color": "#7C3AED"
+        "color": "#FF85A1"
       }
     },
     "Geothermal plants": {
@@ -142,9 +144,11 @@
         }
       },
       "fileName": "geothermal_plants.mbtiles",
+      "type": "circle",
+      "radius": 2,
       "description": "Geothermal energy power plant",
       "style": {
-        "color": "#7C3AED"
+        "color": "#00B4D8"
       }
     },
     "Nuclear plants": {
@@ -156,24 +160,11 @@
         }
       },
       "fileName": "nuclear_plants.mbtiles",
+      "type": "circle",
+      "radius": 3,
       "description": "Nuclear power plant",
       "style": {
-        "color": "#7C3AED"
-      }
-    },
-    "Flywheel plants": {
-      "osmium filter": "plant:source=flywheel",
-
-      "postprocessing": {
-        "point on surface": {
-          "columns": ["name", "operator"],
-          "group by": "name"
-        }
-      },
-      "fileName": "flywheel_plants.mbtiles",
-      "description": "Flywheel energy storage",
-      "style": {
-        "color": "#7C3AED"
+        "color": "#F2D64B"
       }
     },
     "Waste plants": {
@@ -186,9 +177,11 @@
         }
       },
       "fileName": "waste_plants.mbtiles",
+      "type": "circle",
+      "radius": 2,
       "description": "Waste incineration plants",
       "style": {
-        "color": "#7C3AED"
+        "color": "#FF006E"
       }
     },
     "Battery plants": {
@@ -201,9 +194,11 @@
         }
       },
       "fileName": "battery_plants.mbtiles",
+      "type": "circle",
+      "radius": 2,
       "description": "Battery storage plant",
       "style": {
-        "color": "#7C3AED"
+        "color": "#00D9FF"
       }
     },
     "Tidal plants": {
@@ -216,25 +211,21 @@
         }
       },
       "fileName": "tidal_plants.mbtiles",
+      "type": "circle",
+      "radius": 3,
       "description": "Tidal power plant",
       "style": {
-        "color": "#7C3AED"
+        "color": "#FB5607"
       }
     },
     "Wind Turbines": {
       "osmium filter": "n/generator:method=wind_turbine",
       "fileName": "wind_turbines.mbtiles",
+      "type": "circle",
+      "radius": 1,
       "description": "Wind turbine generator",
       "style": {
-        "color": "#7C3AED"
-      }
-    },
-    "Power Lines": {
-      "osmium filter": "power=line power=cable",
-      "fileName": "power_lines.mbtiles",
-      "description": "Power transmission lines",
-      "style": {
-        "color": "#7C3AED"
+        "color": "#3A86FF"
       }
     }
   },
@@ -245,6 +236,8 @@
     "Churches": {
       "osmium filter": "building=church",
       "fileName": "churches.mbtiles",
+      "type": "circle",
+      "radius": 1,
       "description": "A building used for Christian worship services and Christian activities",
       "postprocessing": {
         "point on surface": {
@@ -253,12 +246,14 @@
         }
       },
       "style": {
-        "color": "#7C3AED"
+        "color": "#FFBE0B"
       }
     },
     "Kingdom Halls": {
       "osmium filter": "building=kingdom_hall",
       "fileName": "kingdom_halls.mbtiles",
+      "type": "circle",
+      "radius": 2,
       "description": "A place of worship used by Jehovah's Witnesses",
 
       "postprocessing": {
@@ -268,12 +263,14 @@
         }
       },
       "style": {
-        "color": "#7C3AED"
+        "color": "#FF1654"
       }
     },
     "Mosques": {
       "osmium filter": "building=mosque",
       "fileName": "mosques.mbtiles",
+      "type": "circle",
+      "radius": 1,
       "description": "A place of worship for Muslims",
 
       "postprocessing": {
@@ -283,20 +280,24 @@
         }
       },
       "style": {
-        "color": "#7C3AED"
+        "color": "#06FFA5"
       }
     },
     "Wayside Shrines": {
       "osmium filter": "historic=wayside_shrine",
       "fileName": "wayside_shrines.mbtiles",
+      "type": "circle",
+      "radius": 1,
       "description": "A shrine often showing a religious depiction. Tag is used also for modern shrines",
       "style": {
-        "color": "#7C3AED"
+        "color": "#FF85A1"
       }
     },
     "Synagogues": {
       "osmium filter": "building=synagogue",
       "fileName": "synagogues.mbtiles",
+      "type": "circle",
+      "radius": 2,
       "description": "A place of worship for Jews and Samaritans",
       "postprocessing": {
         "point on surface": {
@@ -305,12 +306,14 @@
         }
       },
       "style": {
-        "color": "#7C3AED"
+        "color": "#00B4D8"
       }
     },
     "Temples": {
       "osmium filter": "building=temple",
       "fileName": "temples.mbtiles",
+      "type": "circle",
+      "radius": 1,
       "description": "A building that was built as a temple",
       "postprocessing": {
         "point on surface": {
@@ -319,7 +322,7 @@
         }
       },
       "style": {
-        "color": "#7C3AED"
+        "color": "#9D84B7"
       }
     }
   },
@@ -331,14 +334,16 @@
       "osmium filter": "aeroway=aerodrome,airstrip,heliport",
       "postprocessing": {
         "point on surface": {
-          "columns": ["name", "operator"],
+          "columns": ["name"],
           "group by": "name"
         }
       },
       "fileName": "airports.mbtiles",
+      "type": "circle",
+      "radius": 1,
       "description": "An aerodrome, airport or a designated strip of surface on which aircrafts can take off and land",
       "style": {
-        "color": "#7C3AED"
+        "color": "#7209B7"
       }
     },
     "Spaceports": {
@@ -351,9 +356,11 @@
       },
 
       "fileName": "spaceports.mbtiles",
+      "type": "circle",
+      "radius": 3,
       "description": "A spaceport or cosmodrome is a site for launching or receiving Spacecraft",
       "style": {
-        "color": "#7C3AED"
+        "color": "#FF006E"
       }
     }
   },
@@ -364,14 +371,18 @@
     "Bars": {
       "osmium filter": "amenity=bar",
       "fileName": "bars.mbtiles",
+      "type": "circle",
+      "radius": 1,
       "description": "Bar is a purpose-built commercial establishment that sells alcoholic drinks to be consumed on the premises. They are characterised by a noisy and vibrant atmosphere, similar to a party and usually don't sell food.",
       "style": {
-        "color": "#7C3AED"
+        "color": "#00D9FF"
       }
     },
     "Cafe": {
       "osmium filter": "amenity=cafe",
       "fileName": "cafes.mbtiles",
+      "type": "circle",
+      "radius": 1,
       "description": "Cafe is generally an informal place that offers casual meals and beverages; typically, the focus is on coffee or tea. Also known as a coffeehouse/shop, bistro or sidewalk cafe",
       "postprocessing": {
         "point on surface": {
@@ -380,23 +391,27 @@
         }
       },
       "style": {
-        "color": "#7C3AED"
+        "color": "#FB5607"
       }
     },
     "Fast Food": {
       "osmium filter": "amenity=fast_food",
       "fileName": "fast_food.mbtiles",
+      "type": "circle",
+      "radius": 1,
       "description": "Fast food restaurant is a specific type of restaurant that serves fast food cuisine and has minimal table service. Food served in fast food restaurants is typically less nutritionally valuable compared to other types of restaurants.",
       "style": {
-        "color": "#7C3AED"
+        "color": "#3A86FF"
       }
     },
     "Restaurant": {
       "osmium filter": "amenity=restaurant",
       "fileName": "restaurants.mbtiles",
+      "type": "circle",
+      "radius": 1,
       "description": "A restaurant is a business that prepares and serves food and drinks to customers. Meals are generally served and eaten on the premises, but many restaurants also offer take-out and food delivery services.",
       "style": {
-        "color": "#7C3AED"
+        "color": "#8338EC"
       }
     }
   },
@@ -407,6 +422,8 @@
     "University": {
       "osmium filter": "amenity=university",
       "fileName": "universities.mbtiles",
+      "type": "circle",
+      "radius": 1,
       "description": "A university campus: an institute of higher education",
       "postprocessing": {
         "point on surface": {
@@ -415,12 +432,14 @@
         }
       },
       "style": {
-        "color": "#7C3AED"
+        "color": "#FFBE0B"
       }
     },
     "College": {
       "osmium filter": "amenity=college",
       "fileName": "colleges.mbtiles",
+      "type": "circle",
+      "radius": 1,
       "description": "A college campus: an institute of higher education",
       "postprocessing": {
         "point on surface": {
@@ -429,12 +448,14 @@
         }
       },
       "style": {
-        "color": "#7C3AED"
+        "color": "#FF1654"
       }
     },
     "Kindergarten": {
       "osmium filter": "amenity=kindergarten",
       "fileName": "kindergartens.mbtiles",
+      "type": "circle",
+      "radius": 1,
       "description": "For children too young for a regular school (also known as preschool, playschool or nursery school), in some countries including afternoon supervision of primary school children",
       "postprocessing": {
         "point on surface": {
@@ -443,12 +464,14 @@
         }
       },
       "style": {
-        "color": "#7C3AED"
+        "color": "#06FFA5"
       }
     },
     "Library": {
       "osmium filter": "amenity=library",
       "fileName": "libraries.mbtiles",
+      "type": "circle",
+      "radius": 1,
       "description": "A public library (municipal, university, …) to borrow books from",
       "postprocessing": {
         "point on surface": {
@@ -457,12 +480,14 @@
         }
       },
       "style": {
-        "color": "#7C3AED"
+        "color": "#FF85A1"
       }
     },
     "School": {
       "osmium filter": "amenity=school",
       "fileName": "schools.mbtiles",
+      "type": "circle",
+      "radius": 1,
       "description": "School and grounds - primary, middle and secondary schools",
       "postprocessing": {
         "point on surface": {
@@ -471,7 +496,7 @@
         }
       },
       "style": {
-        "color": "#7C3AED"
+        "color": "#00B4D8"
       }
     }
   },
@@ -482,6 +507,8 @@
     "Charging Stations": {
       "osmium filter": "amenity=charging_station",
       "fileName": "charging_stations.mbtiles",
+      "type": "circle",
+      "radius": 2,
       "description": "Charging facility for electric vehicle",
       "postprocessing": {
         "point on surface": {
@@ -490,12 +517,14 @@
         }
       },
       "style": {
-        "color": "#7C3AED"
+        "color": "#4CD964"
       }
     },
     "Refueling stations": {
       "osmium filter": "amenity=fuel",
       "fileName": "refueling_stations.mbtiles",
+      "type": "circle",
+      "radius": 1,
       "description": "Petrol station, gas station, marine fuel",
       "postprocessing": {
         "point on surface": {
@@ -504,12 +533,14 @@
         }
       },
       "style": {
-        "color": "#7C3AED"
+        "color": "#7209B7"
       }
     },
     "Train Stations": {
       "osmium filter": "building=train_station",
       "fileName": "train_stations.mbtiles",
+      "type": "circle",
+      "radius": 1,
       "description": "A building constructed to be a train station building, including buildings that are abandoned and used nowadays for a different purpose",
       "postprocessing": {
         "point on surface": {
@@ -518,23 +549,27 @@
         }
       },
       "style": {
-        "color": "#7C3AED"
+        "color": "#FF006E"
       }
     },
     "Highways": {
       "osmium filter": "highway=motorway,trunk,primary",
       "fileName": "highways.mbtiles",
+      "type": "circle",
+      "radius": 1,
       "description": "Collection of major highways including motorways, trunks, primaries and secondaries along with their link roads",
       "style": {
-        "color": "#7C3AED"
+        "color": "#00D9FF"
       }
     },
     "Railways": {
       "osmium filter": "railway=rail,light_rail",
       "fileName": "railways.mbtiles",
+      "type": "circle",
+      "radius": 1,
       "description": "Collection of major railway lines including rail, light_rail, subway and tram along with their branch lines",
       "style": {
-        "color": "#7C3AED"
+        "color": "#FB5607"
       }
     }
   },
@@ -545,6 +580,8 @@
     "Hospitals": {
       "osmium filter": "amenity=hospital",
       "fileName": "hospitals.mbtiles",
+      "type": "circle",
+      "radius": 1,
       "description": "A hospital providing in-patient medical treatment",
       "postprocessing": {
         "point on surface": {
@@ -553,12 +590,14 @@
         }
       },
       "style": {
-        "color": "#7C3AED"
+        "color": "#3A86FF"
       }
     },
     "Fire Stations": {
       "osmium filter": "amenity=fire_station",
       "fileName": "fire_stations.mbtiles",
+      "type": "circle",
+      "radius": 1,
       "description": "A station of a fire brigade",
       "postprocessing": {
         "point on surface": {
@@ -567,12 +606,14 @@
         }
       },
       "style": {
-        "color": "#7C3AED"
+        "color": "#8338EC"
       }
     },
     "Police Stations": {
       "osmium filter": "amenity=police",
       "fileName": "police_stations.mbtiles",
+      "type": "circle",
+      "radius": 1,
       "description": "A police station where police officers patrol from and that is a first point of contact for civilians",
       "postprocessing": {
         "point on surface": {
@@ -581,7 +622,7 @@
         }
       },
       "style": {
-        "color": "#7C3AED"
+        "color": "#FFBE0B"
       }
     }
   },
@@ -592,30 +633,38 @@
     "Volcanic Caldera Rims": {
       "osmium filter": "geological=volcanic_caldera_rim",
       "fileName": "volcanic_caldera_rims.mbtiles",
+      "type": "circle",
+      "radius": 2,
       "description": "The crater (caldera) of a volcano.",
       "style": {
-        "color": "#7C3AED"
+        "color": "#FF1654"
       }
     },
     "Paleontological Sites": {
       "osmium filter": "geological=paleontological_site",
       "fileName": "paleontological_sites.mbtiles",
+      "type": "circle",
+      "radius": 2,
       "description": "A place with fossils",
       "style": {
-        "color": "#7C3AED"
+        "color": "#06FFA5"
       }
     },
     "Glacial Erratics": {
       "osmium filter": "geological=glacial_erratic",
       "fileName": "glacial_erratics.mbtiles",
+      "type": "circle",
+      "radius": 2,
       "description": "A boulder deposited by a glacier",
       "style": {
-        "color": "#7C3AED"
+        "color": "#FF85A1"
       }
     },
     "Rock Glaciers": {
       "osmium filter": "geological=rock_glacier",
       "fileName": "rock_glaciers.mbtiles",
+      "type": "circle",
+      "radius": 2,
       "description": "Rock glaciers are mixtures of rock and ice that move slowly downhill when active",
       "postprocessing": {
         "point on surface": {
@@ -624,39 +673,47 @@
         }
       },
       "style": {
-        "color": "#7C3AED"
+        "color": "#00B4D8"
       }
     },
     "Meteor Crater": {
       "osmium filter": "geological=meteor_crater",
       "fileName": "meteor_craters.mbtiles",
+      "type": "circle",
+      "radius": 2,
       "description": "A crater formed by the impact of a meteor",
       "style": {
-        "color": "#7C3AED"
+        "color": "#9D84B7"
       }
     },
     "Sinkhole": {
       "osmium filter": "geological=sinkhole",
       "fileName": "sinkholes.mbtiles",
+      "type": "circle",
+      "radius": 2,
       "description": "A depression or hole in the ground caused by some form of collapse of the surface",
       "style": {
-        "color": "#7C3AED"
+        "color": "#7209B7"
       }
     },
     "Volcanos": {
       "osmium filter": "natural=volcano",
       "fileName": "volcanos.mbtiles",
+      "type": "circle",
+      "radius": 2,
       "description": "An opening exposed on the earth's surface where volcanic material is emitted",
       "style": {
-        "color": "#7C3AED"
+        "color": "#FF006E"
       }
     },
     "Cave entrances": {
       "osmium filter": "natural=cave_entrance",
       "fileName": "cave_entrances.mbtiles",
+      "type": "circle",
+      "radius": 1,
       "description": "An entrance to a cave: a natural underground space large enough for a human to enter",
       "style": {
-        "color": "#7C3AED"
+        "color": "#00D9FF"
       }
     }
   },
@@ -667,6 +724,8 @@
     "Castles": {
       "osmium filter": "historic=castle building=castle",
       "fileName": "castles.mbtiles",
+      "type": "circle",
+      "radius": 1,
       "description": "various kinds of castles, palaces, fortresses, manors, stately homes, kremlins, shiros and other",
       "postprocessing": {
         "point on surface": {
@@ -675,12 +734,14 @@
         }
       },
       "style": {
-        "color": "#7C3AED"
+        "color": "#FB5607"
       }
     },
     "Ruins": {
       "osmium filter": "historic=ruins",
       "fileName": "ruins.mbtiles",
+      "type": "circle",
+      "radius": 1,
       "description": "Remains of structures that were once complete, but have fallen into partial or complete disrepair",
       "postprocessing": {
         "point on surface": {
@@ -689,12 +750,14 @@
         }
       },
       "style": {
-        "color": "#7C3AED"
+        "color": "#3A86FF"
       }
     },
     "Archaeological Sites": {
       "osmium filter": "historic=archaeological_site",
       "fileName": "archaeological_site.mbtiles",
+      "type": "circle",
+      "radius": 2,
       "description": "A place in which evidence of past human activity is preserved",
       "postprocessing": {
         "point on surface": {
@@ -703,28 +766,34 @@
         }
       },
       "style": {
-        "color": "#7C3AED"
+        "color": "#8338EC"
       }
     },
     "Battlefields": {
       "osmium filter": "historic=battlefield",
       "fileName": "battlefield.mbtiles",
+      "type": "circle",
+      "radius": 2,
       "description": "The site of a battle or military skirmish in the past",
       "style": {
-        "color": "#7C3AED"
+        "color": "#FFBE0B"
       }
     },
     "Bomb Craters": {
       "osmium filter": "historic=bomb_crater",
       "fileName": "bomb_crater.mbtiles",
+      "type": "circle",
+      "radius": 2,
       "description": "A bomb crater",
       "style": {
-        "color": "#7C3AED"
+        "color": "#FF1654"
       }
     },
     "Forts": {
       "osmium filter": "historic=fort",
       "fileName": "fort.mbtiles",
+      "type": "circle",
+      "radius": 2,
       "description": "A military fort, a stand-alone defensive structure which differs from a castle in that there is no permanent residence",
       "postprocessing": {
         "point on surface": {
@@ -733,29 +802,17 @@
         }
       },
       "style": {
-        "color": "#7C3AED"
-      }
-    },
-    "Monuments": {
-      "osmium filter": "historic=monument",
-      "fileName": "monument.mbtiles",
-      "description": "A large memorial object built to remember or commemorate a person, group of people, or an event",
-      "postprocessing": {
-        "point on surface": {
-          "columns": ["name"],
-          "group by": "name"
-        }
-      },
-      "style": {
-        "color": "#7C3AED"
+        "color": "#06FFA5"
       }
     },
     "Tombs": {
       "osmium filter": "historic=tomb",
       "fileName": "tomb.mbtiles",
+      "type": "circle",
+      "radius": 2,
       "description": "A structure where somebody has been buried",
       "style": {
-        "color": "#7C3AED"
+        "color": "#00B4D8"
       }
     }
   },
@@ -766,6 +823,8 @@
     "Bases and Airfields": {
       "osmium filter": "military=base,airfield",
       "fileName": "military_bases.mbtiles",
+      "type": "circle",
+      "radius": 2,
       "description": "A facility where military personnel and equipment are based and where military planes take off and land",
       "postprocessing": {
         "point on surface": {
@@ -774,12 +833,14 @@
         }
       },
       "style": {
-        "color": "#7C3AED"
+        "color": "#9D84B7"
       }
     },
     "Bunkers": {
       "osmium filter": "military=bunker",
       "fileName": "military_bunkers.mbtiles",
+      "type": "circle",
+      "radius": 1,
       "description": "A building reinforced to withstand attack",
       "postprocessing": {
         "point on surface": {
@@ -788,15 +849,17 @@
         }
       },
       "style": {
-        "color": "#7C3AED"
+        "color": "#7209B7"
       }
     },
     "Nuclear Explosion Sites": {
       "osmium filter": "military=nuclear_explosion_site",
       "fileName": "nuclear_explosion_sites.mbtiles",
+      "type": "circle",
+      "radius": 2,
       "description": "Nuclear weapons test site",
       "style": {
-        "color": "#7C3AED"
+        "color": "#FF006E"
       }
     }
   },
@@ -807,6 +870,8 @@
     "Data centers": {
       "osmium filter": "telecom=data_center",
       "fileName": "data_centers.mbtiles",
+      "type": "circle",
+      "radius": 2,
       "description": "A building used to house computers and network equipment",
       "postprocessing": {
         "point on surface": {
@@ -815,15 +880,17 @@
         }
       },
       "style": {
-        "color": "#7C3AED"
+        "color": "#00D9FF"
       }
     },
     "Telecom lines": {
       "osmium filter": "communication=line",
       "fileName": "telecom_lines.mbtiles",
+      "type": "line",
+      "radius": 1,
       "description": "Telecommunication lines, including telephone and internet cables",
       "style": {
-        "color": "#7C3AED"
+        "color": "#FB5607"
       }
     }
   },
@@ -834,6 +901,8 @@
     "Attractions": {
       "osmium filter": "tourism=attraction",
       "fileName": "attractions.mbtiles",
+      "type": "circle",
+      "radius": 1,
       "description": "A place of interest to tourists",
       "postprocessing": {
         "point on surface": {
@@ -842,28 +911,40 @@
         }
       },
       "style": {
-        "color": "#7C3AED"
+        "color": "#3A86FF"
       }
     },
     "Hotels, Hostels and Motels": {
       "osmium filter": "tourism=hostel,hotel,motel",
       "fileName": "hotels_motels_and_hostels.mbtiles",
+      "type": "circle",
+      "radius": 1,
       "description": "Hotels, hostels, and motels constitute categories of accommodation facilities that offer temporary lodging to travelers, varying in service level, privacy, and available amenities",
       "style": {
-        "color": "#7C3AED"
+        "color": "#8338EC"
+      },
+      "postprocessing": {
+        "point on surface": {
+          "columns": ["name"],
+          "group by": "name"
+        }
       }
     },
     "Artwork": {
       "osmium filter": "tourism=artwork",
       "fileName": "artwork.mbtiles",
+      "type": "circle",
+      "radius": 1,
       "description": "A public piece of art",
       "style": {
-        "color": "#7C3AED"
+        "color": "#FFBE0B"
       }
     },
     "Camp Sites": {
       "osmium filter": "tourism=camp_site",
       "fileName": "camp_sites.mbtiles",
+      "type": "circle",
+      "radius": 1,
       "description": "An area where people can camp overnight using tents, camper vans, or caravans",
       "postprocessing": {
         "point on surface": {
@@ -872,12 +953,14 @@
         }
       },
       "style": {
-        "color": "#7C3AED"
+        "color": "#FF1654"
       }
     },
     "Galleries": {
       "osmium filter": "tourism=gallery",
       "fileName": "galleries.mbtiles",
+      "type": "circle",
+      "radius": 1,
       "description": "An area or building that displays a variety of visual art exhibitions",
       "postprocessing": {
         "point on surface": {
@@ -886,12 +969,14 @@
         }
       },
       "style": {
-        "color": "#7C3AED"
+        "color": "#06FFA5"
       }
     },
     "Museums": {
       "osmium filter": "tourism=museum",
       "fileName": "museums.mbtiles",
+      "type": "circle",
+      "radius": 1,
       "description": "A museum: an institution with exhibitions on scientific, historical, cultural topics",
       "postprocessing": {
         "point on surface": {
@@ -900,12 +985,14 @@
         }
       },
       "style": {
-        "color": "#7C3AED"
+        "color": "#FF85A1"
       }
     },
     "Theme Parks": {
       "osmium filter": "tourism=theme_park",
       "fileName": "theme_parks.mbtiles",
+      "type": "circle",
+      "radius": 2,
       "description": "An amusement park where entertainment is provided by rides, games, concessions",
       "postprocessing": {
         "point on surface": {
@@ -914,20 +1001,24 @@
         }
       },
       "style": {
-        "color": "#7C3AED"
+        "color": "#00B4D8"
       }
     },
     "Viewpoints": {
       "osmium filter": "tourism=viewpoint",
       "fileName": "viewpoints.mbtiles",
+      "type": "circle",
+      "radius": 1,
       "description": "A place worth visiting, often high, with a good view of surrounding countryside or notable buildings",
       "style": {
-        "color": "#7C3AED"
+        "color": "#9D84B7"
       }
     },
     "Zoo": {
       "osmium filter": "tourism=zoo",
       "fileName": "zoos.mbtiles",
+      "type": "circle",
+      "radius": 1,
       "description": "A zoological garden, where animals are confined for viewing by the public",
       "postprocessing": {
         "point on surface": {
@@ -936,7 +1027,7 @@
         }
       },
       "style": {
-        "color": "#7C3AED"
+        "color": "#7209B7"
       }
     }
   }

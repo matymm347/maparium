@@ -53,6 +53,8 @@ export default function MapView() {
           postprocessing: postprocessing,
           visible: false,
           style: currentLayerData["style"],
+          type: currentLayerData["type"],
+          radius: currentLayerData["radius"],
         };
       }
     }
@@ -91,6 +93,8 @@ export default function MapView() {
       layerSourceCut = layerSource.replace(".pmtiles", "");
     }
     const layerColor = layerConfig[group]["layers"][layer]["style"]["color"];
+    const layerType = layerConfig[group]["layers"][layer]["type"];
+    const layerRadius = layerConfig[group]["layers"][layer]["radius"];
     const martinUrl = getMartinUrl();
     const sourceName = `source_${layerId}`;
 
@@ -111,29 +115,42 @@ export default function MapView() {
         maxzoom: 12,
       });
 
-      map.addLayer({
-        id: layerId,
-        type: "circle",
-        source: sourceName,
-        "source-layer": layerSourceCut,
-        paint: {
-          "circle-radius": [
-            "interpolate",
-            ["exponential", 2],
-            ["zoom"],
-            0,
-            1,
-            6,
-            2,
-            10,
-            3,
-            16,
-            5,
-          ],
-          "circle-color": layerColor,
-          "circle-opacity": 0.9,
-        },
-      });
+      if (layerType === "line") {
+        map.addLayer({
+          id: layerId,
+          type: layerType,
+          source: sourceName,
+          "source-layer": layerSourceCut,
+          paint: {
+            "line-color": layerColor,
+            "line-width": 2,
+            "line-opacity": 0.8,
+          },
+        });
+        return;
+      } else if (layerType === "circle") {
+        map.addLayer({
+          id: layerId,
+          type: layerType,
+          source: sourceName,
+          "source-layer": layerSourceCut,
+          paint: {
+            "circle-radius": [
+              "interpolate",
+              ["exponential", 2],
+              ["zoom"],
+              0,
+              layerRadius,
+              6,
+              2,
+              10,
+              4,
+            ],
+            "circle-color": layerColor,
+            "circle-opacity": 0.9,
+          },
+        });
+      }
     }
   }
 
@@ -155,7 +172,7 @@ export default function MapView() {
             type: "vector",
             tiles: [`${martinUrl}/planet_z12/{z}/{x}/{y}`],
             minzoom: 0,
-            maxzoom: 14,
+            maxzoom: 12,
             attribution:
               '<a href="https://protomaps.com">Protomaps</a> © <a href="https://openstreetmap.org">OpenStreetMap</a>',
           },
