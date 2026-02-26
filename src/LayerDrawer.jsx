@@ -18,8 +18,8 @@ export default function LayerDrawer({ children }) {
         <div
           style={{
             position: "absolute",
-            bottom: 50,
-            left: 8,
+            bottom: 80,
+            left: 12,
             zIndex: 10,
           }}
         >

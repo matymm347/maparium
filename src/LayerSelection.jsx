@@ -9,16 +9,26 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { LayerIconMap } from "./LayerIconMap";
 import { Checkbox } from "@/components/ui/checkbox";
 
-export default function LayerSelection({ layerConfig, updateLayerVisibility }) {
+export default function LayerSelection({
+  layerConfig,
+  updateLayerVisibility,
+  chosenLayerGroup,
+  handleChooseLayerGroup,
+}) {
   return (
-    <Accordion type="multiple" collapsible="true" defaultValue="item-1">
+    <Accordion
+      type="multiple"
+      collapsible="true"
+      value={chosenLayerGroup}
+      onValueChange={handleChooseLayerGroup}
+    >
       <div className="h-[80vh] w-full">
         <ScrollArea className="h-full w-full rounded-md border border-neutral-800 p-4 bg-neutral-900 text-white">
           {Object.keys(layerConfig).map((group) => {
             const Icon = LayerIconMap[layerConfig[group]["lucideIcon"]];
             return (
               <AccordionItem value={group} key={group}>
-                <AccordionTrigger>
+                <AccordionTrigger data-state="open">
                   <div className="flex">
                     <div className="flex items-center mr-2">
                       <Icon size={18} />

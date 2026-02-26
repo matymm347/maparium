@@ -10,6 +10,9 @@ export default function MapView() {
   const [layerConfig, setLayerConfig] = useState(
     buildLayerConfig(initialLayers),
   );
+
+  const [chosenLayerGroup, setChosenLayerGroup] = useState([]);
+
   const mapRef = useRef(null);
   const isMapLoadedRef = useRef(false);
 
@@ -22,6 +25,11 @@ export default function MapView() {
     // In production, use absolute URL with current origin
     return `${window.location.origin}/tiles`;
   };
+
+  function handleChooseLayerGroup(group) {
+    setChosenLayerGroup(group);
+    console.log("Chosen group in MapView:", group);
+  }
 
   function buildLayerConfig(layersData) {
     const layerConfig = {};
@@ -227,6 +235,8 @@ export default function MapView() {
         <LayerSelection
           layerConfig={layerConfig}
           updateLayerVisibility={updateLayerVisibility}
+          chosenLayerGroup={chosenLayerGroup}
+          handleChooseLayerGroup={handleChooseLayerGroup}
         />
       </LayerDrawer>
       <div
