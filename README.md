@@ -1,49 +1,39 @@
-# 🗺️ Maparium
+# <img src="src/assets/maparium_logo.svg" alt="Maparium Logo" height="32" style="vertical-align:middle;" /> Maparium
 
-**Maparium** is a lightweight web application that provides access to geospatial data across Poland. Built as a comprehensive GIS platform, it offers multiple data layers, including flood predictions, drought visualization, demographic data, and more—serving as a modern alternative to slow and difficult-to-use official portals.
+Maparium is a web application that allows users to display specific OpenStreetMap features globally with very high performance. For example, it can show all wind turbines or all castles from a full-globe perspective in a fraction of a second, while remaining lightweight in terms of hardware requirements. The data is rendered using MapLibre GL JS. The data is hosted on a dedicated server, the configuration of which is not currently included in this repository.
 
-Designed for everyday citizens, students, journalists, and curious minds, Maparium aims to make GIS data accessible and intuitive. While official government websites are feature-rich for GIS professionals and officials, they are often too slow and complex for spontaneous use. Maparium's mission is to simplify access to this data.
+Maparium is built mainly for fun and curiosity, aiming to be a place that brings together a very wide range of topics in one platform while remaining fast and responsive.
 
-Built with **React (TypeScript)** and **Vite** for the frontend, Protomaps basemap, and custom pmtiles for the backend, the website currently works as a serverless solution.
 
----
+## Available Pre Defined Data Layers
 
-## Upcoming
+|Type           |Layers    |
+|---------------|----------|
+|Power         | Biogas plants, Diesel plants, Solar plants, Biomass plants, Hydro plants, Coal plants, Gas plants, Oil plants, Geothermal plants, Nuclear plants, Waste plants, Battery plants, Tidal plants, Wind Turbines |
+|Religious      |	Churches, Kingdom Halls, Mosques, Wayside Shrines, Synagogues, Temples|
+|Aeroway        |	Airports and Runways, Spaceports|
+|Amenity        |	Bars, Cafe, Fast Food, Restaurant|
+|Education      |	University, College, Kindergarten, Library, School|
+|Transportation |	Charging Stations, Refueling stations, Train Stations, Highways, Railways|
+|Emergency      |	Hospitals, Fire Stations, Police Stations|
+|Geological     |	Volcanic Caldera Rims, Paleontological Sites, Glacial Erratics, Rock Glaciers, Meteor Crater, Sinkhole, Volcanos, Cave entrances|
+|Historic       |	Castles, Ruins, Archaeological Sites, Battlefields, Bomb Craters, Forts, Tombs|
+|Military       |	Bases and Airfields, Bunkers, Nuclear Explosion Sites|
+|Telecom        |	Data centers, Telecom lines|
+|Tourism        |	Attractions, Hotels, Hostels and Motels, Artwork, Camp Sites, Galleries, Museums, Theme Parks, Viewpoints, Zoo|
 
-Here are some features planned for future development:
-
-- [ ] Additional environmental data layers (air quality, temperature, precipitation, demographics, drought areas)
-- [ ] Search bar for quickly zooming to specific locations
-- [ ] Historical data comparison tools
-- [ ] Polish language support
-
-Have an idea for a new data layer or feature? Feel free to open an issue or contribute!
-
----
-
-## Available Data Layers
-
-### Environmental
-
-- **Flood hazard map**: Areas of flood hazard for rivers and seas with varying probabilities or levee breaches
-
-_More layers are continuously being added._
-
----
 
 ## Tech Stack
 
-- **Frontend**: React + TypeScript + Vite
-- **Mapping**: Protomaps base map and custom pmtiles for all additional layers
-- **Data pre-processing**: QGIS, tippecanoe, planetiler
+- **Frontend**: React, Vite, MapLibre GL JS
+- **Mapping**: Protomaps base map and custom mbtiles extracted from OpenStreetMap for all additional layers
+- **Data pre-processing**: omsium-tool, tippecanoe, ogr2ogr
 
----
 
 ## Screenshot
 
 ![Maparium screenshot](./assets/screenshot.png)
 
----
 
 ## Setup & Development
 
@@ -55,12 +45,12 @@ _More layers are continuously being added._
    npm install
    ```
 
-2. **Pmtiles**
+2. **Backend**
 
-   Data preprocessing and hosting pmtiles are beyond the scope of this README. Proper instructions will be provided in the future. If you want to contribute to the frontend, Vite is configured so that the development build uses the Maparium server to display tiles.
+   Data preprocessing and hosting are beyond the scope of this README. Proper instructions will be provided in the future. If you want to contribute to the frontend, Vite is configured so that the development build uses the Maparium server to display tiles.
 
----
 
-## Data Source
+## Upcoming
 
-Maparium aggregates data from various Polish governmental sources through [dane.gov.pl](https://dane.gov.pl/pl).
+The next big step would be opening Maparium to user contributions, allowing users to add new layers with features that are not part of the predefined set. This would require user accounts and additional backend processing.
+
