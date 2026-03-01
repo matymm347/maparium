@@ -1,6 +1,7 @@
 import { Github } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import AddressSearch from "./AddressSearch";
+import mapariumLogo from "@/assets/maparium_logo.svg";
 
 export default function Navbar() {
   return (
@@ -10,7 +11,8 @@ export default function Navbar() {
         <div className="flex items-center justify-between w-full sm:w-auto sm:flex-1">
           {/* Logo */}
           <div className="flex items-center gap-2">
-            <div className="h-8 w-8 rounded-lg bg-linear-to-br from-blue-500 to-purple-600"></div>
+            <img src={mapariumLogo} alt="Maparium Logo" className="h-8 w-8" />
+
             <span className="text-xl font-semibold text-gray-900">
               Maparium
             </span>
