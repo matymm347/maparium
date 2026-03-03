@@ -1,4 +1,4 @@
-import { Layers2 } from "lucide-react";
+import { Layers } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Drawer,
@@ -24,7 +24,7 @@ export default function LayerDrawer({ children }) {
           }}
         >
           <Button variant="outline" size="icon">
-            <Layers2 size={20} />
+            <Layers size={20} />
           </Button>
         </div>
       </DrawerTrigger>

@@ -1,4 +1,5 @@
 import "maplibre-gl/dist/maplibre-gl.css";
+import { Earth, Map as MapIcon } from "lucide-react";
 import maplibregl from "maplibre-gl";
 import { useEffect, useRef, useState } from "react";
 import { layers, namedFlavor } from "@protomaps/basemaps";
@@ -15,7 +16,6 @@ export default function MapView({ setApiKey, setMapController }) {
   );
 
   const [API_KEY] = useState(import.meta.env.VITE_MAP_TILER_API_KEY);
-  47;
   const [chosenLayerGroup, setChosenLayerGroup] = useState([]);
 
   const mapRef = useRef(null);
@@ -33,7 +33,6 @@ export default function MapView({ setApiKey, setMapController }) {
 
   function handleChooseLayerGroup(group) {
     setChosenLayerGroup(group);
-    console.log("Chosen group in MapView:", group);
   }
 
   function buildLayerConfig(layersData) {
@@ -72,6 +71,41 @@ export default function MapView({ setApiKey, setMapController }) {
       }
     }
     return layerConfig;
+  }
+
+  function clearAllLayers(layerConfig) {
+    // Create a deep copy of layerConfig with all layers set to visible: false
+    const newConfig = {};
+    Object.keys(layerConfig).forEach((group) => {
+      newConfig[group] = {
+        ...layerConfig[group],
+        layers: {},
+      };
+      Object.keys(layerConfig[group]["layers"]).forEach((layer) => {
+        newConfig[group].layers[layer] = {
+          ...layerConfig[group]["layers"][layer],
+          visible: false,
+        };
+      });
+    });
+    setLayerConfig(newConfig);
+
+    // Remove all layers from the map
+    const map = mapRef.current;
+    if (map && isMapLoadedRef.current) {
+      Object.keys(layerConfig).forEach((group) => {
+        Object.keys(layerConfig[group]["layers"]).forEach((layer) => {
+          const layerId = layer;
+          const sourceName = `source_${layerId}`;
+          if (map.getLayer(layerId)) {
+            map.removeLayer(layerId);
+          }
+          if (map.getSource(sourceName)) {
+            map.removeSource(sourceName);
+          }
+        });
+      });
+    }
   }
 
   function updateLayerVisibility(layerConfig, group, layer) {
@@ -179,7 +213,7 @@ export default function MapView({ setApiKey, setMapController }) {
         version: 8,
         glyphs:
           "https://protomaps.github.io/basemaps-assets/fonts/{fontstack}/{range}.pbf",
-        sprite: "https://protomaps.github.io/basemaps-assets/sprites/v4/light",
+        sprite: `https://protomaps.github.io/basemaps-assets/sprites/v4/dark`,
         sources: {
           protomaps: {
             type: "vector",
@@ -187,13 +221,11 @@ export default function MapView({ setApiKey, setMapController }) {
             minzoom: 0,
             maxzoom: 12,
             attribution:
-              '<a href="https://protomaps.com">Protomaps</a> © <a href="https://openstreetmap.org">OpenStreetMap</a>',
+              '<a href="https://maptiler.com/copyright?_gl=1*10ylx4k*_gcl_au*MjEwNDE3Mzk1LjE3NzI1NjkzNTI.*_ga*MjU0ODUyNi4xNzcyNTY5MzUz*_ga_K4SXYBF4HT*czE3NzI1NjkzNTIkbzEkZzEkdDE3NzI1Njk0NjAkajI1JGwwJGgw">© MapTiler |</a> <a href="https://protomaps.com">Protomaps |</a> © <a href="https://openstreetmap.org">OpenStreetMap</a>',
           },
         },
         layers: layers("protomaps", namedFlavor("black"), { lang: "en" }),
       },
-      // ceil to avoid blurry tiles on non integer ratios
-      // pixelRatio: Math.ceil(window.devicePixelRatio),
       center: [19.1451, 51.9194],
       zoom: 2,
     });
@@ -209,13 +241,29 @@ export default function MapView({ setApiKey, setMapController }) {
       }),
       "bottom-right",
     );
+
+    if (maplibregl.ProjectionControl) {
+      map.addControl(
+        new maplibregl.ProjectionControl({
+          projections: [
+            { name: "Globe", id: "globe" },
+            { name: "Mercator", id: "mercator" },
+          ],
+        }),
+        "bottom-right",
+      );
+    }
+
+    if (maplibregl.GlobeControl) {
+      map.addControl(new maplibregl.GlobeControl(), "bottom-right");
+    }
     const controller = createMapLibreGlMapController(map, maplibregl);
     if (setApiKey) setApiKey(API_KEY);
     if (setMapController) setMapController(controller);
 
     map.on("style.load", () => {
       map.setProjection({
-        type: "globe", // Set projection to globe
+        type: "globe",
       });
     });
 
@@ -227,11 +275,6 @@ export default function MapView({ setApiKey, setMapController }) {
       if (mapRef.current) {
         mapRef.current.remove();
         mapRef.current = null;
-      }
-      // Clean up global variables
-      if (typeof window !== "undefined") {
-        window.mapariumApiKey = undefined;
-        window.mapariumMapController = undefined;
       }
     };
   }, [API_KEY]);
@@ -250,6 +293,7 @@ export default function MapView({ setApiKey, setMapController }) {
           updateLayerVisibility={updateLayerVisibility}
           chosenLayerGroup={chosenLayerGroup}
           handleChooseLayerGroup={handleChooseLayerGroup}
+          clearAllLayers={clearAllLayers}
         />
       </LayerDrawer>
       <div

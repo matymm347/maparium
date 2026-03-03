@@ -1,6 +1,5 @@
 import MapView from "./MapView";
 import Navbar from "./Navbar";
-
 import { useState } from "react";
 
 function App() {

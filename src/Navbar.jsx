@@ -21,7 +21,7 @@ export default function Navbar({ apiKey, mapController }) {
           </a>
 
           {/* GitHub button - visible on mobile */}
-          <div className="sm:hidden">
+          <div className="flex items-center gap-2 sm:hidden">
             <Button variant="ghost" size="sm">
               <a
                 href="https://github.com/matymm347/maparium"
@@ -41,7 +41,7 @@ export default function Navbar({ apiKey, mapController }) {
         </div>
 
         {/* GitHub button - hidden on mobile, visible on desktop */}
-        <div className="hidden sm:block">
+        <div className="hidden sm:flex items-center gap-2">
           <Button variant="ghost" size="sm">
             <a
               href="https://github.com/matymm347/maparium"
