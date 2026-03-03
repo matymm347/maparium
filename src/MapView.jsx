@@ -14,7 +14,7 @@ export default function MapView({ setApiKey, setMapController }) {
     buildLayerConfig(initialLayers),
   );
 
-  const [API_KEY] = useState(import.meta.env.VITE_MAPTILER_API_KEY);
+  const [API_KEY] = useState(import.meta.env.VITE_MAP_TILER_API_KEY);
   47;
   const [chosenLayerGroup, setChosenLayerGroup] = useState([]);
 
