@@ -1,4 +1,6 @@
+import "@maptiler/geocoding-control/style.css";
 import { useState, useRef } from "react";
+import { GeocodingControl } from "@maptiler/geocoding-control/react";
 import { Check, MapPin } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -69,78 +71,21 @@ const places = [
   },
 ];
 
-export default function AddressSearch() {
-  const [open, setOpen] = useState(false);
-  const [value, setValue] = useState("");
-  const triggerRef = useRef(null);
-
+export default function AddressSearch({ apiKey, mapController }) {
+  // Accept apiKey and mapController as props
+  // If not provided, fallback to nothing
+  // Use GeocodingControl from @maptiler/geocoding-control/react
+  // Style to fit navbar
+  // ...existing code...
+  // eslint-disable-next-line
+  // @ts-ignore
   return (
-    <div className="min-w-[100px] max-w-[300px] w-full">
-      <Popover open={open} onOpenChange={setOpen}>
-        <PopoverTrigger asChild>
-          <Button
-            ref={triggerRef}
-            variant="outline"
-            role="combobox"
-            aria-expanded={open}
-            className="w-full justify-between text-left font-normal"
-          >
-            <div className="flex items-center gap-2">
-              <MapPin className="h-4 w-4 text-muted-foreground" />
-              <span className="truncate">
-                {value
-                  ? places.find((place) => place.value === value)?.label
-                  : "Search for a place..."}
-              </span>
-            </div>
-          </Button>
-        </PopoverTrigger>
-        <PopoverContent
-          className="p-0"
-          style={{
-            width: triggerRef.current
-              ? `${triggerRef.current.offsetWidth}px`
-              : undefined,
-          }}
-        >
-          <Command>
-            <CommandInput
-              placeholder="Type to search places..."
-              className="h-9"
-            />
-            <CommandList>
-              <CommandEmpty>No places found.</CommandEmpty>
-              <CommandGroup>
-                {places.map((place) => (
-                  <CommandItem
-                    key={place.value}
-                    value={place.value}
-                    onSelect={(currentValue) => {
-                      setValue(currentValue === value ? "" : currentValue);
-                      setOpen(false);
-                    }}
-                    className="flex items-start gap-2 p-3"
-                  >
-                    <MapPin className="h-4 w-4 text-muted-foreground mt-0.5 flex-shrink-0" />
-                    <div className="flex-1 min-w-0">
-                      <div className="font-medium">{place.label}</div>
-                      <div className="text-sm text-muted-foreground truncate">
-                        {place.address}
-                      </div>
-                    </div>
-                    <Check
-                      className={cn(
-                        "h-4 w-4 flex-shrink-0",
-                        value === place.value ? "opacity-100" : "opacity-0"
-                      )}
-                    />
-                  </CommandItem>
-                ))}
-              </CommandGroup>
-            </CommandList>
-          </Command>
-        </PopoverContent>
-      </Popover>
+    <div style={{ minWidth: "200px", maxWidth: "400px", width: "100%" }}>
+      {apiKey && mapController ? (
+        <div style={{ width: "100%" }}>
+          <GeocodingControl apiKey={apiKey} mapController={mapController} />
+        </div>
+      ) : null}
     </div>
   );
 }

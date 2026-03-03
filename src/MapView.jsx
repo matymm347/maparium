@@ -5,12 +5,17 @@ import { layers, namedFlavor } from "@protomaps/basemaps";
 import LayerDrawer from "./LayerDrawer";
 import LayerSelection from "./LayerSelection";
 import initialLayers from "./layers.json";
+import { GeocodingControl } from "@maptiler/geocoding-control/react";
+import { createMapLibreGlMapController } from "@maptiler/geocoding-control/maplibregl-controller";
+import "@maptiler/geocoding-control/style.css";
 
-export default function MapView() {
+export default function MapView({ setApiKey, setMapController }) {
   const [layerConfig, setLayerConfig] = useState(
     buildLayerConfig(initialLayers),
   );
 
+  const [API_KEY] = useState(import.meta.env.VITE_MAPTILER_API_KEY);
+  47;
   const [chosenLayerGroup, setChosenLayerGroup] = useState([]);
 
   const mapRef = useRef(null);
@@ -204,6 +209,9 @@ export default function MapView() {
       }),
       "bottom-right",
     );
+    const controller = createMapLibreGlMapController(map, maplibregl);
+    if (setApiKey) setApiKey(API_KEY);
+    if (setMapController) setMapController(controller);
 
     map.on("style.load", () => {
       map.setProjection({
@@ -220,8 +228,13 @@ export default function MapView() {
         mapRef.current.remove();
         mapRef.current = null;
       }
+      // Clean up global variables
+      if (typeof window !== "undefined") {
+        window.mapariumApiKey = undefined;
+        window.mapariumMapController = undefined;
+      }
     };
-  }, []);
+  }, [API_KEY]);
 
   return (
     <div

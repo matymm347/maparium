@@ -3,20 +3,22 @@ import { Button } from "@/components/ui/button";
 import AddressSearch from "./AddressSearch";
 import mapariumLogo from "@/assets/maparium_logo.svg";
 
-export default function Navbar() {
+export default function Navbar({ apiKey, mapController }) {
   return (
     <nav className="fixed top-4 left-1/2 transform -translate-x-1/2 z-40 border border-gray-200 bg-white rounded-xl shadow-lg">
       <div className="flex flex-col sm:flex-row sm:h-13 items-center px-4 gap-4 py-2 sm:py-0">
         {/* Top row: Logo and GitHub button */}
         <div className="flex items-center justify-between w-full sm:w-auto sm:flex-1">
           {/* Logo */}
-          <div className="flex items-center gap-2">
+          <a
+            href="/"
+            className="flex items-center gap-2 hover:opacity-80 transition-opacity"
+          >
             <img src={mapariumLogo} alt="Maparium Logo" className="h-8 w-8" />
-
             <span className="text-xl font-semibold text-gray-900">
               Maparium
             </span>
-          </div>
+          </a>
 
           {/* GitHub button - visible on mobile */}
           <div className="sm:hidden">
@@ -35,7 +37,7 @@ export default function Navbar() {
 
         {/* Search - second row on mobile, inline on desktop */}
         <div className="w-full sm:flex-1 sm:max-w-lg sm:mx-10">
-          <AddressSearch />
+          <AddressSearch apiKey={apiKey} mapController={mapController} />
         </div>
 
         {/* GitHub button - hidden on mobile, visible on desktop */}
