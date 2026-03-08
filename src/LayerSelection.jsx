@@ -21,7 +21,7 @@ export default function LayerSelection({
     <>
       <Button
         variant="destructive"
-        className="bg-[#3B1C1D] text-[#F66163] mb-4"
+        className="bg-[#3B1C1D] text-[#F66163] mb-4 ml-4 px-2 py-1 text-xs w-fit"
         onClick={() => clearAllLayers(layerConfig)}
       >
         Clear all

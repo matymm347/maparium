@@ -451,22 +451,6 @@
         "color": "#FF1654"
       }
     },
-    "Kindergarten": {
-      "osmium filter": "amenity=kindergarten",
-      "fileName": "kindergartens.mbtiles",
-      "type": "circle",
-      "radius": 1,
-      "description": "For children too young for a regular school (also known as preschool, playschool or nursery school), in some countries including afternoon supervision of primary school children",
-      "postprocessing": {
-        "point on surface": {
-          "columns": ["name"],
-          "group by": "name"
-        }
-      },
-      "style": {
-        "color": "#06FFA5"
-      }
-    },
     "Library": {
       "osmium filter": "amenity=library",
       "fileName": "libraries.mbtiles",
@@ -508,7 +492,7 @@
       "osmium filter": "amenity=charging_station",
       "fileName": "charging_stations.mbtiles",
       "type": "circle",
-      "radius": 2,
+      "radius": 1,
       "description": "Charging facility for electric vehicle",
       "postprocessing": {
         "point on surface": {
@@ -550,16 +534,6 @@
       },
       "style": {
         "color": "#FF006E"
-      }
-    },
-    "Highways": {
-      "osmium filter": "highway=motorway,trunk,primary",
-      "fileName": "highways.mbtiles",
-      "type": "circle",
-      "radius": 1,
-      "description": "Collection of major highways including motorways, trunks, primaries and secondaries along with their link roads",
-      "style": {
-        "color": "#00D9FF"
       }
     },
     "Railways": {
@@ -640,16 +614,6 @@
         "color": "#FF1654"
       }
     },
-    "Paleontological Sites": {
-      "osmium filter": "geological=paleontological_site",
-      "fileName": "paleontological_sites.mbtiles",
-      "type": "circle",
-      "radius": 2,
-      "description": "A place with fossils",
-      "style": {
-        "color": "#06FFA5"
-      }
-    },
     "Glacial Erratics": {
       "osmium filter": "geological=glacial_erratic",
       "fileName": "glacial_erratics.mbtiles",
@@ -683,17 +647,7 @@
       "radius": 2,
       "description": "A crater formed by the impact of a meteor",
       "style": {
-        "color": "#9D84B7"
-      }
-    },
-    "Sinkhole": {
-      "osmium filter": "geological=sinkhole",
-      "fileName": "sinkholes.mbtiles",
-      "type": "circle",
-      "radius": 2,
-      "description": "A depression or hole in the ground caused by some form of collapse of the surface",
-      "style": {
-        "color": "#7209B7"
+        "color": "#FF1A7A"
       }
     },
     "Volcanos": {
@@ -757,7 +711,7 @@
       "osmium filter": "historic=archaeological_site",
       "fileName": "archaeological_site.mbtiles",
       "type": "circle",
-      "radius": 2,
+      "radius": 1,
       "description": "A place in which evidence of past human activity is preserved",
       "postprocessing": {
         "point on surface": {
@@ -789,27 +743,11 @@
         "color": "#FF1654"
       }
     },
-    "Forts": {
-      "osmium filter": "historic=fort",
-      "fileName": "fort.mbtiles",
-      "type": "circle",
-      "radius": 2,
-      "description": "A military fort, a stand-alone defensive structure which differs from a castle in that there is no permanent residence",
-      "postprocessing": {
-        "point on surface": {
-          "columns": ["name"],
-          "group by": "name"
-        }
-      },
-      "style": {
-        "color": "#06FFA5"
-      }
-    },
     "Tombs": {
       "osmium filter": "historic=tomb",
       "fileName": "tomb.mbtiles",
       "type": "circle",
-      "radius": 2,
+      "radius": 1,
       "description": "A structure where somebody has been buried",
       "style": {
         "color": "#00B4D8"
@@ -833,7 +771,7 @@
         }
       },
       "style": {
-        "color": "#9D84B7"
+        "color": "#FF007A"
       }
     },
     "Bunkers": {
@@ -930,16 +868,6 @@
         }
       }
     },
-    "Artwork": {
-      "osmium filter": "tourism=artwork",
-      "fileName": "artwork.mbtiles",
-      "type": "circle",
-      "radius": 1,
-      "description": "A public piece of art",
-      "style": {
-        "color": "#FFBE0B"
-      }
-    },
     "Camp Sites": {
       "osmium filter": "tourism=camp_site",
       "fileName": "camp_sites.mbtiles",
@@ -954,22 +882,6 @@
       },
       "style": {
         "color": "#FF1654"
-      }
-    },
-    "Galleries": {
-      "osmium filter": "tourism=gallery",
-      "fileName": "galleries.mbtiles",
-      "type": "circle",
-      "radius": 1,
-      "description": "An area or building that displays a variety of visual art exhibitions",
-      "postprocessing": {
-        "point on surface": {
-          "columns": ["name"],
-          "group by": "name"
-        }
-      },
-      "style": {
-        "color": "#06FFA5"
       }
     },
     "Museums": {
