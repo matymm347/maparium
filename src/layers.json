@@ -419,7 +419,7 @@
     "osmium filter": "amenity",
     "folder_name": "education",
     "lucideIcon": "BookOpen",
-    "University": {
+    "Universities": {
       "osmium filter": "amenity=university",
       "fileName": "universities.mbtiles",
       "type": "circle",
@@ -435,7 +435,7 @@
         "color": "#FFBE0B"
       }
     },
-    "College": {
+    "Colleges": {
       "osmium filter": "amenity=college",
       "fileName": "colleges.mbtiles",
       "type": "circle",
@@ -451,7 +451,7 @@
         "color": "#FF1654"
       }
     },
-    "Library": {
+    "Libraries": {
       "osmium filter": "amenity=library",
       "fileName": "libraries.mbtiles",
       "type": "circle",
@@ -467,7 +467,7 @@
         "color": "#FF85A1"
       }
     },
-    "School": {
+    "Schools": {
       "osmium filter": "amenity=school",
       "fileName": "schools.mbtiles",
       "type": "circle",
@@ -504,7 +504,7 @@
         "color": "#4CD964"
       }
     },
-    "Refueling stations": {
+    "Refueling Stations": {
       "osmium filter": "amenity=fuel",
       "fileName": "refueling_stations.mbtiles",
       "type": "circle",

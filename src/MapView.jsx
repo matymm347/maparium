@@ -10,16 +10,47 @@ import { GeocodingControl } from "@maptiler/geocoding-control/react";
 import { createMapLibreGlMapController } from "@maptiler/geocoding-control/maplibregl-controller";
 import "@maptiler/geocoding-control/style.css";
 
-export default function MapView({ setApiKey, setMapController }) {
-  const [layerConfig, setLayerConfig] = useState(
-    buildLayerConfig(initialLayers),
+const DEFAULT_MAP_VIEW = {
+  center: [19.1451, 51.9194],
+  zoom: 2,
+  bearing: 0,
+  pitch: 0,
+};
+
+const URL_PARAM_KEYS = {
+  latitude: "lat",
+  longitude: "lng",
+  zoom: "z",
+  bearing: "bearing",
+  pitch: "pitch",
+  layer: "layer",
+};
+
+const formatCoordinate = (value) => value.toFixed(5);
+const formatZoom = (value) => value.toFixed(2);
+const formatAngle = (value) => value.toFixed(1);
+
+export default function MapView({
+  setApiKey,
+  setMapController,
+  setLegendEntries,
+}) {
+  const initialUrlStateRef = useRef(parseMapStateFromUrl(initialLayers));
+  const [layerConfig, setLayerConfig] = useState(() =>
+    buildLayerConfig(initialLayers, initialUrlStateRef.current.visibleLayerIds),
   );
 
   const [API_KEY] = useState(import.meta.env.VITE_MAP_TILER_API_KEY);
-  const [chosenLayerGroup, setChosenLayerGroup] = useState([]);
+  const [chosenLayerGroup, setChosenLayerGroup] = useState(
+    initialUrlStateRef.current.openGroups,
+  );
 
   const mapRef = useRef(null);
   const isMapLoadedRef = useRef(false);
+  const hoverPopupRef = useRef(null);
+  const hoverHandlersRef = useRef(new Map());
+  const interactiveLayerIdsRef = useRef(new Set());
+  const layerConfigRef = useRef(layerConfig);
 
   // Get base URL for Martin server based on environment
   const getMartinUrl = () => {
@@ -31,11 +62,10 @@ export default function MapView({ setApiKey, setMapController }) {
     return `${window.location.origin}/tiles`;
   };
 
-  function handleChooseLayerGroup(group) {
-    setChosenLayerGroup(group);
-  }
+  const getSourceName = (layerId) => `source_${layerId}`;
+  const getHaloLayerId = (layerId) => `${layerId}__halo`;
 
-  function buildLayerConfig(layersData) {
+  function buildLayerConfig(layersData, visibleLayerIds = new Set()) {
     const layerConfig = {};
     for (const group in layersData) {
       layerConfig[group] = {};
@@ -63,7 +93,7 @@ export default function MapView({ setApiKey, setMapController }) {
           fileName: currentLayerData["fileName"],
           description: currentLayerData["description"],
           postprocessing: postprocessing,
-          visible: false,
+          visible: visibleLayerIds.has(layer),
           style: currentLayerData["style"],
           type: currentLayerData["type"],
           radius: currentLayerData["radius"],
@@ -71,6 +101,293 @@ export default function MapView({ setApiKey, setMapController }) {
       }
     }
     return layerConfig;
+  }
+
+  function parseMapStateFromUrl(layersData) {
+    const params = new URLSearchParams(window.location.search);
+    const visibleLayerIds = new Set(params.getAll(URL_PARAM_KEYS.layer));
+    const openGroups = Object.keys(layersData).filter((group) =>
+      Object.keys(layersData[group]).some((layerName) => {
+        if (
+          layerName === "folder_name" ||
+          layerName === "osmium filter" ||
+          layerName === "lucideIcon"
+        ) {
+          return false;
+        }
+
+        return visibleLayerIds.has(layerName);
+      }),
+    );
+
+    const parseNumber = (key, fallback) => {
+      const rawValue = params.get(key);
+      if (rawValue === null) {
+        return fallback;
+      }
+
+      const parsedValue = Number(rawValue);
+      return Number.isFinite(parsedValue) ? parsedValue : fallback;
+    };
+
+    return {
+      center: [
+        parseNumber(URL_PARAM_KEYS.longitude, DEFAULT_MAP_VIEW.center[0]),
+        parseNumber(URL_PARAM_KEYS.latitude, DEFAULT_MAP_VIEW.center[1]),
+      ],
+      zoom: parseNumber(URL_PARAM_KEYS.zoom, DEFAULT_MAP_VIEW.zoom),
+      bearing: parseNumber(URL_PARAM_KEYS.bearing, DEFAULT_MAP_VIEW.bearing),
+      pitch: parseNumber(URL_PARAM_KEYS.pitch, DEFAULT_MAP_VIEW.pitch),
+      visibleLayerIds,
+      openGroups,
+    };
+  }
+
+  const getVisibleLayerIds = (currentLayerConfig) =>
+    Object.values(currentLayerConfig).flatMap((groupConfig) =>
+      Object.entries(groupConfig.layers)
+        .filter(([, layer]) => layer.visible)
+        .map(([layerName]) => layerName),
+    );
+
+  const syncUrlWithMapState = (map, currentLayerConfig) => {
+    const url = new URL(window.location.href);
+    const center = map.getCenter();
+
+    url.searchParams.set(URL_PARAM_KEYS.latitude, formatCoordinate(center.lat));
+    url.searchParams.set(
+      URL_PARAM_KEYS.longitude,
+      formatCoordinate(center.lng),
+    );
+    url.searchParams.set(URL_PARAM_KEYS.zoom, formatZoom(map.getZoom()));
+    url.searchParams.set(URL_PARAM_KEYS.bearing, formatAngle(map.getBearing()));
+    url.searchParams.set(URL_PARAM_KEYS.pitch, formatAngle(map.getPitch()));
+    url.searchParams.delete(URL_PARAM_KEYS.layer);
+
+    getVisibleLayerIds(currentLayerConfig)
+      .sort((left, right) => left.localeCompare(right))
+      .forEach((layerId) => {
+        url.searchParams.append(URL_PARAM_KEYS.layer, layerId);
+      });
+
+    const nextUrl = `${url.pathname}${url.search}${url.hash}`;
+    const currentUrl = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+
+    if (nextUrl !== currentUrl) {
+      window.history.replaceState(null, "", nextUrl);
+    }
+  };
+
+  const addMapLayerSet = (map, layerId, layerDefinition) => {
+    const layerSource = layerDefinition.fileName;
+    let layerSourceCut = layerSource;
+
+    if (layerSource.endsWith(".mbtiles")) {
+      layerSourceCut = layerSource.replace(".mbtiles", "");
+    } else if (layerSource.endsWith(".pmtiles")) {
+      layerSourceCut = layerSource.replace(".pmtiles", "");
+    }
+
+    const layerColor = layerDefinition.style.color;
+    const layerType = layerDefinition.type;
+    const layerRadius = layerDefinition.radius;
+    const martinUrl = getMartinUrl();
+    const sourceName = getSourceName(layerId);
+    const haloLayerId = getHaloLayerId(layerId);
+
+    map.addSource(sourceName, {
+      type: "vector",
+      tiles: [`${martinUrl}/${layerSourceCut}/{z}/{x}/{y}`],
+      minzoom: 0,
+      maxzoom: 12,
+    });
+
+    if (layerType === "line") {
+      map.addLayer({
+        id: layerId,
+        type: layerType,
+        source: sourceName,
+        "source-layer": layerSourceCut,
+        paint: {
+          "line-color": layerColor,
+          "line-width": 2,
+          "line-opacity": 0.8,
+        },
+      });
+      return;
+    }
+
+    if (layerType === "circle") {
+      map.addLayer({
+        id: haloLayerId,
+        type: layerType,
+        source: sourceName,
+        "source-layer": layerSourceCut,
+        paint: {
+          "circle-radius": getCircleRadiusExpression(layerRadius, 6),
+          "circle-color": layerColor,
+          "circle-opacity": 0,
+        },
+      });
+
+      map.addLayer({
+        id: layerId,
+        type: layerType,
+        source: sourceName,
+        "source-layer": layerSourceCut,
+        paint: {
+          "circle-radius": getCircleRadiusExpression(layerRadius),
+          "circle-color": layerColor,
+          "circle-opacity": 0.9,
+        },
+      });
+
+      registerHoverHandlers(map, haloLayerId);
+    }
+  };
+
+  const applyVisibleLayersToMap = (map, currentLayerConfig) => {
+    Object.values(currentLayerConfig).forEach((groupConfig) => {
+      Object.entries(groupConfig.layers).forEach(
+        ([layerId, layerDefinition]) => {
+          removeMapLayerSet(map, layerId);
+
+          if (layerDefinition.visible) {
+            addMapLayerSet(map, layerId, layerDefinition);
+          }
+        },
+      );
+    });
+  };
+
+  const getCircleRadiusExpression = (baseRadius, haloSize = 0) => [
+    "interpolate",
+    ["exponential", 2],
+    ["zoom"],
+    0,
+    baseRadius + haloSize,
+    6,
+    2 + haloSize,
+    10,
+    4 + haloSize,
+  ];
+
+  const getFeatureName = (feature) => {
+    const name = feature?.properties?.name;
+    if (typeof name !== "string") {
+      return null;
+    }
+
+    const trimmedName = name.trim();
+    return trimmedName.length > 0 ? trimmedName : null;
+  };
+
+  const hideHoverPopup = () => {
+    hoverPopupRef.current?.remove();
+  };
+
+  const getFeaturePopupLabel = (feature) =>
+    getFeatureName(feature) ?? "unnamed";
+
+  const findNearbyFeature = (map, point) => {
+    const interactiveLayerIds = Array.from(interactiveLayerIdsRef.current);
+    if (interactiveLayerIds.length === 0) {
+      return null;
+    }
+
+    const hoverPadding = 10;
+    const features = map.queryRenderedFeatures(
+      [
+        [point.x - hoverPadding, point.y - hoverPadding],
+        [point.x + hoverPadding, point.y + hoverPadding],
+      ],
+      { layers: interactiveLayerIds },
+    );
+
+    return (
+      features.find((feature) => getFeatureName(feature)) ?? features[0] ?? null
+    );
+  };
+
+  const registerHoverHandlers = (map, layerId) => {
+    if (hoverHandlersRef.current.has(layerId)) {
+      return;
+    }
+
+    interactiveLayerIdsRef.current.add(layerId);
+
+    const handleMouseEnter = () => {
+      map.getCanvas().style.cursor = "pointer";
+    };
+
+    const handleMouseMove = (event) => {
+      const feature = findNearbyFeature(map, event.point);
+
+      if (!feature) {
+        hideHoverPopup();
+        return;
+      }
+
+      hoverPopupRef.current
+        ?.setLngLat(event.lngLat)
+        .setText(getFeaturePopupLabel(feature))
+        .addTo(map);
+    };
+
+    const handleMouseLeave = () => {
+      map.getCanvas().style.cursor = "";
+      hideHoverPopup();
+    };
+
+    map.on("mouseenter", layerId, handleMouseEnter);
+    map.on("mousemove", layerId, handleMouseMove);
+    map.on("mouseleave", layerId, handleMouseLeave);
+
+    hoverHandlersRef.current.set(layerId, {
+      handleMouseEnter,
+      handleMouseMove,
+      handleMouseLeave,
+    });
+  };
+
+  const unregisterHoverHandlers = (map, layerId) => {
+    const hoverHandlers = hoverHandlersRef.current.get(layerId);
+    if (!hoverHandlers) {
+      interactiveLayerIdsRef.current.delete(layerId);
+      return;
+    }
+
+    map.off("mouseenter", layerId, hoverHandlers.handleMouseEnter);
+    map.off("mousemove", layerId, hoverHandlers.handleMouseMove);
+    map.off("mouseleave", layerId, hoverHandlers.handleMouseLeave);
+    hoverHandlersRef.current.delete(layerId);
+    interactiveLayerIdsRef.current.delete(layerId);
+
+    if (interactiveLayerIdsRef.current.size === 0) {
+      map.getCanvas().style.cursor = "";
+      hideHoverPopup();
+    }
+  };
+
+  const removeMapLayerSet = (map, layerId) => {
+    const haloLayerId = getHaloLayerId(layerId);
+    const sourceName = getSourceName(layerId);
+
+    unregisterHoverHandlers(map, haloLayerId);
+
+    if (map.getLayer(layerId)) {
+      map.removeLayer(layerId);
+    }
+    if (map.getLayer(haloLayerId)) {
+      map.removeLayer(haloLayerId);
+    }
+    if (map.getSource(sourceName)) {
+      map.removeSource(sourceName);
+    }
+  };
+
+  function handleChooseLayerGroup(group) {
+    setChosenLayerGroup(group);
   }
 
   function clearAllLayers(layerConfig) {
@@ -95,14 +412,7 @@ export default function MapView({ setApiKey, setMapController }) {
     if (map && isMapLoadedRef.current) {
       Object.keys(layerConfig).forEach((group) => {
         Object.keys(layerConfig[group]["layers"]).forEach((layer) => {
-          const layerId = layer;
-          const sourceName = `source_${layerId}`;
-          if (map.getLayer(layerId)) {
-            map.removeLayer(layerId);
-          }
-          if (map.getSource(sourceName)) {
-            map.removeSource(sourceName);
-          }
+          removeMapLayerSet(map, layer);
         });
       });
     }
@@ -132,74 +442,45 @@ export default function MapView({ setApiKey, setMapController }) {
     if (!map || !isMapLoadedRef.current) return;
 
     const layerId = layer;
-    const layerSource = layerConfig[group]["layers"][layer]["fileName"];
-    let layerSourceCut = layerSource;
-    if (layerSource.endsWith(".mbtiles")) {
-      layerSourceCut = layerSource.replace(".mbtiles", "");
-    } else if (layerSource.endsWith(".pmtiles")) {
-      layerSourceCut = layerSource.replace(".pmtiles", "");
-    }
-    const layerColor = layerConfig[group]["layers"][layer]["style"]["color"];
-    const layerType = layerConfig[group]["layers"][layer]["type"];
-    const layerRadius = layerConfig[group]["layers"][layer]["radius"];
-    const martinUrl = getMartinUrl();
-    const sourceName = `source_${layerId}`;
+    const updatedLayer = updatedLayerConfig[group]["layers"][layer];
 
     // Remove existing layer and source if they exist
-    if (map.getLayer(layerId)) {
-      map.removeLayer(layerId);
-    }
-    if (map.getSource(sourceName)) {
-      map.removeSource(sourceName);
-    }
+    removeMapLayerSet(map, layerId);
 
     if (!visible) {
-      // Add source and layer only if making visible
-      map.addSource(sourceName, {
-        type: "vector",
-        tiles: [`${martinUrl}/${layerSourceCut}/{z}/{x}/{y}`],
-        minzoom: 0,
-        maxzoom: 12,
-      });
-
-      if (layerType === "line") {
-        map.addLayer({
-          id: layerId,
-          type: layerType,
-          source: sourceName,
-          "source-layer": layerSourceCut,
-          paint: {
-            "line-color": layerColor,
-            "line-width": 2,
-            "line-opacity": 0.8,
-          },
-        });
-        return;
-      } else if (layerType === "circle") {
-        map.addLayer({
-          id: layerId,
-          type: layerType,
-          source: sourceName,
-          "source-layer": layerSourceCut,
-          paint: {
-            "circle-radius": [
-              "interpolate",
-              ["exponential", 2],
-              ["zoom"],
-              0,
-              layerRadius,
-              6,
-              2,
-              10,
-              4,
-            ],
-            "circle-color": layerColor,
-            "circle-opacity": 0.9,
-          },
-        });
-      }
+      addMapLayerSet(map, layerId, updatedLayer);
     }
   }
+
+  useEffect(() => {
+    layerConfigRef.current = layerConfig;
+
+    const map = mapRef.current;
+    if (!map || !isMapLoadedRef.current) {
+      return;
+    }
+
+    syncUrlWithMapState(map, layerConfig);
+  }, [layerConfig]);
+
+  useEffect(() => {
+    if (!setLegendEntries) {
+      return;
+    }
+
+    const activeEntries = Object.entries(layerConfig).flatMap(
+      ([group, groupConfig]) =>
+        Object.entries(groupConfig.layers)
+          .filter(([, layer]) => layer.visible)
+          .map(([layerName, layer]) => ({
+            id: `${group}-${layerName}`,
+            label: layerName,
+            color: layer.style.color,
+          })),
+    );
+
+    setLegendEntries(activeEntries);
+  }, [layerConfig, setLegendEntries]);
 
   // Initialize the map
   useEffect(() => {
@@ -226,12 +507,19 @@ export default function MapView({ setApiKey, setMapController }) {
         },
         layers: layers("protomaps", namedFlavor("black"), { lang: "en" }),
       },
-      center: [19.1451, 51.9194],
-      zoom: 2,
+      center: initialUrlStateRef.current.center,
+      zoom: initialUrlStateRef.current.zoom,
+      bearing: initialUrlStateRef.current.bearing,
+      pitch: initialUrlStateRef.current.pitch,
     });
 
     // Store map reference immediately to prevent duplicate instances
     mapRef.current = map;
+    hoverPopupRef.current = new maplibregl.Popup({
+      closeButton: false,
+      closeOnClick: false,
+      offset: 12,
+    });
 
     map.addControl(new maplibregl.NavigationControl(), "bottom-right");
     map.addControl(
@@ -269,9 +557,31 @@ export default function MapView({ setApiKey, setMapController }) {
 
     map.on("load", () => {
       isMapLoadedRef.current = true;
+      applyVisibleLayersToMap(map, layerConfigRef.current);
+      syncUrlWithMapState(map, layerConfigRef.current);
     });
 
+    const handleMapViewChange = () => {
+      if (!isMapLoadedRef.current) {
+        return;
+      }
+
+      syncUrlWithMapState(map, layerConfigRef.current);
+    };
+
+    map.on("moveend", handleMapViewChange);
+    map.on("rotateend", handleMapViewChange);
+    map.on("pitchend", handleMapViewChange);
+
     return () => {
+      map.off("moveend", handleMapViewChange);
+      map.off("rotateend", handleMapViewChange);
+      map.off("pitchend", handleMapViewChange);
+      hoverPopupRef.current?.remove();
+      hoverPopupRef.current = null;
+      hoverHandlersRef.current.clear();
+      interactiveLayerIdsRef.current.clear();
+
       if (mapRef.current) {
         mapRef.current.remove();
         mapRef.current = null;
