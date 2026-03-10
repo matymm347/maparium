@@ -1,16 +1,9 @@
 {
   "Power": {
-    "folder_name": "power",
-    "osmium filter": "power",
     "lucideIcon": "Zap",
     "Biogas plants": {
       "osmium filter": "plant:source=biogas",
-      "postprocessing": {
-        "point on surface": {
-          "columns": ["name", "operator"],
-          "group by": "name"
-        }
-      },
+      "postprocessing": "point on surface",
       "fileName": "biogas_plants.mbtiles",
       "type": "circle",
       "radius": 2,
@@ -21,12 +14,7 @@
     },
     "Diesel plants": {
       "osmium filter": "plant:source=diesel",
-      "postprocessing": {
-        "point on surface": {
-          "columns": ["name", "operator"],
-          "group by": "name"
-        }
-      },
+      "postprocessing": "point on surface",
       "fileName": "diesel_plants.mbtiles",
       "type": "circle",
       "radius": 2,
@@ -37,12 +25,7 @@
     },
     "Solar plants": {
       "osmium filter": "plant:source=solar",
-      "postprocessing": {
-        "point on surface": {
-          "columns": ["name", "operator"],
-          "group by": "name"
-        }
-      },
+      "postprocessing": "point on surface",
       "fileName": "solar_plants.mbtiles",
       "type": "circle",
       "radius": 1,
@@ -54,12 +37,7 @@
     "Biomass plants": {
       "osmium filter": "plant:source=biomass",
 
-      "postprocessing": {
-        "point on surface": {
-          "columns": ["name", "operator"],
-          "group by": "name"
-        }
-      },
+      "postprocessing": "point on surface",
       "fileName": "biomass_plants.mbtiles",
       "type": "circle",
       "radius": 2,
@@ -71,12 +49,7 @@
     "Hydro plants": {
       "osmium filter": "plant:source=hydro",
 
-      "postprocessing": {
-        "point on surface": {
-          "columns": ["name", "operator"],
-          "group by": "name"
-        }
-      },
+      "postprocessing": "point on surface",
       "fileName": "hydro_plants.mbtiles",
       "type": "circle",
       "radius": 1,
@@ -87,12 +60,7 @@
     },
     "Coal plants": {
       "osmium filter": "plant:source=coal",
-      "postprocessing": {
-        "point on surface": {
-          "columns": ["name", "operator"],
-          "group by": "name"
-        }
-      },
+      "postprocessing": "point on surface",
       "fileName": "coal_plants.mbtiles",
       "type": "circle",
       "radius": 2,
@@ -103,12 +71,7 @@
     },
     "Gas plants": {
       "osmium filter": "plant:source=gas",
-      "postprocessing": {
-        "point on surface": {
-          "columns": ["name", "operator"],
-          "group by": "name"
-        }
-      },
+      "postprocessing": "point on surface",
       "fileName": "gas_plants.mbtiles",
       "type": "circle",
       "radius": 1,
@@ -120,12 +83,7 @@
     "Oil plants": {
       "osmium filter": "plant:source=oil",
 
-      "postprocessing": {
-        "point on surface": {
-          "columns": ["name", "operator"],
-          "group by": "name"
-        }
-      },
+      "postprocessing": "point on surface",
       "fileName": "oil_plants.mbtiles",
       "type": "circle",
       "radius": 2,
@@ -137,12 +95,7 @@
     "Geothermal plants": {
       "osmium filter": "plant:source=geothermal",
 
-      "postprocessing": {
-        "point on surface": {
-          "columns": ["name", "operator"],
-          "group by": "name"
-        }
-      },
+      "postprocessing": "point on surface",
       "fileName": "geothermal_plants.mbtiles",
       "type": "circle",
       "radius": 2,
@@ -153,12 +106,7 @@
     },
     "Nuclear plants": {
       "osmium filter": "plant:source=nuclear",
-      "postprocessing": {
-        "point on surface": {
-          "columns": ["name", "operator"],
-          "group by": "name"
-        }
-      },
+      "postprocessing": "point on surface",
       "fileName": "nuclear_plants.mbtiles",
       "type": "circle",
       "radius": 3,
@@ -170,12 +118,7 @@
     "Waste plants": {
       "osmium filter": "plant:source=waste",
 
-      "postprocessing": {
-        "point on surface": {
-          "columns": ["name", "operator"],
-          "group by": "name"
-        }
-      },
+      "postprocessing": "point on surface",
       "fileName": "waste_plants.mbtiles",
       "type": "circle",
       "radius": 2,
@@ -187,12 +130,7 @@
     "Battery plants": {
       "osmium filter": "plant:source=battery",
 
-      "postprocessing": {
-        "point on surface": {
-          "columns": ["name", "operator"],
-          "group by": "name"
-        }
-      },
+      "postprocessing": "point on surface",
       "fileName": "battery_plants.mbtiles",
       "type": "circle",
       "radius": 2,
@@ -204,12 +142,7 @@
     "Tidal plants": {
       "osmium filter": "plant:source=tidal",
 
-      "postprocessing": {
-        "point on surface": {
-          "columns": ["name", "operator"],
-          "group by": "name"
-        }
-      },
+      "postprocessing": "point on surface",
       "fileName": "tidal_plants.mbtiles",
       "type": "circle",
       "radius": 3,
@@ -230,8 +163,6 @@
     }
   },
   "Religious": {
-    "folder_name": "religious",
-    "osmium filter": "building historic",
     "lucideIcon": "Church",
     "Churches": {
       "osmium filter": "building=church",
@@ -239,12 +170,7 @@
       "type": "circle",
       "radius": 1,
       "description": "A building used for Christian worship services and Christian activities",
-      "postprocessing": {
-        "point on surface": {
-          "columns": ["name"],
-          "group by": "name"
-        }
-      },
+      "postprocessing": "point on surface",
       "style": {
         "color": "#FFBE0B"
       }
@@ -256,12 +182,7 @@
       "radius": 2,
       "description": "A place of worship used by Jehovah's Witnesses",
 
-      "postprocessing": {
-        "point on surface": {
-          "columns": ["name"],
-          "group by": "name"
-        }
-      },
+      "postprocessing": "point on surface",
       "style": {
         "color": "#FF1654"
       }
@@ -273,12 +194,7 @@
       "radius": 1,
       "description": "A place of worship for Muslims",
 
-      "postprocessing": {
-        "point on surface": {
-          "columns": ["name"],
-          "group by": "name"
-        }
-      },
+      "postprocessing": "point on surface",
       "style": {
         "color": "#06FFA5"
       }
@@ -299,12 +215,7 @@
       "type": "circle",
       "radius": 2,
       "description": "A place of worship for Jews and Samaritans",
-      "postprocessing": {
-        "point on surface": {
-          "columns": ["name"],
-          "group by": "name"
-        }
-      },
+      "postprocessing": "point on surface",
       "style": {
         "color": "#00B4D8"
       }
@@ -315,29 +226,17 @@
       "type": "circle",
       "radius": 1,
       "description": "A building that was built as a temple",
-      "postprocessing": {
-        "point on surface": {
-          "columns": ["name", "operator"],
-          "group by": "name"
-        }
-      },
+      "postprocessing": "point on surface",
       "style": {
         "color": "#9D84B7"
       }
     }
   },
   "Aeroway": {
-    "folder_name": "aeroway",
-    "osmium filter": "aeroway",
     "lucideIcon": "Plane",
     "Airports and Runways": {
       "osmium filter": "aeroway=aerodrome,airstrip,heliport",
-      "postprocessing": {
-        "point on surface": {
-          "columns": ["name"],
-          "group by": "name"
-        }
-      },
+      "postprocessing": "point on surface",
       "fileName": "airports.mbtiles",
       "type": "circle",
       "radius": 1,
@@ -348,12 +247,7 @@
     },
     "Spaceports": {
       "osmium filter": "aeroway=spaceport",
-      "postprocessing": {
-        "point on surface": {
-          "columns": ["name", "operator"],
-          "group by": "name"
-        }
-      },
+      "postprocessing": "point on surface",
 
       "fileName": "spaceports.mbtiles",
       "type": "circle",
@@ -365,8 +259,6 @@
     }
   },
   "Amenity": {
-    "folder_name": "amenity",
-    "osmium filter": "amenity",
     "lucideIcon": "Utensils",
     "Bars": {
       "osmium filter": "amenity=bar",
@@ -384,12 +276,7 @@
       "type": "circle",
       "radius": 1,
       "description": "Cafe is generally an informal place that offers casual meals and beverages; typically, the focus is on coffee or tea. Also known as a coffeehouse/shop, bistro or sidewalk cafe",
-      "postprocessing": {
-        "point on surface": {
-          "columns": ["name", "operator"],
-          "group by": "name"
-        }
-      },
+      "postprocessing": "point on surface",
       "style": {
         "color": "#FB5607"
       }
@@ -416,8 +303,6 @@
     }
   },
   "Education": {
-    "osmium filter": "amenity",
-    "folder_name": "education",
     "lucideIcon": "BookOpen",
     "Universities": {
       "osmium filter": "amenity=university",
@@ -425,12 +310,7 @@
       "type": "circle",
       "radius": 1,
       "description": "A university campus: an institute of higher education",
-      "postprocessing": {
-        "point on surface": {
-          "columns": ["name"],
-          "group by": "name"
-        }
-      },
+      "postprocessing": "point on surface",
       "style": {
         "color": "#FFBE0B"
       }
@@ -441,12 +321,7 @@
       "type": "circle",
       "radius": 1,
       "description": "A college campus: an institute of higher education",
-      "postprocessing": {
-        "point on surface": {
-          "columns": ["name"],
-          "group by": "name"
-        }
-      },
+      "postprocessing": "point on surface",
       "style": {
         "color": "#FF1654"
       }
@@ -457,12 +332,7 @@
       "type": "circle",
       "radius": 1,
       "description": "A public library (municipal, university, …) to borrow books from",
-      "postprocessing": {
-        "point on surface": {
-          "columns": ["name"],
-          "group by": "name"
-        }
-      },
+      "postprocessing": "point on surface",
       "style": {
         "color": "#FF85A1"
       }
@@ -473,20 +343,13 @@
       "type": "circle",
       "radius": 1,
       "description": "School and grounds - primary, middle and secondary schools",
-      "postprocessing": {
-        "point on surface": {
-          "columns": ["name"],
-          "group by": "name"
-        }
-      },
+      "postprocessing": "point on surface",
       "style": {
         "color": "#00B4D8"
       }
     }
   },
   "Transportation": {
-    "folder_name": "transportation",
-    "osmium filter": "amenity building highway railway",
     "lucideIcon": "Car",
     "Charging Stations": {
       "osmium filter": "amenity=charging_station",
@@ -494,12 +357,7 @@
       "type": "circle",
       "radius": 1,
       "description": "Charging facility for electric vehicle",
-      "postprocessing": {
-        "point on surface": {
-          "columns": ["name", "operator"],
-          "group by": "name"
-        }
-      },
+      "postprocessing": "point on surface",
       "style": {
         "color": "#4CD964"
       }
@@ -510,12 +368,7 @@
       "type": "circle",
       "radius": 1,
       "description": "Petrol station, gas station, marine fuel",
-      "postprocessing": {
-        "point on surface": {
-          "columns": ["name", "operator"],
-          "group by": "name"
-        }
-      },
+      "postprocessing": "point on surface",
       "style": {
         "color": "#7209B7"
       }
@@ -526,12 +379,7 @@
       "type": "circle",
       "radius": 1,
       "description": "A building constructed to be a train station building, including buildings that are abandoned and used nowadays for a different purpose",
-      "postprocessing": {
-        "point on surface": {
-          "columns": ["name", "operator"],
-          "group by": "name"
-        }
-      },
+      "postprocessing": "point on surface",
       "style": {
         "color": "#FF006E"
       }
@@ -548,8 +396,6 @@
     }
   },
   "Emergency": {
-    "folder_name": "emergency",
-    "osmium filter": "amenity",
     "lucideIcon": "AlertCircle",
     "Hospitals": {
       "osmium filter": "amenity=hospital",
@@ -557,12 +403,7 @@
       "type": "circle",
       "radius": 1,
       "description": "A hospital providing in-patient medical treatment",
-      "postprocessing": {
-        "point on surface": {
-          "columns": ["name"],
-          "group by": "name"
-        }
-      },
+      "postprocessing": "point on surface",
       "style": {
         "color": "#3A86FF"
       }
@@ -573,12 +414,7 @@
       "type": "circle",
       "radius": 1,
       "description": "A station of a fire brigade",
-      "postprocessing": {
-        "point on surface": {
-          "columns": ["name"],
-          "group by": "name"
-        }
-      },
+      "postprocessing": "point on surface",
       "style": {
         "color": "#8338EC"
       }
@@ -589,20 +425,13 @@
       "type": "circle",
       "radius": 1,
       "description": "A police station where police officers patrol from and that is a first point of contact for civilians",
-      "postprocessing": {
-        "point on surface": {
-          "columns": ["name"],
-          "group by": "name"
-        }
-      },
+      "postprocessing": "point on surface",
       "style": {
         "color": "#FFBE0B"
       }
     }
   },
   "Geological": {
-    "folder_name": "geological",
-    "osmium filter": "geological natural",
     "lucideIcon": "Mountain",
     "Volcanic Caldera Rims": {
       "osmium filter": "geological=volcanic_caldera_rim",
@@ -630,12 +459,7 @@
       "type": "circle",
       "radius": 2,
       "description": "Rock glaciers are mixtures of rock and ice that move slowly downhill when active",
-      "postprocessing": {
-        "point on surface": {
-          "columns": ["name"],
-          "group by": "name"
-        }
-      },
+      "postprocessing": "point on surface",
       "style": {
         "color": "#00B4D8"
       }
@@ -672,8 +496,6 @@
     }
   },
   "Historic": {
-    "folder_name": "historic",
-    "osmium filter": "historic building",
     "lucideIcon": "Castle",
     "Castles": {
       "osmium filter": "historic=castle building=castle",
@@ -681,12 +503,7 @@
       "type": "circle",
       "radius": 1,
       "description": "various kinds of castles, palaces, fortresses, manors, stately homes, kremlins, shiros and other",
-      "postprocessing": {
-        "point on surface": {
-          "columns": ["name"],
-          "group by": "name"
-        }
-      },
+      "postprocessing": "point on surface",
       "style": {
         "color": "#FB5607"
       }
@@ -697,12 +514,7 @@
       "type": "circle",
       "radius": 1,
       "description": "Remains of structures that were once complete, but have fallen into partial or complete disrepair",
-      "postprocessing": {
-        "point on surface": {
-          "columns": ["name"],
-          "group by": "name"
-        }
-      },
+      "postprocessing": "point on surface",
       "style": {
         "color": "#3A86FF"
       }
@@ -713,12 +525,7 @@
       "type": "circle",
       "radius": 1,
       "description": "A place in which evidence of past human activity is preserved",
-      "postprocessing": {
-        "point on surface": {
-          "columns": ["name"],
-          "group by": "name"
-        }
-      },
+      "postprocessing": "point on surface",
       "style": {
         "color": "#8338EC"
       }
@@ -755,8 +562,6 @@
     }
   },
   "Military": {
-    "folder_name": "military",
-    "osmium filter": "military",
     "lucideIcon": "Shield",
     "Bases and Airfields": {
       "osmium filter": "military=base,airfield",
@@ -764,12 +569,7 @@
       "type": "circle",
       "radius": 2,
       "description": "A facility where military personnel and equipment are based and where military planes take off and land",
-      "postprocessing": {
-        "point on surface": {
-          "columns": ["name"],
-          "group by": "name"
-        }
-      },
+      "postprocessing": "point on surface",
       "style": {
         "color": "#FF007A"
       }
@@ -780,12 +580,7 @@
       "type": "circle",
       "radius": 1,
       "description": "A building reinforced to withstand attack",
-      "postprocessing": {
-        "point on surface": {
-          "columns": ["name"],
-          "group by": "name"
-        }
-      },
+      "postprocessing": "point on surface",
       "style": {
         "color": "#7209B7"
       }
@@ -802,8 +597,6 @@
     }
   },
   "Telecom": {
-    "folder_name": "telecom",
-    "osmium filter": "telecom communication",
     "lucideIcon": "Wifi",
     "Data centers": {
       "osmium filter": "telecom=data_center",
@@ -811,12 +604,7 @@
       "type": "circle",
       "radius": 2,
       "description": "A building used to house computers and network equipment",
-      "postprocessing": {
-        "point on surface": {
-          "columns": ["name"],
-          "group by": "name"
-        }
-      },
+      "postprocessing": "point on surface",
       "style": {
         "color": "#00D9FF"
       }
@@ -833,8 +621,6 @@
     }
   },
   "Tourism": {
-    "folder_name": "tourism",
-    "osmium filter": "tourism",
     "lucideIcon": "Compass",
     "Attractions": {
       "osmium filter": "tourism=attraction",
@@ -842,12 +628,7 @@
       "type": "circle",
       "radius": 1,
       "description": "A place of interest to tourists",
-      "postprocessing": {
-        "point on surface": {
-          "columns": ["name"],
-          "group by": "name"
-        }
-      },
+      "postprocessing": "point on surface",
       "style": {
         "color": "#3A86FF"
       }
@@ -861,12 +642,7 @@
       "style": {
         "color": "#8338EC"
       },
-      "postprocessing": {
-        "point on surface": {
-          "columns": ["name"],
-          "group by": "name"
-        }
-      }
+      "postprocessing": "point on surface"
     },
     "Camp Sites": {
       "osmium filter": "tourism=camp_site",
@@ -874,12 +650,7 @@
       "type": "circle",
       "radius": 1,
       "description": "An area where people can camp overnight using tents, camper vans, or caravans",
-      "postprocessing": {
-        "point on surface": {
-          "columns": ["name"],
-          "group by": "name"
-        }
-      },
+      "postprocessing": "point on surface",
       "style": {
         "color": "#FF1654"
       }
@@ -890,12 +661,7 @@
       "type": "circle",
       "radius": 1,
       "description": "A museum: an institution with exhibitions on scientific, historical, cultural topics",
-      "postprocessing": {
-        "point on surface": {
-          "columns": ["name"],
-          "group by": "name"
-        }
-      },
+      "postprocessing": "point on surface",
       "style": {
         "color": "#FF85A1"
       }
@@ -906,12 +672,7 @@
       "type": "circle",
       "radius": 2,
       "description": "An amusement park where entertainment is provided by rides, games, concessions",
-      "postprocessing": {
-        "point on surface": {
-          "columns": ["name"],
-          "group by": "name"
-        }
-      },
+      "postprocessing": "point on surface",
       "style": {
         "color": "#00B4D8"
       }
@@ -932,12 +693,7 @@
       "type": "circle",
       "radius": 1,
       "description": "A zoological garden, where animals are confined for viewing by the public",
-      "postprocessing": {
-        "point on surface": {
-          "columns": ["name"],
-          "group by": "name"
-        }
-      },
+      "postprocessing": "point on surface",
       "style": {
         "color": "#7209B7"
       }
