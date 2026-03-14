@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
   Accordion,
   AccordionContent,
@@ -21,7 +20,7 @@ export default function LayerSelection({
     <>
       <Button
         variant="destructive"
-        className="bg-[#3B1C1D] text-[#F66163] mb-4 ml-4 px-2 py-1 text-xs w-fit"
+        className="mb-4 ml-4 w-fit px-2 py-1 text-xs text-red-700 bg-red-100 hover:bg-red-200 dark:bg-[#3B1C1D] dark:text-[#F66163] dark:hover:bg-[#512425]"
         onClick={() => clearAllLayers(layerConfig)}
       >
         Clear all
@@ -33,7 +32,7 @@ export default function LayerSelection({
         onValueChange={handleChooseLayerGroup}
       >
         <div className="h-[80vh] w-full">
-          <ScrollArea className="h-full w-full rounded-md border border-neutral-800 p-4 bg-neutral-900 text-white">
+          <ScrollArea className="bg-card text-card-foreground border-border h-full w-full rounded-md border p-4">
             {Object.keys(layerConfig).map((group) => {
               const Icon = LayerIconMap[layerConfig[group]["lucideIcon"]];
               return (

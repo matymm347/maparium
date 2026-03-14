@@ -36,11 +36,39 @@ const URL_PARAM_KEYS = {
 const formatCoordinate = (value) => value.toFixed(5);
 const formatZoom = (value) => value.toFixed(2);
 const formatAngle = (value) => value.toFixed(1);
+const PROTOMAPS_GLYPH_URL =
+  "https://protomaps.github.io/basemaps-assets/fonts/{fontstack}/{range}.pbf";
+
+const getBasemapTheme = (theme) => (theme === "dark" ? "black" : "white");
+const getSpriteTheme = (theme) => (theme === "dark" ? "dark" : "white");
+
+const createBasemapStyle = (martinUrl, theme) => {
+  const basemapTheme = getBasemapTheme(theme);
+  const spriteTheme = getSpriteTheme(theme);
+
+  return {
+    version: 8,
+    glyphs: PROTOMAPS_GLYPH_URL,
+    sprite: `https://protomaps.github.io/basemaps-assets/sprites/v4/${spriteTheme}`,
+    sources: {
+      protomaps: {
+        type: "vector",
+        tiles: [`${martinUrl}/planet_z12/{z}/{x}/{y}`],
+        minzoom: 0,
+        maxzoom: 12,
+        attribution:
+          '<a href="https://maptiler.com/copyright?_gl=1*10ylx4k*_gcl_au*MjEwNDE3Mzk1LjE3NzI1NjkzNTI.*_ga*MjU0ODUyNi4xNzcyNTY5MzUz*_ga_K4SXYBF4HT*czE3NzI1NjkzNTIkbzEkZzEkdDE3NzI1Njk0NjAkajI1JGwwJGgw">© MapTiler |</a> <a href="https://protomaps.com">Protomaps |</a> © <a href="https://openstreetmap.org">OpenStreetMap</a>',
+      },
+    },
+    layers: layers("protomaps", namedFlavor(basemapTheme), { lang: "en" }),
+  };
+};
 
 export default function MapView({
   setApiKey,
   setMapController,
   setLegendEntries,
+  theme,
 }) {
   const initialUrlStateRef = useRef(parseMapStateFromUrl(initialLayers));
   const [layerConfig, setLayerConfig] = useState(() =>
@@ -619,6 +647,32 @@ export default function MapView({
     setLegendEntries(activeEntries);
   }, [layerConfig, setLegendEntries]);
 
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || !isMapLoadedRef.current) {
+      return;
+    }
+
+    const martinUrl = getMartinUrl();
+    const currentCenter = map.getCenter();
+    const mapViewSnapshot = {
+      center: [currentCenter.lng, currentCenter.lat],
+      zoom: map.getZoom(),
+      bearing: map.getBearing(),
+      pitch: map.getPitch(),
+    };
+
+    map.once("style.load", () => {
+      if (!mapRef.current) {
+        return;
+      }
+
+      map.jumpTo(mapViewSnapshot);
+    });
+
+    map.setStyle(createBasemapStyle(martinUrl, theme));
+  }, [theme]);
+
   // Initialize the map
   useEffect(() => {
     if (mapRef.current) return;
@@ -627,23 +681,7 @@ export default function MapView({
 
     const map = new maplibregl.Map({
       container: "map-view",
-      style: {
-        version: 8,
-        glyphs:
-          "https://protomaps.github.io/basemaps-assets/fonts/{fontstack}/{range}.pbf",
-        sprite: `https://protomaps.github.io/basemaps-assets/sprites/v4/dark`,
-        sources: {
-          protomaps: {
-            type: "vector",
-            tiles: [`${martinUrl}/planet_z12/{z}/{x}/{y}`],
-            minzoom: 0,
-            maxzoom: 12,
-            attribution:
-              '<a href="https://maptiler.com/copyright?_gl=1*10ylx4k*_gcl_au*MjEwNDE3Mzk1LjE3NzI1NjkzNTI.*_ga*MjU0ODUyNi4xNzcyNTY5MzUz*_ga_K4SXYBF4HT*czE3NzI1NjkzNTIkbzEkZzEkdDE3NzI1Njk0NjAkajI1JGwwJGgw">© MapTiler |</a> <a href="https://protomaps.com">Protomaps |</a> © <a href="https://openstreetmap.org">OpenStreetMap</a>',
-          },
-        },
-        layers: layers("protomaps", namedFlavor("black"), { lang: "en" }),
-      },
+      style: createBasemapStyle(martinUrl, theme),
       center: initialUrlStateRef.current.center,
       zoom: initialUrlStateRef.current.zoom,
       bearing: initialUrlStateRef.current.bearing,
@@ -691,6 +729,10 @@ export default function MapView({
       map.setProjection({
         type: "globe",
       });
+
+      if (isMapLoadedRef.current) {
+        applyVisibleLayersToMap(map, layerConfigRef.current);
+      }
     });
 
     map.on("load", () => {
@@ -738,7 +780,7 @@ export default function MapView({
         mapRef.current = null;
       }
     };
-  }, [API_KEY]);
+  }, [API_KEY, theme]);
 
   return (
     <div
@@ -796,7 +838,7 @@ export default function MapView({
                       href={selectedFeature.wikipediaUrl}
                       target="_blank"
                       rel="noreferrer"
-                      className="inline-flex items-center gap-1 font-medium text-sky-300 underline underline-offset-4 hover:text-sky-200"
+                      className="text-sky-700 hover:text-sky-600 dark:text-sky-300 dark:hover:text-sky-200 inline-flex items-center gap-1 font-medium underline underline-offset-4"
                     >
                       Open Wikipedia article
                     </a>
@@ -808,14 +850,14 @@ export default function MapView({
                 </div>
               </div>
             </div>
-            <div className="border-neutral-800 text-neutral-300 border-t px-6 py-4 text-xs leading-relaxed">
+            <div className="text-muted-foreground border-border border-t px-6 py-4 text-xs leading-relaxed">
               <p>
                 Data from{" "}
                 <a
                   href="https://www.wikidata.org/"
                   target="_blank"
                   rel="noreferrer"
-                  className="text-sky-300 underline underline-offset-4 hover:text-sky-200"
+                  className="text-sky-700 hover:text-sky-600 dark:text-sky-300 dark:hover:text-sky-200 underline underline-offset-4"
                 >
                   Wikidata
                 </a>{" "}
@@ -824,7 +866,7 @@ export default function MapView({
                   href="https://www.wikipedia.org/"
                   target="_blank"
                   rel="noreferrer"
-                  className="text-sky-300 underline underline-offset-4 hover:text-sky-200"
+                  className="text-sky-700 hover:text-sky-600 dark:text-sky-300 dark:hover:text-sky-200 underline underline-offset-4"
                 >
                   Wikipedia
                 </a>
@@ -833,7 +875,7 @@ export default function MapView({
                   href="https://commons.wikimedia.org/"
                   target="_blank"
                   rel="noreferrer"
-                  className="text-sky-300 underline underline-offset-4 hover:text-sky-200"
+                  className="text-sky-700 hover:text-sky-600 dark:text-sky-300 dark:hover:text-sky-200 underline underline-offset-4"
                 >
                   Wikimedia Commons
                 </a>
@@ -851,7 +893,7 @@ export default function MapView({
           bottom: 0,
           width: "100%",
           height: "100%",
-          backgroundColor: "#1a1a1a",
+          backgroundColor: theme === "dark" ? "#1a1a1a" : "#edf2f7",
         }}
       ></div>
     </div>

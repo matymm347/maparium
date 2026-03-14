@@ -55,7 +55,7 @@ function SheetContent({
       <DialogPrimitive.Content
         data-slot="sheet-content"
         className={cn(
-          "bg-neutral-900 text-white border-neutral-800 data-[state=open]:animate-in data-[state=closed]:animate-out fixed z-50 gap-4 border p-6 shadow-lg duration-200",
+          "bg-card text-card-foreground border-border data-[state=open]:animate-in data-[state=closed]:animate-out fixed z-50 gap-4 border p-6 shadow-lg duration-200",
           sheetVariants[side],
           className,
         )}
@@ -63,7 +63,7 @@ function SheetContent({
       >
         {children}
         {showCloseButton && (
-          <DialogPrimitive.Close className="focus:ring-neutral-500 data-[state=open]:bg-neutral-800 absolute top-4 right-4 rounded-xs opacity-70 transition-opacity hover:bg-neutral-800 hover:opacity-100 focus:ring-2 focus:outline-hidden disabled:pointer-events-none">
+          <DialogPrimitive.Close className="focus:ring-ring data-[state=open]:bg-accent absolute top-4 right-4 rounded-xs opacity-70 transition-opacity hover:bg-accent hover:opacity-100 focus:ring-2 focus:outline-hidden disabled:pointer-events-none">
             <X className="size-4" />
             <span className="sr-only">Close</span>
           </DialogPrimitive.Close>
@@ -100,7 +100,7 @@ function SheetTitle({ className, ...props }) {
   return (
     <DialogPrimitive.Title
       data-slot="sheet-title"
-      className={cn("text-white text-lg font-semibold", className)}
+      className={cn("text-foreground text-lg font-semibold", className)}
       {...props}
     />
   );
@@ -110,7 +110,7 @@ function SheetDescription({ className, ...props }) {
   return (
     <DialogPrimitive.Description
       data-slot="sheet-description"
-      className={cn("text-neutral-300 text-sm", className)}
+      className={cn("text-muted-foreground text-sm", className)}
       {...props}
     />
   );
