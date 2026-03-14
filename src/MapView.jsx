@@ -104,6 +104,7 @@ export default function MapView({
 
   const getSourceName = (layerId) => `source_${layerId}`;
   const getHaloLayerId = (layerId) => `${layerId}__halo`;
+  const getRingLayerId = (layerId) => `${layerId}__ring`;
 
   function buildLayerConfig(layersData, visibleLayerIds = new Set()) {
     const layerConfig = {};
@@ -234,6 +235,8 @@ export default function MapView({
     const martinUrl = getMartinUrl();
     const sourceName = getSourceName(layerId);
     const haloLayerId = getHaloLayerId(layerId);
+    const ringLayerId = getRingLayerId(layerId);
+    const isLightTheme = theme !== "dark";
 
     map.addSource(sourceName, {
       type: "vector",
@@ -243,6 +246,20 @@ export default function MapView({
     });
 
     if (layerType === "line") {
+      if (isLightTheme) {
+        map.addLayer({
+          id: ringLayerId,
+          type: layerType,
+          source: sourceName,
+          "source-layer": layerSourceCut,
+          paint: {
+            "line-color": "#000000",
+            "line-width": 2.25,
+            "line-opacity": 0.22,
+          },
+        });
+      }
+
       map.addLayer({
         id: layerId,
         type: layerType,
@@ -279,6 +296,9 @@ export default function MapView({
           "circle-radius": getCircleRadiusExpression(layerRadius),
           "circle-color": layerColor,
           "circle-opacity": 0.9,
+          "circle-stroke-width": isLightTheme ? 0.2 : 0,
+          "circle-stroke-color": "#000000",
+          "circle-stroke-opacity": isLightTheme ? 0.35 : 0,
         },
       });
 
@@ -528,12 +548,16 @@ export default function MapView({
 
   const removeMapLayerSet = (map, layerId) => {
     const haloLayerId = getHaloLayerId(layerId);
+    const ringLayerId = getRingLayerId(layerId);
     const sourceName = getSourceName(layerId);
 
     unregisterHoverHandlers(map, haloLayerId);
 
     if (map.getLayer(layerId)) {
       map.removeLayer(layerId);
+    }
+    if (map.getLayer(ringLayerId)) {
+      map.removeLayer(ringLayerId);
     }
     if (map.getLayer(haloLayerId)) {
       map.removeLayer(haloLayerId);
@@ -695,6 +719,7 @@ export default function MapView({
       closeButton: false,
       closeOnClick: false,
       offset: 12,
+      className: "maparium-hover-popup",
     });
 
     map.addControl(new maplibregl.NavigationControl(), "bottom-right");

@@ -118,3 +118,7 @@
     @apply bg-background text-foreground;
   }
 }
+
+.maparium-hover-popup .maplibregl-popup-content {
+  color: #000;
+}
