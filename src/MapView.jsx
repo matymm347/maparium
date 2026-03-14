@@ -9,6 +9,13 @@ import initialLayers from "./layers.json";
 import { GeocodingControl } from "@maptiler/geocoding-control/react";
 import { createMapLibreGlMapController } from "@maptiler/geocoding-control/maplibregl-controller";
 import "@maptiler/geocoding-control/style.css";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
 
 const DEFAULT_MAP_VIEW = {
   center: [19.1451, 51.9194],
@@ -51,6 +58,11 @@ export default function MapView({
   const hoverHandlersRef = useRef(new Map());
   const interactiveLayerIdsRef = useRef(new Set());
   const layerConfigRef = useRef(layerConfig);
+  const imageRequestIdRef = useRef(0);
+  const [isFeatureSheetOpen, setIsFeatureSheetOpen] = useState(false);
+  const [selectedFeature, setSelectedFeature] = useState(null);
+  const [featureImageUrl, setFeatureImageUrl] = useState(null);
+  const [isFeatureImageLoading, setIsFeatureImageLoading] = useState(false);
 
   // Get base URL for Martin server based on environment
   const getMartinUrl = () => {
@@ -286,6 +298,127 @@ export default function MapView({
     hoverPopupRef.current?.remove();
   };
 
+  const getFeatureProperty = (feature, key) => {
+    const properties = feature?.properties;
+    if (!properties || typeof properties !== "object") {
+      return null;
+    }
+
+    const directValue = properties[key];
+    if (typeof directValue === "string") {
+      const trimmedDirectValue = directValue.trim();
+      return trimmedDirectValue.length > 0 ? trimmedDirectValue : null;
+    }
+
+    const keyLowercase = key.toLowerCase();
+    const matchedKey = Object.keys(properties).find(
+      (propertyKey) => propertyKey.toLowerCase() === keyLowercase,
+    );
+
+    if (!matchedKey || typeof properties[matchedKey] !== "string") {
+      return null;
+    }
+
+    const trimmedValue = properties[matchedKey].trim();
+    return trimmedValue.length > 0 ? trimmedValue : null;
+  };
+
+  const normalizeWikidataId = (rawWikidata) => {
+    if (!rawWikidata) {
+      return null;
+    }
+
+    const wikidataMatch = rawWikidata.match(/(Q\d+)/i);
+    if (!wikidataMatch) {
+      return null;
+    }
+
+    return wikidataMatch[1].toUpperCase();
+  };
+
+  const buildWikipediaUrl = (rawWikipediaTag) => {
+    if (!rawWikipediaTag) {
+      return null;
+    }
+
+    if (/^https?:\/\//i.test(rawWikipediaTag)) {
+      return rawWikipediaTag;
+    }
+
+    const tagWithoutPrefix = rawWikipediaTag.replace(/^wikipedia\s*:\s*/i, "");
+    const separatorIndex = tagWithoutPrefix.indexOf(":");
+
+    if (separatorIndex < 0) {
+      return `https://en.wikipedia.org/wiki/${encodeURIComponent(tagWithoutPrefix)}`;
+    }
+
+    const languageCode =
+      tagWithoutPrefix.slice(0, separatorIndex).trim() || "en";
+    const articleName = tagWithoutPrefix.slice(separatorIndex + 1).trim();
+
+    if (!articleName) {
+      return null;
+    }
+
+    return `https://${languageCode}.wikipedia.org/wiki/${encodeURIComponent(articleName)}`;
+  };
+
+  const getFeatureSheetData = (feature) => {
+    const rawWikidata = getFeatureProperty(feature, "wikidata");
+    const rawWikipedia = getFeatureProperty(feature, "wikipedia");
+
+    return {
+      name: getFeatureName(feature) ?? "Unnamed feature",
+      wikidataId: normalizeWikidataId(rawWikidata),
+      wikipediaUrl: buildWikipediaUrl(rawWikipedia),
+    };
+  };
+
+  const fetchFeatureImage = async (wikidataId, requestId) => {
+    if (!wikidataId) {
+      setFeatureImageUrl(null);
+      setIsFeatureImageLoading(false);
+      return;
+    }
+
+    setIsFeatureImageLoading(true);
+
+    try {
+      const endpoint = `https://www.wikidata.org/w/api.php?action=wbgetentities&ids=${wikidataId}&props=claims&format=json&origin=*`;
+      const response = await fetch(endpoint);
+      if (!response.ok) {
+        throw new Error("Failed to load Wikidata entity");
+      }
+
+      const payload = await response.json();
+      const imageFileName =
+        payload?.entities?.[wikidataId]?.claims?.P18?.[0]?.mainsnak?.datavalue
+          ?.value;
+
+      if (requestId !== imageRequestIdRef.current) {
+        return;
+      }
+
+      if (!imageFileName) {
+        setFeatureImageUrl(null);
+        return;
+      }
+
+      setFeatureImageUrl(
+        `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(imageFileName)}?width=960`,
+      );
+    } catch {
+      if (requestId !== imageRequestIdRef.current) {
+        return;
+      }
+      setFeatureImageUrl(null);
+    } finally {
+      if (requestId === imageRequestIdRef.current) {
+        setIsFeatureImageLoading(false);
+      }
+    }
+  };
+
   const getFeaturePopupLabel = (feature) =>
     getFeatureName(feature) ?? "unnamed";
 
@@ -316,9 +449,7 @@ export default function MapView({
 
     interactiveLayerIdsRef.current.add(layerId);
 
-    const handleMouseEnter = () => {
-      map.getCanvas().style.cursor = "pointer";
-    };
+    const handleMouseEnter = () => {};
 
     const handleMouseMove = (event) => {
       const feature = findNearbyFeature(map, event.point);
@@ -335,7 +466,6 @@ export default function MapView({
     };
 
     const handleMouseLeave = () => {
-      map.getCanvas().style.cursor = "";
       hideHoverPopup();
     };
 
@@ -364,7 +494,6 @@ export default function MapView({
     interactiveLayerIdsRef.current.delete(layerId);
 
     if (interactiveLayerIdsRef.current.size === 0) {
-      map.getCanvas().style.cursor = "";
       hideHoverPopup();
     }
   };
@@ -453,6 +582,14 @@ export default function MapView({
   }
 
   useEffect(() => {
+    const wikidataId = selectedFeature?.wikidataId;
+    const requestId = imageRequestIdRef.current + 1;
+    imageRequestIdRef.current = requestId;
+
+    fetchFeatureImage(wikidataId, requestId);
+  }, [selectedFeature]);
+
+  useEffect(() => {
     layerConfigRef.current = layerConfig;
 
     const map = mapRef.current;
@@ -515,6 +652,7 @@ export default function MapView({
 
     // Store map reference immediately to prevent duplicate instances
     mapRef.current = map;
+    map.getCanvas().style.cursor = "default";
     hoverPopupRef.current = new maplibregl.Popup({
       closeButton: false,
       closeOnClick: false,
@@ -569,14 +707,27 @@ export default function MapView({
       syncUrlWithMapState(map, layerConfigRef.current);
     };
 
+    const handleMapClick = (event) => {
+      const clickedFeature = findNearbyFeature(map, event.point);
+      if (!clickedFeature) {
+        return;
+      }
+
+      setSelectedFeature(getFeatureSheetData(clickedFeature));
+      setIsFeatureSheetOpen(true);
+      hideHoverPopup();
+    };
+
     map.on("moveend", handleMapViewChange);
     map.on("rotateend", handleMapViewChange);
     map.on("pitchend", handleMapViewChange);
+    map.on("click", handleMapClick);
 
     return () => {
       map.off("moveend", handleMapViewChange);
       map.off("rotateend", handleMapViewChange);
       map.off("pitchend", handleMapViewChange);
+      map.off("click", handleMapClick);
       hoverPopupRef.current?.remove();
       hoverPopupRef.current = null;
       hoverHandlersRef.current.clear();
@@ -606,6 +757,92 @@ export default function MapView({
           clearAllLayers={clearAllLayers}
         />
       </LayerDrawer>
+      <Sheet open={isFeatureSheetOpen} onOpenChange={setIsFeatureSheetOpen}>
+        <SheetContent side="right" className="w-[90vw] p-0 sm:max-w-md">
+          <div className="flex h-full flex-col">
+            <div className="flex-1 overflow-y-auto p-6">
+              <SheetHeader>
+                <SheetTitle>
+                  {selectedFeature?.name ?? "Feature details"}
+                </SheetTitle>
+                <SheetDescription>
+                  Wikipedia and Wikidata information for selected map feature.
+                </SheetDescription>
+              </SheetHeader>
+              <div className="mt-6 space-y-4">
+                {isFeatureImageLoading ? (
+                  <div className="bg-muted h-52 w-full animate-pulse rounded-md" />
+                ) : featureImageUrl ? (
+                  <img
+                    src={featureImageUrl}
+                    alt={selectedFeature?.name ?? "Feature"}
+                    className="h-auto w-full rounded-md border object-cover"
+                    loading="lazy"
+                    onError={() => setFeatureImageUrl(null)}
+                  />
+                ) : (
+                  <div className="bg-muted/40 text-muted-foreground rounded-md border p-3 text-sm">
+                    No image available for this feature.
+                  </div>
+                )}
+
+                <div className="space-y-2 text-sm">
+                  <p>
+                    <span className="text-muted-foreground">Wikidata:</span>{" "}
+                    {selectedFeature?.wikidataId ?? "Not available"}
+                  </p>
+                  {selectedFeature?.wikipediaUrl ? (
+                    <a
+                      href={selectedFeature.wikipediaUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-1 font-medium text-sky-300 underline underline-offset-4 hover:text-sky-200"
+                    >
+                      Open Wikipedia article
+                    </a>
+                  ) : (
+                    <p className="text-muted-foreground">
+                      Wikipedia link not available.
+                    </p>
+                  )}
+                </div>
+              </div>
+            </div>
+            <div className="border-neutral-800 text-neutral-300 border-t px-6 py-4 text-xs leading-relaxed">
+              <p>
+                Data from{" "}
+                <a
+                  href="https://www.wikidata.org/"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-sky-300 underline underline-offset-4 hover:text-sky-200"
+                >
+                  Wikidata
+                </a>{" "}
+                and{" "}
+                <a
+                  href="https://www.wikipedia.org/"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-sky-300 underline underline-offset-4 hover:text-sky-200"
+                >
+                  Wikipedia
+                </a>
+                . Images from{" "}
+                <a
+                  href="https://commons.wikimedia.org/"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-sky-300 underline underline-offset-4 hover:text-sky-200"
+                >
+                  Wikimedia Commons
+                </a>
+                .
+              </p>
+            </div>
+          </div>
+        </SheetContent>
+      </Sheet>
       <div
         id="map-view"
         style={{

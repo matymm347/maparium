@@ -2,161 +2,175 @@
   "Power": {
     "lucideIcon": "Zap",
     "Biogas plants": {
-      "osmium filter": "plant:source=biogas",
+      "osmiumFilter": "plant:source=biogas",
       "postprocessing": "point on surface",
       "fileName": "biogas_plants.mbtiles",
       "type": "circle",
       "radius": 2,
       "description": "Biogas power plant",
+      "keep tags": ["name", "wikidata", "wikipedia"],
       "style": {
         "color": "#FF006E"
       }
     },
     "Diesel plants": {
-      "osmium filter": "plant:source=diesel",
+      "osmiumFilter": "plant:source=diesel",
       "postprocessing": "point on surface",
       "fileName": "diesel_plants.mbtiles",
       "type": "circle",
       "radius": 2,
       "description": "Diesel-fired power plant",
+      "keep tags": ["name", "wikidata", "wikipedia"],
       "style": {
         "color": "#00D9FF"
       }
     },
     "Solar plants": {
-      "osmium filter": "plant:source=solar",
+      "osmiumFilter": "plant:source=solar",
       "postprocessing": "point on surface",
       "fileName": "solar_plants.mbtiles",
       "type": "circle",
       "radius": 1,
       "description": "Solar power plant",
+      "keep tags": ["name", "wikidata", "wikipedia"],
       "style": {
         "color": "#3A86FF"
       }
     },
     "Biomass plants": {
-      "osmium filter": "plant:source=biomass",
+      "osmiumFilter": "plant:source=biomass",
 
       "postprocessing": "point on surface",
       "fileName": "biomass_plants.mbtiles",
       "type": "circle",
       "radius": 2,
       "description": "Biomass power plant, biogas plant",
+      "keep tags": ["name", "wikidata", "wikipedia"],
       "style": {
         "color": "#8338EC"
       }
     },
     "Hydro plants": {
-      "osmium filter": "plant:source=hydro",
+      "osmiumFilter": "plant:source=hydro",
 
       "postprocessing": "point on surface",
       "fileName": "hydro_plants.mbtiles",
       "type": "circle",
       "radius": 1,
       "description": "Hydroelectric power station",
+      "keep tags": ["name", "wikidata", "wikipedia"],
       "style": {
         "color": "#FFBE0B"
       }
     },
     "Coal plants": {
-      "osmium filter": "plant:source=coal",
+      "osmiumFilter": "plant:source=coal",
       "postprocessing": "point on surface",
       "fileName": "coal_plants.mbtiles",
       "type": "circle",
       "radius": 2,
       "description": "Coal-fired power station",
+      "keep tags": ["name", "wikidata", "wikipedia"],
       "style": {
         "color": "#FF1654"
       }
     },
     "Gas plants": {
-      "osmium filter": "plant:source=gas",
+      "osmiumFilter": "plant:source=gas",
       "postprocessing": "point on surface",
       "fileName": "gas_plants.mbtiles",
       "type": "circle",
       "radius": 1,
       "description": "Gas-fired power station",
+      "keep tags": ["name", "wikidata", "wikipedia"],
       "style": {
         "color": "#06FFA5"
       }
     },
     "Oil plants": {
-      "osmium filter": "plant:source=oil",
+      "osmiumFilter": "plant:source=oil",
 
       "postprocessing": "point on surface",
       "fileName": "oil_plants.mbtiles",
       "type": "circle",
       "radius": 2,
       "description": "Oil-fired power plant",
+      "keep tags": ["name", "wikidata", "wikipedia"],
       "style": {
         "color": "#FF85A1"
       }
     },
     "Geothermal plants": {
-      "osmium filter": "plant:source=geothermal",
+      "osmiumFilter": "plant:source=geothermal",
 
       "postprocessing": "point on surface",
       "fileName": "geothermal_plants.mbtiles",
       "type": "circle",
       "radius": 2,
       "description": "Geothermal energy power plant",
+      "keep tags": ["name", "wikidata", "wikipedia"],
       "style": {
         "color": "#00B4D8"
       }
     },
     "Nuclear plants": {
-      "osmium filter": "plant:source=nuclear",
+      "osmiumFilter": "plant:source=nuclear",
       "postprocessing": "point on surface",
       "fileName": "nuclear_plants.mbtiles",
       "type": "circle",
       "radius": 3,
       "description": "Nuclear power plant",
+      "keep tags": ["name", "wikidata", "wikipedia"],
       "style": {
         "color": "#F2D64B"
       }
     },
     "Waste plants": {
-      "osmium filter": "plant:source=waste",
+      "osmiumFilter": "plant:source=waste",
 
       "postprocessing": "point on surface",
       "fileName": "waste_plants.mbtiles",
       "type": "circle",
       "radius": 2,
       "description": "Waste incineration plants",
+      "keep tags": ["name", "wikidata", "wikipedia"],
       "style": {
         "color": "#FF006E"
       }
     },
     "Battery plants": {
-      "osmium filter": "plant:source=battery",
+      "osmiumFilter": "plant:source=battery",
 
       "postprocessing": "point on surface",
       "fileName": "battery_plants.mbtiles",
       "type": "circle",
       "radius": 2,
       "description": "Battery storage plant",
+      "keep tags": ["name", "wikidata", "wikipedia"],
       "style": {
         "color": "#00D9FF"
       }
     },
     "Tidal plants": {
-      "osmium filter": "plant:source=tidal",
+      "osmiumFilter": "plant:source=tidal",
 
       "postprocessing": "point on surface",
       "fileName": "tidal_plants.mbtiles",
       "type": "circle",
       "radius": 3,
       "description": "Tidal power plant",
+      "keep tags": ["name", "wikidata", "wikipedia"],
       "style": {
         "color": "#FB5607"
       }
     },
     "Wind Turbines": {
-      "osmium filter": "n/generator:method=wind_turbine",
+      "osmiumFilter": "n/generator:method=wind_turbine",
       "fileName": "wind_turbines.mbtiles",
       "type": "circle",
       "radius": 1,
       "description": "Wind turbine generator",
+      "keep tags": ["name", "wikidata", "wikipedia"],
       "style": {
         "color": "#3A86FF"
       }
@@ -165,67 +179,72 @@
   "Religious": {
     "lucideIcon": "Church",
     "Churches": {
-      "osmium filter": "building=church",
+      "osmiumFilter": "building=church",
       "fileName": "churches.mbtiles",
       "type": "circle",
       "radius": 1,
       "description": "A building used for Christian worship services and Christian activities",
+      "keep tags": ["name", "wikidata", "wikipedia"],
       "postprocessing": "point on surface",
       "style": {
         "color": "#FFBE0B"
       }
     },
     "Kingdom Halls": {
-      "osmium filter": "building=kingdom_hall",
+      "osmiumFilter": "building=kingdom_hall",
       "fileName": "kingdom_halls.mbtiles",
       "type": "circle",
       "radius": 2,
       "description": "A place of worship used by Jehovah's Witnesses",
-
+      "keep tags": ["name", "wikidata", "wikipedia"],
       "postprocessing": "point on surface",
       "style": {
         "color": "#FF1654"
       }
     },
     "Mosques": {
-      "osmium filter": "building=mosque",
+      "osmiumFilter": "building=mosque",
       "fileName": "mosques.mbtiles",
       "type": "circle",
       "radius": 1,
       "description": "A place of worship for Muslims",
-
+      "keep tags": ["name", "wikidata", "wikipedia"],
       "postprocessing": "point on surface",
       "style": {
         "color": "#06FFA5"
       }
     },
     "Wayside Shrines": {
-      "osmium filter": "historic=wayside_shrine",
+      "osmiumFilter": "historic=wayside_shrine",
       "fileName": "wayside_shrines.mbtiles",
       "type": "circle",
       "radius": 1,
       "description": "A shrine often showing a religious depiction. Tag is used also for modern shrines",
+      "keep tags": ["name", "wikidata", "wikipedia"],
+      "postprocessing": "point on surface",
       "style": {
         "color": "#FF85A1"
       }
     },
     "Synagogues": {
-      "osmium filter": "building=synagogue",
+      "osmiumFilter": "building=synagogue",
       "fileName": "synagogues.mbtiles",
       "type": "circle",
       "radius": 2,
       "description": "A place of worship for Jews and Samaritans",
+      "keep tags": ["name", "wikidata", "wikipedia"],
       "postprocessing": "point on surface",
       "style": {
         "color": "#00B4D8"
       }
     },
     "Temples": {
-      "osmium filter": "building=temple",
+      "osmiumFilter": "building=temple",
       "fileName": "temples.mbtiles",
       "type": "circle",
       "radius": 1,
       "description": "A building that was built as a temple",
+      "keep tags": ["name", "wikidata", "wikipedia"],
       "postprocessing": "point on surface",
       "style": {
         "color": "#9D84B7"
@@ -235,24 +254,26 @@
   "Aeroway": {
     "lucideIcon": "Plane",
     "Airports and Runways": {
-      "osmium filter": "aeroway=aerodrome,airstrip,heliport",
+      "osmiumFilter": "aeroway=aerodrome,airstrip,heliport",
       "postprocessing": "point on surface",
       "fileName": "airports.mbtiles",
       "type": "circle",
       "radius": 1,
       "description": "An aerodrome, airport or a designated strip of surface on which aircrafts can take off and land",
+      "keep tags": ["name", "wikidata", "wikipedia"],
       "style": {
         "color": "#7209B7"
       }
     },
     "Spaceports": {
-      "osmium filter": "aeroway=spaceport",
+      "osmiumFilter": "aeroway=spaceport",
       "postprocessing": "point on surface",
 
       "fileName": "spaceports.mbtiles",
       "type": "circle",
       "radius": 3,
       "description": "A spaceport or cosmodrome is a site for launching or receiving Spacecraft",
+      "keep tags": ["name", "wikidata", "wikipedia"],
       "style": {
         "color": "#FF006E"
       }
@@ -261,42 +282,48 @@
   "Amenity": {
     "lucideIcon": "Utensils",
     "Bars": {
-      "osmium filter": "amenity=bar",
+      "osmiumFilter": "amenity=bar",
       "fileName": "bars.mbtiles",
       "type": "circle",
       "radius": 1,
       "description": "Bar is a purpose-built commercial establishment that sells alcoholic drinks to be consumed on the premises. They are characterised by a noisy and vibrant atmosphere, similar to a party and usually don't sell food.",
+      "keep tags": ["name", "wikidata", "wikipedia"],
       "style": {
         "color": "#00D9FF"
       }
     },
     "Cafe": {
-      "osmium filter": "amenity=cafe",
+      "osmiumFilter": "amenity=cafe",
       "fileName": "cafes.mbtiles",
       "type": "circle",
       "radius": 1,
       "description": "Cafe is generally an informal place that offers casual meals and beverages; typically, the focus is on coffee or tea. Also known as a coffeehouse/shop, bistro or sidewalk cafe",
+      "keep tags": ["name", "wikidata", "wikipedia"],
       "postprocessing": "point on surface",
       "style": {
         "color": "#FB5607"
       }
     },
     "Fast Food": {
-      "osmium filter": "amenity=fast_food",
+      "osmiumFilter": "amenity=fast_food",
       "fileName": "fast_food.mbtiles",
       "type": "circle",
       "radius": 1,
       "description": "Fast food restaurant is a specific type of restaurant that serves fast food cuisine and has minimal table service. Food served in fast food restaurants is typically less nutritionally valuable compared to other types of restaurants.",
+      "keep tags": ["name", "wikidata", "wikipedia"],
+      "postprocessing": "point on surface",
       "style": {
         "color": "#3A86FF"
       }
     },
     "Restaurant": {
-      "osmium filter": "amenity=restaurant",
+      "osmiumFilter": "amenity=restaurant",
       "fileName": "restaurants.mbtiles",
       "type": "circle",
       "radius": 1,
       "description": "A restaurant is a business that prepares and serves food and drinks to customers. Meals are generally served and eaten on the premises, but many restaurants also offer take-out and food delivery services.",
+      "keep tags": ["name", "wikidata", "wikipedia"],
+      "postprocessing": "point on surface",
       "style": {
         "color": "#8338EC"
       }
@@ -305,44 +332,48 @@
   "Education": {
     "lucideIcon": "BookOpen",
     "Universities": {
-      "osmium filter": "amenity=university",
+      "osmiumFilter": "amenity=university",
       "fileName": "universities.mbtiles",
       "type": "circle",
       "radius": 1,
       "description": "A university campus: an institute of higher education",
+      "keep tags": ["name", "wikidata", "wikipedia"],
       "postprocessing": "point on surface",
       "style": {
         "color": "#FFBE0B"
       }
     },
     "Colleges": {
-      "osmium filter": "amenity=college",
+      "osmiumFilter": "amenity=college",
       "fileName": "colleges.mbtiles",
       "type": "circle",
       "radius": 1,
       "description": "A college campus: an institute of higher education",
+      "keep tags": ["name", "wikidata", "wikipedia"],
       "postprocessing": "point on surface",
       "style": {
         "color": "#FF1654"
       }
     },
     "Libraries": {
-      "osmium filter": "amenity=library",
+      "osmiumFilter": "amenity=library",
       "fileName": "libraries.mbtiles",
       "type": "circle",
       "radius": 1,
       "description": "A public library (municipal, university, …) to borrow books from",
+      "keep tags": ["name", "wikidata", "wikipedia"],
       "postprocessing": "point on surface",
       "style": {
         "color": "#FF85A1"
       }
     },
     "Schools": {
-      "osmium filter": "amenity=school",
+      "osmiumFilter": "amenity=school",
       "fileName": "schools.mbtiles",
       "type": "circle",
       "radius": 1,
       "description": "School and grounds - primary, middle and secondary schools",
+      "keep tags": ["name", "wikidata", "wikipedia"],
       "postprocessing": "point on surface",
       "style": {
         "color": "#00B4D8"
@@ -352,79 +383,75 @@
   "Transportation": {
     "lucideIcon": "Car",
     "Charging Stations": {
-      "osmium filter": "amenity=charging_station",
+      "osmiumFilter": "amenity=charging_station",
       "fileName": "charging_stations.mbtiles",
       "type": "circle",
       "radius": 1,
       "description": "Charging facility for electric vehicle",
+      "keep tags": ["name", "wikidata", "wikipedia"],
       "postprocessing": "point on surface",
       "style": {
         "color": "#4CD964"
       }
     },
     "Refueling Stations": {
-      "osmium filter": "amenity=fuel",
+      "osmiumFilter": "amenity=fuel",
       "fileName": "refueling_stations.mbtiles",
       "type": "circle",
       "radius": 1,
       "description": "Petrol station, gas station, marine fuel",
+      "keep tags": ["name", "wikidata", "wikipedia"],
       "postprocessing": "point on surface",
       "style": {
         "color": "#7209B7"
       }
     },
     "Train Stations": {
-      "osmium filter": "building=train_station",
+      "osmiumFilter": "building=train_station",
       "fileName": "train_stations.mbtiles",
       "type": "circle",
       "radius": 1,
       "description": "A building constructed to be a train station building, including buildings that are abandoned and used nowadays for a different purpose",
+      "keep tags": ["name", "wikidata", "wikipedia"],
       "postprocessing": "point on surface",
       "style": {
         "color": "#FF006E"
-      }
-    },
-    "Railways": {
-      "osmium filter": "railway=rail,light_rail",
-      "fileName": "railways.mbtiles",
-      "type": "circle",
-      "radius": 1,
-      "description": "Collection of major railway lines including rail, light_rail, subway and tram along with their branch lines",
-      "style": {
-        "color": "#FB5607"
       }
     }
   },
   "Emergency": {
     "lucideIcon": "AlertCircle",
     "Hospitals": {
-      "osmium filter": "amenity=hospital",
+      "osmiumFilter": "amenity=hospital",
       "fileName": "hospitals.mbtiles",
       "type": "circle",
       "radius": 1,
       "description": "A hospital providing in-patient medical treatment",
+      "keep tags": ["name", "wikidata", "wikipedia"],
       "postprocessing": "point on surface",
       "style": {
         "color": "#3A86FF"
       }
     },
     "Fire Stations": {
-      "osmium filter": "amenity=fire_station",
+      "osmiumFilter": "amenity=fire_station",
       "fileName": "fire_stations.mbtiles",
       "type": "circle",
       "radius": 1,
       "description": "A station of a fire brigade",
+      "keep tags": ["name", "wikidata", "wikipedia"],
       "postprocessing": "point on surface",
       "style": {
         "color": "#8338EC"
       }
     },
     "Police Stations": {
-      "osmium filter": "amenity=police",
+      "osmiumFilter": "amenity=police",
       "fileName": "police_stations.mbtiles",
       "type": "circle",
       "radius": 1,
       "description": "A police station where police officers patrol from and that is a first point of contact for civilians",
+      "keep tags": ["name", "wikidata", "wikipedia"],
       "postprocessing": "point on surface",
       "style": {
         "color": "#FFBE0B"
@@ -434,62 +461,71 @@
   "Geological": {
     "lucideIcon": "Mountain",
     "Volcanic Caldera Rims": {
-      "osmium filter": "geological=volcanic_caldera_rim",
+      "osmiumFilter": "geological=volcanic_caldera_rim",
       "fileName": "volcanic_caldera_rims.mbtiles",
       "type": "circle",
       "radius": 2,
       "description": "The crater (caldera) of a volcano.",
+      "keep tags": ["name", "wikidata", "wikipedia"],
+      "postprocessing": "point on surface",
       "style": {
         "color": "#FF1654"
       }
     },
     "Glacial Erratics": {
-      "osmium filter": "geological=glacial_erratic",
+      "osmiumFilter": "geological=glacial_erratic",
       "fileName": "glacial_erratics.mbtiles",
       "type": "circle",
       "radius": 2,
       "description": "A boulder deposited by a glacier",
+      "keep tags": ["name", "wikidata", "wikipedia"],
+      "postprocessing": "point on surface",
       "style": {
         "color": "#FF85A1"
       }
     },
     "Rock Glaciers": {
-      "osmium filter": "geological=rock_glacier",
+      "osmiumFilter": "geological=rock_glacier",
       "fileName": "rock_glaciers.mbtiles",
       "type": "circle",
       "radius": 2,
       "description": "Rock glaciers are mixtures of rock and ice that move slowly downhill when active",
+      "keep tags": ["name", "wikidata", "wikipedia"],
       "postprocessing": "point on surface",
       "style": {
         "color": "#00B4D8"
       }
     },
     "Meteor Crater": {
-      "osmium filter": "geological=meteor_crater",
+      "osmiumFilter": "geological=meteor_crater",
       "fileName": "meteor_craters.mbtiles",
       "type": "circle",
       "radius": 2,
       "description": "A crater formed by the impact of a meteor",
+      "keep tags": ["name", "wikidata", "wikipedia"],
+      "postprocessing": "point on surface",
       "style": {
         "color": "#FF1A7A"
       }
     },
     "Volcanos": {
-      "osmium filter": "natural=volcano",
+      "osmiumFilter": "natural=volcano",
       "fileName": "volcanos.mbtiles",
       "type": "circle",
       "radius": 2,
       "description": "An opening exposed on the earth's surface where volcanic material is emitted",
+      "keep tags": ["name", "wikidata", "wikipedia"],
       "style": {
         "color": "#FF006E"
       }
     },
     "Cave entrances": {
-      "osmium filter": "natural=cave_entrance",
+      "osmiumFilter": "natural=cave_entrance",
       "fileName": "cave_entrances.mbtiles",
       "type": "circle",
       "radius": 1,
       "description": "An entrance to a cave: a natural underground space large enough for a human to enter",
+      "keep tags": ["name", "wikidata", "wikipedia"],
       "style": {
         "color": "#00D9FF"
       }
@@ -498,64 +534,73 @@
   "Historic": {
     "lucideIcon": "Castle",
     "Castles": {
-      "osmium filter": "historic=castle building=castle",
+      "osmiumFilter": "historic=castle building=castle",
       "fileName": "castles.mbtiles",
       "type": "circle",
       "radius": 1,
       "description": "various kinds of castles, palaces, fortresses, manors, stately homes, kremlins, shiros and other",
+      "keep tags": ["name", "wikidata", "wikipedia"],
       "postprocessing": "point on surface",
       "style": {
         "color": "#FB5607"
       }
     },
     "Ruins": {
-      "osmium filter": "historic=ruins",
+      "osmiumFilter": "historic=ruins",
       "fileName": "ruins.mbtiles",
       "type": "circle",
       "radius": 1,
       "description": "Remains of structures that were once complete, but have fallen into partial or complete disrepair",
+      "keep tags": ["name", "wikidata", "wikipedia"],
       "postprocessing": "point on surface",
       "style": {
         "color": "#3A86FF"
       }
     },
     "Archaeological Sites": {
-      "osmium filter": "historic=archaeological_site",
+      "osmiumFilter": "historic=archaeological_site",
       "fileName": "archaeological_site.mbtiles",
       "type": "circle",
       "radius": 1,
       "description": "A place in which evidence of past human activity is preserved",
+      "keep tags": ["name", "wikidata", "wikipedia"],
       "postprocessing": "point on surface",
       "style": {
         "color": "#8338EC"
       }
     },
     "Battlefields": {
-      "osmium filter": "historic=battlefield",
+      "osmiumFilter": "historic=battlefield",
       "fileName": "battlefield.mbtiles",
       "type": "circle",
       "radius": 2,
       "description": "The site of a battle or military skirmish in the past",
+      "keep tags": ["name", "wikidata", "wikipedia"],
+      "postprocessing": "point on surface",
       "style": {
         "color": "#FFBE0B"
       }
     },
     "Bomb Craters": {
-      "osmium filter": "historic=bomb_crater",
+      "osmiumFilter": "historic=bomb_crater",
       "fileName": "bomb_crater.mbtiles",
       "type": "circle",
       "radius": 2,
       "description": "A bomb crater",
+      "keep tags": ["name", "wikidata", "wikipedia"],
+      "postprocessing": "point on surface",
       "style": {
         "color": "#FF1654"
       }
     },
     "Tombs": {
-      "osmium filter": "historic=tomb",
+      "osmiumFilter": "historic=tomb",
       "fileName": "tomb.mbtiles",
       "type": "circle",
       "radius": 1,
       "description": "A structure where somebody has been buried",
+      "keep tags": ["name", "wikidata", "wikipedia"],
+      "postprocessing": "point on surface",
       "style": {
         "color": "#00B4D8"
       }
@@ -564,33 +609,37 @@
   "Military": {
     "lucideIcon": "Shield",
     "Bases and Airfields": {
-      "osmium filter": "military=base,airfield",
+      "osmiumFilter": "military=base,airfield",
       "fileName": "military_bases.mbtiles",
       "type": "circle",
       "radius": 2,
       "description": "A facility where military personnel and equipment are based and where military planes take off and land",
+      "keep tags": ["name", "wikidata", "wikipedia"],
       "postprocessing": "point on surface",
       "style": {
         "color": "#FF007A"
       }
     },
     "Bunkers": {
-      "osmium filter": "military=bunker",
+      "osmiumFilter": "military=bunker",
       "fileName": "military_bunkers.mbtiles",
       "type": "circle",
       "radius": 1,
       "description": "A building reinforced to withstand attack",
+      "keep tags": ["name", "wikidata", "wikipedia"],
       "postprocessing": "point on surface",
       "style": {
         "color": "#7209B7"
       }
     },
     "Nuclear Explosion Sites": {
-      "osmium filter": "military=nuclear_explosion_site",
+      "osmiumFilter": "military=nuclear_explosion_site",
       "fileName": "nuclear_explosion_sites.mbtiles",
       "type": "circle",
       "radius": 2,
       "description": "Nuclear weapons test site",
+      "keep tags": ["name", "wikidata", "wikipedia"],
+      "postprocessing": "point on surface",
       "style": {
         "color": "#FF006E"
       }
@@ -599,100 +648,99 @@
   "Telecom": {
     "lucideIcon": "Wifi",
     "Data centers": {
-      "osmium filter": "telecom=data_center",
+      "osmiumFilter": "telecom=data_center",
       "fileName": "data_centers.mbtiles",
       "type": "circle",
       "radius": 2,
       "description": "A building used to house computers and network equipment",
+      "keep tags": ["name", "wikidata", "wikipedia"],
       "postprocessing": "point on surface",
       "style": {
         "color": "#00D9FF"
-      }
-    },
-    "Telecom lines": {
-      "osmium filter": "communication=line",
-      "fileName": "telecom_lines.mbtiles",
-      "type": "line",
-      "radius": 1,
-      "description": "Telecommunication lines, including telephone and internet cables",
-      "style": {
-        "color": "#FB5607"
       }
     }
   },
   "Tourism": {
     "lucideIcon": "Compass",
     "Attractions": {
-      "osmium filter": "tourism=attraction",
+      "osmiumFilter": "tourism=attraction",
       "fileName": "attractions.mbtiles",
       "type": "circle",
       "radius": 1,
       "description": "A place of interest to tourists",
+      "keep tags": ["name", "wikidata", "wikipedia"],
       "postprocessing": "point on surface",
       "style": {
         "color": "#3A86FF"
       }
     },
     "Hotels, Hostels and Motels": {
-      "osmium filter": "tourism=hostel,hotel,motel",
+      "osmiumFilter": "tourism=hostel,hotel,motel",
       "fileName": "hotels_motels_and_hostels.mbtiles",
       "type": "circle",
       "radius": 1,
       "description": "Hotels, hostels, and motels constitute categories of accommodation facilities that offer temporary lodging to travelers, varying in service level, privacy, and available amenities",
+      "keep tags": ["name", "wikidata", "wikipedia"],
       "style": {
         "color": "#8338EC"
       },
       "postprocessing": "point on surface"
     },
     "Camp Sites": {
-      "osmium filter": "tourism=camp_site",
+      "osmiumFilter": "tourism=camp_site",
       "fileName": "camp_sites.mbtiles",
       "type": "circle",
       "radius": 1,
       "description": "An area where people can camp overnight using tents, camper vans, or caravans",
+      "keep tags": ["name", "wikidata", "wikipedia"],
       "postprocessing": "point on surface",
       "style": {
         "color": "#FF1654"
       }
     },
     "Museums": {
-      "osmium filter": "tourism=museum",
+      "osmiumFilter": "tourism=museum",
       "fileName": "museums.mbtiles",
       "type": "circle",
       "radius": 1,
       "description": "A museum: an institution with exhibitions on scientific, historical, cultural topics",
+      "keep tags": ["name", "wikidata", "wikipedia"],
       "postprocessing": "point on surface",
       "style": {
         "color": "#FF85A1"
       }
     },
     "Theme Parks": {
-      "osmium filter": "tourism=theme_park",
+      "osmiumFilter": "tourism=theme_park",
       "fileName": "theme_parks.mbtiles",
       "type": "circle",
       "radius": 2,
       "description": "An amusement park where entertainment is provided by rides, games, concessions",
+      "keep tags": ["name", "wikidata", "wikipedia"],
       "postprocessing": "point on surface",
       "style": {
         "color": "#00B4D8"
       }
     },
     "Viewpoints": {
-      "osmium filter": "tourism=viewpoint",
+      "osmiumFilter": "tourism=viewpoint",
       "fileName": "viewpoints.mbtiles",
       "type": "circle",
       "radius": 1,
       "description": "A place worth visiting, often high, with a good view of surrounding countryside or notable buildings",
+      "keep tags": ["name", "wikidata", "wikipedia"],
+      "postprocessing": "point on surface",
       "style": {
         "color": "#9D84B7"
       }
     },
     "Zoo": {
-      "osmium filter": "tourism=zoo",
+      "osmiumFilter": "tourism=zoo",
       "fileName": "zoos.mbtiles",
       "type": "circle",
       "radius": 1,
       "description": "A zoological garden, where animals are confined for viewing by the public",
+      "keep tags": ["name", "wikidata", "wikipedia"],
       "postprocessing": "point on surface",
       "style": {
         "color": "#7209B7"
