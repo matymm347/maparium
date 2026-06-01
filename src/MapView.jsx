@@ -1,12 +1,10 @@
 import "maplibre-gl/dist/maplibre-gl.css";
-import { Earth, Map as MapIcon } from "lucide-react";
 import maplibregl from "maplibre-gl";
 import { useEffect, useRef, useState } from "react";
 import { layers, namedFlavor } from "@protomaps/basemaps";
 import LayerDrawer from "./LayerDrawer";
 import LayerSelection from "./LayerSelection";
 import initialLayers from "./layers.json";
-import { GeocodingControl } from "@maptiler/geocoding-control/react";
 import { createMapLibreGlMapController } from "@maptiler/geocoding-control/maplibregl-controller";
 import "@maptiler/geocoding-control/style.css";
 import {
@@ -68,6 +66,7 @@ export default function MapView({
   setApiKey,
   setMapController,
   setLegendEntries,
+  homeResetToken = 0,
   theme,
 }) {
   const initialUrlStateRef = useRef(parseMapStateFromUrl(initialLayers));
@@ -192,6 +191,10 @@ export default function MapView({
     );
 
   const syncUrlWithMapState = (map, currentLayerConfig) => {
+    if (window.location.pathname !== "/") {
+      return;
+    }
+
     const url = new URL(window.location.href);
     const center = map.getCenter();
 
@@ -634,6 +637,30 @@ export default function MapView({
   }
 
   useEffect(() => {
+    if (homeResetToken === 0) {
+      return;
+    }
+
+    const resetLayerConfig = buildLayerConfig(initialLayers);
+    setChosenLayerGroup([]);
+    setLayerConfig(resetLayerConfig);
+    setIsFeatureSheetOpen(false);
+    setSelectedFeature(null);
+    setFeatureImageUrl(null);
+    setIsFeatureImageLoading(false);
+    hideHoverPopup();
+
+    const map = mapRef.current;
+    if (!map || !isMapLoadedRef.current) {
+      return;
+    }
+
+    applyVisibleLayersToMap(map, resetLayerConfig);
+    map.jumpTo(DEFAULT_MAP_VIEW);
+    syncUrlWithMapState(map, resetLayerConfig);
+  }, [homeResetToken]);
+
+  useEffect(() => {
     const wikidataId = selectedFeature?.wikidataId;
     const requestId = imageRequestIdRef.current + 1;
     imageRequestIdRef.current = requestId;
@@ -795,17 +822,33 @@ export default function MapView({
       map.off("rotateend", handleMapViewChange);
       map.off("pitchend", handleMapViewChange);
       map.off("click", handleMapClick);
+      isMapLoadedRef.current = false;
       hoverPopupRef.current?.remove();
       hoverPopupRef.current = null;
       hoverHandlersRef.current.clear();
       interactiveLayerIdsRef.current.clear();
+      setSelectedFeature(null);
+      setFeatureImageUrl(null);
+      setIsFeatureImageLoading(false);
+
+      if (setMapController) {
+        setMapController(undefined);
+      }
+
+      if (setApiKey) {
+        setApiKey(undefined);
+      }
+
+      if (setLegendEntries) {
+        setLegendEntries([]);
+      }
 
       if (mapRef.current) {
         mapRef.current.remove();
         mapRef.current = null;
       }
     };
-  }, [API_KEY, theme]);
+  }, [API_KEY]);
 
   return (
     <div

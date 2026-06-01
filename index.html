@@ -10,14 +10,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="Maparium lets you visualize predefined OpenStreetMap features on a global scale"
+      content="Visualize OpenStreetMap features on a global scale"
     />
+    <script>
+      (() => {
+        const prefersDarkQuery = "(prefers-color-scheme: dark)";
+        const themeStorageKey = "maparium:theme";
+        const storedTheme = window.localStorage.getItem(themeStorageKey);
+        const hasStoredTheme =
+          storedTheme === "dark" || storedTheme === "light";
+        const theme = hasStoredTheme
+          ? storedTheme
+          : window.matchMedia(prefersDarkQuery).matches
+            ? "dark"
+            : "light";
+        const root = document.documentElement;
+
+        root.classList.toggle("dark", theme === "dark");
+        root.style.colorScheme = theme;
+      })();
+    </script>
     <script
       defer
       src="https://cloud.umami.is/script.js"
       data-website-id="020e7afe-33e8-4a34-a821-0509811816c4"
     ></script>
-    <title>Maparium – Visualize OpenStreetMap Features Globally</title>
+    <title>Maparium – Viewing OpenStreetMap features on a global scale</title>
   </head>
   <body>
     <div id="root"></div>

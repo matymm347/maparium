@@ -1,17 +1,27 @@
-import { Check, Github, Link2, Moon, Sun } from "lucide-react";
+import { Check, CircleDot, Info, Link2, Moon, Shield, Sun } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import AddressSearch from "./AddressSearch";
+import githubInvertocatWhite from "@/assets/GitHub_Invertocat_White.svg";
 import mapariumLogo from "@/assets/maparium_logo.svg";
+import { Link } from "react-router-dom";
 
 export default function Navbar({
   apiKey,
   mapController,
   legendEntries = [],
   theme,
+  onHomeNavigate,
   onThemeToggle,
+  onAboutNavigate,
+  onPrivacyNavigate,
+  pathname,
+  showSearch = true,
 }) {
   const [shareState, setShareState] = useState("idle");
+  const showShareButton =
+    !pathname.startsWith("/about") && !pathname.startsWith("/privacy");
+  const isPrivacyRoute = pathname === "/privacy";
   const maxLegendChips = 4;
   const hasOverflow = legendEntries.length > maxLegendChips;
   const visibleLegendEntries = hasOverflow
@@ -66,24 +76,52 @@ export default function Navbar({
     }
   };
 
+  const handleAboutClick = (event) => {
+    if (!onAboutNavigate || pathname === "/about") {
+      return;
+    }
+
+    event.preventDefault();
+    onAboutNavigate();
+  };
+
+  const handlePrivacyClick = (event) => {
+    if (!onPrivacyNavigate || isPrivacyRoute) {
+      return;
+    }
+
+    event.preventDefault();
+    onPrivacyNavigate();
+  };
+
+  const handleHomeClick = (event) => {
+    if (!onHomeNavigate) {
+      return;
+    }
+
+    event.preventDefault();
+    onHomeNavigate();
+  };
+
   return (
     <div className="fixed top-4 left-1/2 z-40 flex w-[min(calc(100vw-2rem),56rem)] -translate-x-1/2 flex-col items-center gap-2 px-4">
-      <nav className="w-full rounded-xl border border-border/70 bg-background/95 shadow-lg backdrop-blur dark:border-white/20 dark:bg-card/95 dark:shadow-black/45">
-        <div className="flex flex-col items-center gap-4 px-4 py-2 md:flex-row md:py-0 md:min-h-13">
-          {/* Top row: Logo and GitHub button */}
-          <div className="flex min-w-0 items-center justify-between w-full md:w-auto md:flex-1">
+      <nav className="relative z-20 w-full rounded-xl border border-border/70 bg-background/95 shadow-lg backdrop-blur dark:border-white/20 dark:bg-card/95 dark:shadow-black/45">
+        <div className="flex flex-col items-center gap-4 px-4 py-2 md:flex-row md:flex-wrap md:items-center md:py-3 lg:flex-nowrap lg:py-0 lg:min-h-13">
+          {/* Top row: Logo and utility actions */}
+          <div className="flex min-w-0 items-center justify-between w-full md:w-auto md:flex-none">
             {/* Logo */}
-            <a
-              href="/"
+            <Link
+              to="/"
+              onClick={handleHomeClick}
               className="flex min-w-0 items-center gap-2 hover:opacity-80 transition-opacity"
             >
               <img src={mapariumLogo} alt="Maparium Logo" className="h-8 w-8" />
-              <span className="truncate text-base font-semibold text-foreground md:text-xl max-[360px]:hidden">
+              <span className="hidden truncate text-base font-semibold text-foreground md:inline md:text-xl">
                 Maparium
               </span>
-            </a>
+            </Link>
 
-            {/* GitHub button - visible on mobile */}
+            {/* Utility buttons - visible on mobile */}
             <div className="flex items-center gap-2 md:hidden">
               <Button
                 variant="outline"
@@ -97,30 +135,59 @@ export default function Navbar({
                   <Moon className="h-4 w-4 text-slate-700" />
                 )}
               </Button>
+              {showShareButton ? (
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={handleShareLink}
+                  aria-label={
+                    shareState === "copied"
+                      ? "Share link copied"
+                      : shareState === "error"
+                        ? "Retry copying share link"
+                        : "Copy share link"
+                  }
+                >
+                  {shareState === "copied" ? (
+                    <Check className="h-4 w-4 text-green-600" />
+                  ) : (
+                    <Link2 className="text-muted-foreground h-4 w-4" />
+                  )}
+                  <span className="sr-only">
+                    {shareState === "copied"
+                      ? "Copied"
+                      : shareState === "error"
+                        ? "Retry"
+                        : "Share"}
+                  </span>
+                </Button>
+              ) : null}
               <Button
-                variant="outline"
+                variant={pathname === "/about" ? "secondary" : "ghost"}
                 size="icon"
-                onClick={handleShareLink}
-                aria-label={
-                  shareState === "copied"
-                    ? "Share link copied"
-                    : shareState === "error"
-                      ? "Retry copying share link"
-                      : "Copy share link"
-                }
+                asChild
               >
-                {shareState === "copied" ? (
-                  <Check className="h-4 w-4 text-green-600" />
-                ) : (
-                  <Link2 className="text-muted-foreground h-4 w-4" />
-                )}
-                <span className="sr-only">
-                  {shareState === "copied"
-                    ? "Copied"
-                    : shareState === "error"
-                      ? "Retry"
-                      : "Share"}
-                </span>
+                <Link
+                  to="/about"
+                  aria-label="About Maparium"
+                  onClick={handleAboutClick}
+                >
+                  <Info className="h-4 w-4" />
+                  <span className="sr-only">About</span>
+                </Link>
+              </Button>
+              <Button
+                variant={isPrivacyRoute ? "secondary" : "ghost"}
+                size="icon"
+                asChild
+              >
+                <Link
+                  to="/privacy"
+                  aria-label="Privacy policy"
+                  onClick={handlePrivacyClick}
+                >
+                  <Shield className="h-4 w-4" />
+                </Link>
               </Button>
               <Button variant="ghost" size="icon" asChild>
                 <a
@@ -129,20 +196,28 @@ export default function Navbar({
                   rel="noopener noreferrer"
                   aria-label="Open GitHub repository"
                 >
-                  <Github className="text-muted-foreground hover:text-foreground h-4 w-4 transition-colors" />
+                  <img
+                    src={githubInvertocatWhite}
+                    alt=""
+                    aria-hidden="true"
+                    className="h-4 w-4 invert opacity-70 transition-opacity hover:opacity-100 dark:invert-0"
+                  />
                   <span className="sr-only">GitHub</span>
                 </a>
               </Button>
             </div>
           </div>
 
-          {/* Search - second row on mobile, inline on desktop */}
-          <div className="w-full min-w-0 md:flex-1 md:max-w-lg md:mx-4 lg:mx-8">
-            <AddressSearch apiKey={apiKey} mapController={mapController} />
-          </div>
+          {showSearch ? (
+            <div className="w-full min-w-0 md:order-3 md:basis-full md:ml-0 md:mr-0 lg:order-0 lg:basis-auto lg:ml-4 lg:mr-auto lg:w-88 lg:max-w-[44vw] xl:w-104">
+              <AddressSearch apiKey={apiKey} mapController={mapController} />
+            </div>
+          ) : (
+            <div className="hidden md:block md:flex-1" aria-hidden="true" />
+          )}
 
-          {/* GitHub button - hidden on mobile, visible on desktop */}
-          <div className="hidden shrink-0 md:flex items-center gap-2">
+          {/* Utility buttons - hidden on mobile, visible on desktop */}
+          <div className="hidden shrink-0 md:ml-auto md:flex md:flex-wrap md:justify-end md:gap-2 lg:flex-nowrap">
             <Button
               variant="outline"
               size="sm"
@@ -152,28 +227,56 @@ export default function Navbar({
               {theme === "dark" ? (
                 <>
                   <Sun className="h-4 w-4 text-amber-500" />
-                  <span>Light</span>
                 </>
               ) : (
                 <>
                   <Moon className="h-4 w-4 text-slate-700" />
-                  <span>Dark</span>
                 </>
               )}
             </Button>
-            <Button variant="outline" size="sm" onClick={handleShareLink}>
-              {shareState === "copied" ? (
-                <Check className="h-4 w-4 text-green-600" />
-              ) : (
-                <Link2 className="text-muted-foreground h-4 w-4" />
-              )}
-              <span>
-                {shareState === "copied"
-                  ? "Link copied"
-                  : shareState === "error"
-                    ? "Copy failed"
-                    : "Share view"}
-              </span>
+            {showShareButton ? (
+              <Button variant="outline" size="sm" onClick={handleShareLink}>
+                {shareState === "copied" ? (
+                  <Check className="h-4 w-4 text-green-600" />
+                ) : (
+                  <Link2 className="text-muted-foreground h-4 w-4" />
+                )}
+                <span>
+                  {shareState === "copied"
+                    ? "Link copied"
+                    : shareState === "error"
+                      ? "Copy failed"
+                      : "Share view"}
+                </span>
+              </Button>
+            ) : null}
+            <Button
+              variant={pathname === "/about" ? "secondary" : "ghost"}
+              size="sm"
+              asChild
+            >
+              <Link to="/about" onClick={handleAboutClick}>
+                {pathname === "/about" ? (
+                  <CircleDot className="h-4 w-4" />
+                ) : (
+                  <Info className="h-4 w-4" />
+                )}
+                <span>About</span>
+              </Link>
+            </Button>
+            <Button
+              variant={isPrivacyRoute ? "secondary" : "ghost"}
+              size="icon"
+              asChild
+            >
+              <Link
+                to="/privacy"
+                aria-label="Privacy policy"
+                onClick={handlePrivacyClick}
+              >
+                <Shield className="h-4 w-4" />
+                <span className="sr-only">Privacy</span>
+              </Link>
             </Button>
             <Button variant="ghost" size="sm" asChild>
               <a
@@ -182,7 +285,12 @@ export default function Navbar({
                 rel="noopener noreferrer"
                 aria-label="Open GitHub repository"
               >
-                <Github className="text-muted-foreground hover:text-foreground h-4 w-4 transition-colors" />
+                <img
+                  src={githubInvertocatWhite}
+                  alt=""
+                  aria-hidden="true"
+                  className="h-4 w-4 invert opacity-70 transition-opacity hover:opacity-100 dark:invert-0"
+                />
                 <span className="sr-only">GitHub</span>
               </a>
             </Button>
@@ -191,7 +299,7 @@ export default function Navbar({
       </nav>
 
       {visibleLegendEntries.length > 0 ? (
-        <div className="flex w-full flex-wrap justify-center gap-2 px-1">
+        <div className="relative z-10 flex w-full flex-wrap justify-center gap-2 px-1">
           {visibleLegendEntries.map((entry) => (
             <div
               key={entry.id}

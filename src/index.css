@@ -111,14 +111,145 @@
 }
 
 @layer base {
+  html {
+    @apply bg-background;
+  }
+
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
-    @apply bg-background text-foreground;
+    @apply min-h-screen bg-background text-foreground;
   }
 }
 
 .maparium-hover-popup .maplibregl-popup-content {
   color: #000;
+}
+
+.maparium-address-search,
+.maparium-address-search .maplibregl-ctrl-geocoder,
+.maparium-address-search .maptiler-ctrl {
+  width: 100%;
+  min-width: 0;
+  max-width: none;
+}
+
+.maparium-address-search .maplibregl-ctrl-geocoder {
+  color: var(--foreground);
+}
+
+.maparium-address-search .maplibregl-ctrl-geocoder form,
+.maparium-address-search .maplibregl-ctrl-geocoder form:hover,
+.maparium-address-search .maplibregl-ctrl-geocoder form:focus-within,
+.maparium-address-search .maptiler-ctrl form,
+.maparium-address-search .maptiler-ctrl form:hover,
+.maparium-address-search .maptiler-ctrl form:focus-within {
+  width: 100% !important;
+  min-width: 0;
+  max-width: none !important;
+  border-radius: 0.75rem;
+  background: color-mix(in oklab, var(--background) 94%, transparent);
+  color: var(--foreground);
+  box-shadow: none;
+}
+
+.maparium-address-search .input-group {
+  width: 100%;
+  min-width: 0;
+  border: 1px solid color-mix(in oklab, var(--border) 82%, transparent);
+  border-radius: 0.75rem;
+  background: color-mix(in oklab, var(--background) 96%, transparent);
+  color: var(--foreground);
+  box-shadow: 0 8px 24px color-mix(in oklab, var(--foreground) 8%, transparent);
+  transition:
+    border-color 150ms ease,
+    background-color 150ms ease,
+    box-shadow 150ms ease;
+}
+
+.maparium-address-search input {
+  min-width: 0;
+  color: var(--foreground) !important;
+}
+
+.maparium-address-search input::placeholder {
+  color: var(--muted-foreground);
+}
+
+.maparium-address-search .input-group:focus-within {
+  border-color: color-mix(in oklab, var(--ring) 62%, var(--border));
+  box-shadow:
+    0 0 0 1px color-mix(in oklab, var(--ring) 28%, transparent),
+    0 10px 28px color-mix(in oklab, var(--foreground) 12%, transparent);
+}
+
+.maparium-address-search button svg,
+.maparium-address-search .search-button svg,
+.maparium-address-search .clear-button-container svg {
+  fill: var(--muted-foreground);
+  color: var(--muted-foreground);
+}
+
+.maparium-address-search ul,
+.maparium-address-search .no-results,
+.maparium-address-search .error {
+  border: 1px solid color-mix(in oklab, var(--border) 80%, transparent);
+  border-radius: 0.9rem;
+  background: color-mix(in oklab, var(--popover) 96%, transparent) !important;
+  color: var(--popover-foreground);
+  box-shadow: 0 18px 40px
+    color-mix(in oklab, var(--foreground) 12%, transparent);
+  backdrop-filter: blur(14px);
+}
+
+.maparium-address-search li {
+  color: var(--foreground);
+}
+
+.maparium-address-search li .primary {
+  color: var(--foreground);
+}
+
+.maparium-address-search li .secondary,
+.maparium-address-search li .line2,
+.maparium-address-search .no-results,
+.maparium-address-search .error {
+  color: var(--muted-foreground) !important;
+}
+
+.maparium-address-search li.picked,
+.maparium-address-search li.selected {
+  background: color-mix(in oklab, var(--accent) 78%, transparent) !important;
+}
+
+.dark .maparium-address-search .maplibregl-ctrl-geocoder form,
+.dark .maparium-address-search .maplibregl-ctrl-geocoder form:hover,
+.dark .maparium-address-search .maplibregl-ctrl-geocoder form:focus-within,
+.dark .maparium-address-search .maptiler-ctrl form,
+.dark .maparium-address-search .maptiler-ctrl form:hover,
+.dark .maparium-address-search .maptiler-ctrl form:focus-within {
+  background: color-mix(in oklab, var(--card) 92%, transparent);
+}
+
+.dark .maparium-address-search .input-group {
+  border-color: color-mix(in oklab, white 18%, var(--border));
+  background: color-mix(in oklab, var(--card) 94%, transparent);
+  box-shadow: 0 10px 28px rgb(0 0 0 / 0.28);
+}
+
+.dark .maparium-address-search .input-group:focus-within {
+  border-color: color-mix(in oklab, white 24%, var(--ring));
+  box-shadow:
+    0 0 0 1px rgb(255 255 255 / 0.08),
+    0 12px 32px rgb(0 0 0 / 0.4);
+}
+
+.dark .maparium-address-search ul,
+.dark .maparium-address-search .no-results,
+.dark .maparium-address-search .error {
+  border-color: rgb(255 255 255 / 0.12);
+  background: color-mix(in oklab, var(--card) 95%, transparent) !important;
+  box-shadow: 0 18px 40px rgb(0 0 0 / 0.42);
 }
