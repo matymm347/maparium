@@ -34,7 +34,7 @@ export default function PrivacyPage() {
                 it uses, and what happens when you interact with map features.
               </p>
               <p className="text-sm text-muted-foreground">
-                Last updated: 15 March 2026
+                Last updated: 1 June 2026
               </p>
             </div>
           </div>
@@ -47,8 +47,8 @@ export default function PrivacyPage() {
             </h2>
             <p className="mt-3 leading-relaxed text-muted-foreground">
               Maparium is operated by Mateusz Jochimiak. If you need to contact
-              the website operator about privacy matters, add your preferred
-              contact email here before publishing this page.
+              the website operator about privacy matters, please contact the
+              website operator at maparium.contact@gmail.com
             </p>
           </article>
 
@@ -72,7 +72,7 @@ export default function PrivacyPage() {
                 Maparium does not use cookies for advertising or cross-site
                 tracking. The website may store a small theme preference in your
                 browser so it can remember whether you prefer light or dark
-                mode. This is stored in browser local storage, not in a cookie.
+                mode. This is stored in browser local storage.
               </p>
             </article>
 
@@ -163,7 +163,7 @@ export default function PrivacyPage() {
                 Depending on the laws that apply to you, you may have rights to
                 request access, correction, deletion, restriction, or objection
                 regarding personal data processing. Privacy questions can be
-                directed to the contact address you publish for this website.
+                directed to maparium.contact@gmail.com.
               </p>
             </article>
           </div>
