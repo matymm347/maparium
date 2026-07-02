@@ -75,8 +75,12 @@ export default function MapView({
   );
 
   const [API_KEY] = useState(import.meta.env.VITE_MAP_TILER_API_KEY);
+  const [isLayerLockEnabled, setIsLayerLockEnabled] = useState(false);
   const [chosenLayerGroup, setChosenLayerGroup] = useState(
-    initialUrlStateRef.current.openGroups,
+    initialUrlStateRef.current.openGroups[0] ?? undefined,
+  );
+  const lastSelectedLayerRef = useRef(
+    initialUrlStateRef.current.visibleLayerIds.values().next().value ?? null,
   );
 
   const mapRef = useRef(null);
@@ -571,7 +575,28 @@ export default function MapView({
   };
 
   function handleChooseLayerGroup(group) {
-    setChosenLayerGroup(group);
+    setChosenLayerGroup(group || undefined);
+  }
+
+  function toggleLayerLock() {
+    if (!isLayerLockEnabled) {
+      setIsLayerLockEnabled(true);
+      return;
+    }
+
+    const nextLayerConfig = buildLayerConfig(initialLayers);
+
+    const map = mapRef.current;
+    if (map && isMapLoadedRef.current) {
+      getVisibleLayerIds(layerConfig).forEach((layerId) => {
+        removeMapLayerSet(map, layerId);
+      });
+    }
+
+    setLayerConfig(nextLayerConfig);
+    setChosenLayerGroup(undefined);
+    lastSelectedLayerRef.current = null;
+    setIsLayerLockEnabled(false);
   }
 
   function clearAllLayers(layerConfig) {
@@ -590,6 +615,7 @@ export default function MapView({
       });
     });
     setLayerConfig(newConfig);
+    lastSelectedLayerRef.current = null;
 
     // Remove all layers from the map
     const map = mapRef.current;
@@ -604,20 +630,36 @@ export default function MapView({
 
   function updateLayerVisibility(layerConfig, group, layer) {
     const visible = layerConfig[group]["layers"][layer]["visible"];
+    lastSelectedLayerRef.current = layer;
 
     const updatedLayerConfig = {
       ...layerConfig,
       [group]: {
         ...layerConfig[group],
         layers: {
-          ...layerConfig[group]["layers"],
-          [layer]: {
-            ...layerConfig[group]["layers"][layer],
-            visible: !visible,
-          },
+          ...layerConfig[group].layers,
         },
       },
     };
+
+    if (isLayerLockEnabled) {
+      updatedLayerConfig[group].layers[layer] = {
+        ...layerConfig[group].layers[layer],
+        visible: !visible,
+      };
+    } else {
+      Object.keys(updatedLayerConfig).forEach((groupName) => {
+        Object.keys(updatedLayerConfig[groupName].layers).forEach(
+          (layerName) => {
+            updatedLayerConfig[groupName].layers[layerName] = {
+              ...layerConfig[groupName].layers[layerName],
+              visible:
+                groupName === group && layerName === layer ? !visible : false,
+            };
+          },
+        );
+      });
+    }
 
     setLayerConfig(updatedLayerConfig);
 
@@ -625,10 +667,14 @@ export default function MapView({
     const map = mapRef.current;
     if (!map || !isMapLoadedRef.current) return;
 
+    if (!isLayerLockEnabled) {
+      applyVisibleLayersToMap(map, updatedLayerConfig);
+      return;
+    }
+
     const layerId = layer;
     const updatedLayer = updatedLayerConfig[group]["layers"][layer];
 
-    // Remove existing layer and source if they exist
     removeMapLayerSet(map, layerId);
 
     if (!visible) {
@@ -642,7 +688,8 @@ export default function MapView({
     }
 
     const resetLayerConfig = buildLayerConfig(initialLayers);
-    setChosenLayerGroup([]);
+    setChosenLayerGroup(undefined);
+    setIsLayerLockEnabled(false);
     setLayerConfig(resetLayerConfig);
     setIsFeatureSheetOpen(false);
     setSelectedFeature(null);
@@ -858,11 +905,14 @@ export default function MapView({
         width: "100vw",
       }}
     >
-      <LayerDrawer>
+      <LayerDrawer
+      >
         <LayerSelection
           layerConfig={layerConfig}
           updateLayerVisibility={updateLayerVisibility}
           chosenLayerGroup={chosenLayerGroup}
+          isLayerLockEnabled={isLayerLockEnabled}
+          onToggleLayerLock={toggleLayerLock}
           handleChooseLayerGroup={handleChooseLayerGroup}
           clearAllLayers={clearAllLayers}
         />
