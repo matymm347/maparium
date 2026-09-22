@@ -24,7 +24,7 @@ function DrawerOverlay({ className, ...props }) {
     <DrawerPrimitive.Overlay
       data-slot="drawer-overlay"
       className={cn(
-        "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 fixed inset-0 z-50 bg-black/50",
+        "fixed inset-0 z-50 bg-transparent",
         className,
       )}
       {...props}
@@ -32,11 +32,12 @@ function DrawerOverlay({ className, ...props }) {
   );
 }
 
-function DrawerContent({ className, children, ...props }) {
+function DrawerContent({ className, children, ref, ...props }) {
   return (
     <DrawerPortal data-slot="drawer-portal">
       <DrawerOverlay />
       <DrawerPrimitive.Content
+        ref={ref}
         data-slot="drawer-content"
         className={cn(
           "group/drawer-content bg-card text-card-foreground border-border fixed z-50 flex h-auto flex-col",

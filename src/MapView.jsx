@@ -29,6 +29,8 @@ const URL_PARAM_KEYS = {
   layer: "layer",
 };
 
+const DEFAULT_VISIBLE_LAYERS = ["Wind Turbines"];
+
 const formatCoordinate = (value) => value.toFixed(5);
 const formatZoom = (value) => value.toFixed(2);
 const formatAngle = (value) => value.toFixed(1);
@@ -149,7 +151,10 @@ export default function MapView({
 
   function parseMapStateFromUrl(layersData) {
     const params = new URLSearchParams(window.location.search);
-    const visibleLayerIds = new Set(params.getAll(URL_PARAM_KEYS.layer));
+    const hasLayerParam = params.has(URL_PARAM_KEYS.layer);
+    const visibleLayerIds = new Set(
+      hasLayerParam ? params.getAll(URL_PARAM_KEYS.layer) : DEFAULT_VISIBLE_LAYERS,
+    );
     const openGroups = Object.keys(layersData).filter((group) =>
       Object.keys(layersData[group]).some((layerName) => {
         if (

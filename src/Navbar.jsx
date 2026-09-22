@@ -21,30 +21,34 @@ export default function Navbar({
 }) {
   const [shareState, setShareState] = useState("idle");
   const navbarContainerRef = useRef(null);
+  const navBarRef = useRef(null);
 
-  // Reports the navbar's bottom edge so the map can center its content in
-  // the space below it instead of behind it.
+  // Reports the main navbar's bottom edge (excluding the legend chip row
+  // below it) so the map can center its content in the space below it
+  // instead of behind it. Deliberately ignoring the legend chips keeps the
+  // map from re-centering (and visibly panning) whenever the active layer
+  // legend grows, shrinks, or wraps to another line.
   useEffect(() => {
-    const container = navbarContainerRef.current;
-    if (!container || !onOffsetChange) {
+    const navBar = navBarRef.current;
+    if (!navBar || !onOffsetChange) {
       return undefined;
     }
 
     const reportOffset = () => {
-      onOffsetChange(container.getBoundingClientRect().bottom);
+      onOffsetChange(navBar.getBoundingClientRect().bottom);
     };
 
     reportOffset();
 
     const resizeObserver = new ResizeObserver(reportOffset);
-    resizeObserver.observe(container);
+    resizeObserver.observe(navBar);
     window.addEventListener("resize", reportOffset);
 
     return () => {
       resizeObserver.disconnect();
       window.removeEventListener("resize", reportOffset);
     };
-  }, [onOffsetChange, legendEntries.length]);
+  }, [onOffsetChange]);
   const showShareButton =
     !pathname.startsWith("/about") && !pathname.startsWith("/privacy");
   const isPrivacyRoute = pathname === "/privacy";
@@ -134,7 +138,10 @@ export default function Navbar({
       ref={navbarContainerRef}
       className="fixed top-4 left-1/2 z-40 flex w-[min(calc(100vw-2rem),56rem)] -translate-x-1/2 flex-col items-center gap-2 px-4"
     >
-      <nav className="relative z-20 w-full rounded-xl border border-border/70 bg-background/95 shadow-lg backdrop-blur dark:border-white/20 dark:bg-card/95 dark:shadow-black/45">
+      <nav
+        ref={navBarRef}
+        className="relative z-20 w-full rounded-xl border border-border/70 bg-background/95 shadow-lg backdrop-blur dark:border-white/20 dark:bg-card/95 dark:shadow-black/45"
+      >
         <div className="flex flex-col items-center gap-4 px-4 py-2 md:flex-row md:flex-wrap md:items-center md:py-3 lg:flex-nowrap lg:py-0 lg:min-h-13">
           {/* Top row: Logo and utility actions */}
           <div className="flex min-w-0 items-center justify-between w-full md:w-auto md:flex-none">
