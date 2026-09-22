@@ -26,10 +26,11 @@ const getSystemTheme = () => {
 };
 
 function App() {
-  const [apiKey, setApiKey] = useState();
-  const [mapController, setMapController] = useState();
+  const apiKey = import.meta.env.VITE_MAP_TILER_API_KEY;
+  const [mapInstance, setMapInstance] = useState();
   const [legendEntries, setLegendEntries] = useState([]);
   const [homeResetToken, setHomeResetToken] = useState(0);
+  const [navbarOffset, setNavbarOffset] = useState(0);
   const [theme, setTheme] = useState(
     () => getStoredTheme() ?? getSystemTheme(),
   );
@@ -109,8 +110,7 @@ function App() {
     }
 
     pendingNavigationPathRef.current = path;
-    setApiKey(undefined);
-    setMapController(undefined);
+    setMapInstance(undefined);
     setLegendEntries([]);
     setIsNavigatingAwayFromMap(true);
   };
@@ -140,11 +140,11 @@ function App() {
     pageContent = (
       <MapView
         key="map-route"
-        setApiKey={setApiKey}
-        setMapController={setMapController}
+        setMapInstance={setMapInstance}
         setLegendEntries={setLegendEntries}
         homeResetToken={homeResetToken}
         theme={theme}
+        navbarOffset={navbarOffset}
       />
     );
   } else if (isAboutRoute) {
@@ -160,7 +160,7 @@ function App() {
       {pageContent}
       <Navbar
         apiKey={apiKey}
-        mapController={mapController}
+        mapInstance={mapInstance}
         legendEntries={isMapRoute ? legendEntries : []}
         theme={theme}
         onHomeNavigate={handleHomeNavigate}
@@ -169,6 +169,7 @@ function App() {
         onPrivacyNavigate={handlePrivacyNavigate}
         pathname={location.pathname}
         showSearch={isMapRoute && !isNavigatingAwayFromMap}
+        onOffsetChange={setNavbarOffset}
       />
     </>
   );

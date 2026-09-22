@@ -224,6 +224,27 @@
   background: color-mix(in oklab, var(--accent) 78%, transparent) !important;
 }
 
+@keyframes layer-button-heartbeat {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 color-mix(in oklab, #f97316 55%, transparent);
+  }
+  14% {
+    box-shadow: 0 0 0 8px color-mix(in oklab, #f97316 0%, transparent);
+  }
+  28% {
+    box-shadow: 0 0 0 0 color-mix(in oklab, #f97316 45%, transparent);
+  }
+  42% {
+    box-shadow: 0 0 0 10px color-mix(in oklab, #f97316 0%, transparent);
+  }
+}
+
+.layer-button-attention {
+  animation: layer-button-heartbeat 2.2s ease-in-out infinite;
+  border-color: #f97316 !important;
+}
+
 .dark .maparium-address-search .maplibregl-ctrl-geocoder form,
 .dark .maparium-address-search .maplibregl-ctrl-geocoder form:hover,
 .dark .maparium-address-search .maplibregl-ctrl-geocoder form:focus-within,

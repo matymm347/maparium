@@ -1,5 +1,5 @@
 import { Check, CircleDot, Info, Link2, Moon, Shield, Sun } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import AddressSearch from "./AddressSearch";
 import githubInvertocatWhite from "@/assets/GitHub_Invertocat_White.svg";
@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 
 export default function Navbar({
   apiKey,
-  mapController,
+  mapInstance,
   legendEntries = [],
   theme,
   onHomeNavigate,
@@ -17,8 +17,34 @@ export default function Navbar({
   onPrivacyNavigate,
   pathname,
   showSearch = true,
+  onOffsetChange,
 }) {
   const [shareState, setShareState] = useState("idle");
+  const navbarContainerRef = useRef(null);
+
+  // Reports the navbar's bottom edge so the map can center its content in
+  // the space below it instead of behind it.
+  useEffect(() => {
+    const container = navbarContainerRef.current;
+    if (!container || !onOffsetChange) {
+      return undefined;
+    }
+
+    const reportOffset = () => {
+      onOffsetChange(container.getBoundingClientRect().bottom);
+    };
+
+    reportOffset();
+
+    const resizeObserver = new ResizeObserver(reportOffset);
+    resizeObserver.observe(container);
+    window.addEventListener("resize", reportOffset);
+
+    return () => {
+      resizeObserver.disconnect();
+      window.removeEventListener("resize", reportOffset);
+    };
+  }, [onOffsetChange, legendEntries.length]);
   const showShareButton =
     !pathname.startsWith("/about") && !pathname.startsWith("/privacy");
   const isPrivacyRoute = pathname === "/privacy";
@@ -104,7 +130,10 @@ export default function Navbar({
   };
 
   return (
-    <div className="fixed top-4 left-1/2 z-40 flex w-[min(calc(100vw-2rem),56rem)] -translate-x-1/2 flex-col items-center gap-2 px-4">
+    <div
+      ref={navbarContainerRef}
+      className="fixed top-4 left-1/2 z-40 flex w-[min(calc(100vw-2rem),56rem)] -translate-x-1/2 flex-col items-center gap-2 px-4"
+    >
       <nav className="relative z-20 w-full rounded-xl border border-border/70 bg-background/95 shadow-lg backdrop-blur dark:border-white/20 dark:bg-card/95 dark:shadow-black/45">
         <div className="flex flex-col items-center gap-4 px-4 py-2 md:flex-row md:flex-wrap md:items-center md:py-3 lg:flex-nowrap lg:py-0 lg:min-h-13">
           {/* Top row: Logo and utility actions */}
@@ -210,7 +239,7 @@ export default function Navbar({
 
           {showSearch ? (
             <div className="w-full min-w-0 md:order-3 md:basis-full md:ml-0 md:mr-0 lg:order-0 lg:basis-auto lg:ml-4 lg:mr-auto lg:w-88 lg:max-w-[44vw] xl:w-104">
-              <AddressSearch apiKey={apiKey} mapController={mapController} />
+              <AddressSearch apiKey={apiKey} mapInstance={mapInstance} />
             </div>
           ) : (
             <div className="hidden md:block md:flex-1" aria-hidden="true" />

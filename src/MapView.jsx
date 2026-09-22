@@ -1,12 +1,10 @@
 import "maplibre-gl/dist/maplibre-gl.css";
-import maplibregl from "maplibre-gl";
+import * as maplibregl from "maplibre-gl";
 import { useEffect, useRef, useState } from "react";
 import { layers, namedFlavor } from "@protomaps/basemaps";
 import LayerDrawer from "./LayerDrawer";
 import LayerSelection from "./LayerSelection";
 import initialLayers from "./layers.json";
-import { createMapLibreGlMapController } from "@maptiler/geocoding-control/maplibregl-controller";
-import "@maptiler/geocoding-control/style.css";
 import {
   Sheet,
   SheetContent,
@@ -63,12 +61,14 @@ const createBasemapStyle = (martinUrl, theme) => {
 };
 
 export default function MapView({
-  setApiKey,
-  setMapController,
+  setMapInstance,
   setLegendEntries,
   homeResetToken = 0,
   theme,
+  navbarOffset = 0,
 }) {
+  const navbarOffsetRef = useRef(navbarOffset);
+  navbarOffsetRef.current = navbarOffset;
   const initialUrlStateRef = useRef(parseMapStateFromUrl(initialLayers));
   const [layerConfig, setLayerConfig] = useState(() =>
     buildLayerConfig(initialLayers, initialUrlStateRef.current.visibleLayerIds),
@@ -771,6 +771,17 @@ export default function MapView({
     map.setStyle(createBasemapStyle(martinUrl, theme));
   }, [theme]);
 
+  // Keep the map's padding in sync with the navbar's height so the visible
+  // (unobstructed) area stays centered as the navbar reflows on resize.
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map) {
+      return;
+    }
+
+    map.setPadding({ top: navbarOffset, bottom: 0, left: 0, right: 0 });
+  }, [navbarOffset]);
+
   // Initialize the map
   useEffect(() => {
     if (mapRef.current) return;
@@ -784,6 +795,9 @@ export default function MapView({
       zoom: initialUrlStateRef.current.zoom,
       bearing: initialUrlStateRef.current.bearing,
       pitch: initialUrlStateRef.current.pitch,
+      // Keeps the map's visual center between the navbar and the bottom of
+      // the window instead of the whole (partially covered) viewport.
+      padding: { top: navbarOffsetRef.current, bottom: 0, left: 0, right: 0 },
     });
 
     // Store map reference immediately to prevent duplicate instances
@@ -805,24 +819,12 @@ export default function MapView({
       "bottom-right",
     );
 
-    if (maplibregl.ProjectionControl) {
-      map.addControl(
-        new maplibregl.ProjectionControl({
-          projections: [
-            { name: "Globe", id: "globe" },
-            { name: "Mercator", id: "mercator" },
-          ],
-        }),
-        "bottom-right",
-      );
-    }
-
     if (maplibregl.GlobeControl) {
       map.addControl(new maplibregl.GlobeControl(), "bottom-right");
     }
-    const controller = createMapLibreGlMapController(map, maplibregl);
-    if (setApiKey) setApiKey(API_KEY);
-    if (setMapController) setMapController(controller);
+    if (setMapInstance) {
+      setMapInstance(map);
+    }
 
     map.on("style.load", () => {
       map.setProjection({
@@ -878,12 +880,8 @@ export default function MapView({
       setFeatureImageUrl(null);
       setIsFeatureImageLoading(false);
 
-      if (setMapController) {
-        setMapController(undefined);
-      }
-
-      if (setApiKey) {
-        setApiKey(undefined);
+      if (setMapInstance) {
+        setMapInstance(undefined);
       }
 
       if (setLegendEntries) {
@@ -895,7 +893,7 @@ export default function MapView({
         mapRef.current = null;
       }
     };
-  }, [API_KEY]);
+  }, [setLegendEntries, setMapInstance, theme]);
 
   return (
     <div
@@ -905,8 +903,7 @@ export default function MapView({
         width: "100vw",
       }}
     >
-      <LayerDrawer
-      >
+      <LayerDrawer>
         <LayerSelection
           layerConfig={layerConfig}
           updateLayerVisibility={updateLayerVisibility}
