@@ -29,7 +29,7 @@ Maparium is built mainly for fun and curiosity, aiming to be a place that brings
 
 ## Screenshot
 
-![Maparium screenshot](./assets/screenshot.png)
+![Maparium screenshot](./assets/screenshot2.png)
 
 ## Setup & Development
 
