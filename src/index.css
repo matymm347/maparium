@@ -245,6 +245,17 @@
   border-color: #f97316 !important;
 }
 
+/*
+ * Fixed positioning always matches the browser's actual visible viewport,
+ * unlike vh/dvh units which can momentarily mismatch the page's static
+ * height as mobile browser chrome (address bar/toolbar) shows or hides —
+ * that mismatch is what exposed a black strip at the bottom on mobile.
+ */
+.map-view-container {
+  position: fixed;
+  inset: 0;
+}
+
 .dark .maparium-address-search .maplibregl-ctrl-geocoder form,
 .dark .maparium-address-search .maplibregl-ctrl-geocoder form:hover,
 .dark .maparium-address-search .maplibregl-ctrl-geocoder form:focus-within,

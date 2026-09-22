@@ -896,13 +896,7 @@ export default function MapView({
   }, [setLegendEntries, setMapInstance, theme]);
 
   return (
-    <div
-      style={{
-        position: "relative",
-        height: "100vh",
-        width: "100vw",
-      }}
-    >
+    <div className="map-view-container">
       <LayerDrawer>
         <LayerSelection
           layerConfig={layerConfig}
