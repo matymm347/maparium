@@ -8,6 +8,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { LayerIconMap } from "./LayerIconMap";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/switch";
 import { Lock, Unlock } from "lucide-react";
 
 export default function LayerSelection({
@@ -29,31 +30,25 @@ export default function LayerSelection({
         >
           Clear all
         </Button>
-        <Button
-          type="button"
-          variant={isLayerLockEnabled ? "secondary" : "outline"}
-          size="sm"
-          className="w-fit justify-start gap-2 bg-blue-100 text-blue-700 hover:bg-blue-200 dark:bg-blue-950 dark:text-blue-300 dark:hover:bg-blue-900"
-          onClick={onToggleLayerLock}
-          aria-pressed={isLayerLockEnabled}
-          aria-label={
-            isLayerLockEnabled
-              ? "Switch to single layer mode"
-              : "Switch to multiple layers mode"
-          }
-        >
+        <div className="flex w-fit items-center gap-3 rounded-md bg-blue-100 px-3 py-2 text-blue-700 dark:bg-blue-950 dark:text-blue-300">
           {isLayerLockEnabled ? (
-            <>
-              <Unlock className="h-4 w-4" />
-              <span>Multiple layers mode</span>
-            </>
+            <Unlock className="h-4 w-4" aria-hidden="true" />
           ) : (
-            <>
-              <Lock className="h-4 w-4" />
-              <span>Single layer mode</span>
-            </>
+            <Lock className="h-4 w-4" aria-hidden="true" />
           )}
-        </Button>
+          <label
+            htmlFor="multiple-layers-mode"
+            className="text-sm font-medium leading-none"
+          >
+            Multiple layers mode
+          </label>
+          <Switch
+            id="multiple-layers-mode"
+            checked={isLayerLockEnabled}
+            onCheckedChange={onToggleLayerLock}
+            className="data-[state=checked]:bg-blue-600 data-[state=unchecked]:bg-gray-300 dark:data-[state=checked]:bg-blue-500 dark:data-[state=unchecked]:bg-gray-700"
+          />
+        </div>
       </div>
       <Accordion
         type="single"
