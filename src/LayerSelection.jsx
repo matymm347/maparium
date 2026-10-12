@@ -33,23 +33,23 @@ export default function LayerSelection({
           type="button"
           variant={isLayerLockEnabled ? "secondary" : "outline"}
           size="sm"
-          className="w-fit justify-start gap-2"
+          className="w-fit justify-start gap-2 bg-blue-100 text-blue-700 hover:bg-blue-200 dark:bg-blue-950 dark:text-blue-300 dark:hover:bg-blue-900"
           onClick={onToggleLayerLock}
           aria-pressed={isLayerLockEnabled}
           aria-label={
             isLayerLockEnabled
-              ? "Unlock multiple layers"
-              : "Lock to allow multiple layers"
+              ? "Switch to single layer mode"
+              : "Switch to multiple layers mode"
           }
         >
           {isLayerLockEnabled ? (
             <>
-              <Lock className="h-4 w-4" />
-              <span>Multiple layers locked</span>
+              <Unlock className="h-4 w-4" />
+              <span>Multiple layers mode</span>
             </>
           ) : (
             <>
-              <Unlock className="h-4 w-4" />
+              <Lock className="h-4 w-4" />
               <span>Single layer mode</span>
             </>
           )}
