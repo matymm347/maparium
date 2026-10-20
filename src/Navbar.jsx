@@ -1,4 +1,4 @@
-import { Check, CircleDot, Info, Link2, Moon, Shield, Sun } from "lucide-react";
+import { Check, CircleDot, Info, Link2, Moon, Sun } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import AddressSearch from "./AddressSearch";
@@ -14,7 +14,6 @@ export default function Navbar({
   onHomeNavigate,
   onThemeToggle,
   onAboutNavigate,
-  onPrivacyNavigate,
   pathname,
   showSearch = true,
   onOffsetChange,
@@ -51,7 +50,6 @@ export default function Navbar({
   }, [onOffsetChange]);
   const showShareButton =
     !pathname.startsWith("/about") && !pathname.startsWith("/privacy");
-  const isPrivacyRoute = pathname === "/privacy";
   const maxLegendChips = 4;
   const hasOverflow = legendEntries.length > maxLegendChips;
   const visibleLegendEntries = hasOverflow
@@ -113,15 +111,6 @@ export default function Navbar({
 
     event.preventDefault();
     onAboutNavigate();
-  };
-
-  const handlePrivacyClick = (event) => {
-    if (!onPrivacyNavigate || isPrivacyRoute) {
-      return;
-    }
-
-    event.preventDefault();
-    onPrivacyNavigate();
   };
 
   const handleHomeClick = (event) => {
@@ -212,19 +201,6 @@ export default function Navbar({
                   <span className="sr-only">About</span>
                 </Link>
               </Button>
-              <Button
-                variant={isPrivacyRoute ? "secondary" : "ghost"}
-                size="icon"
-                asChild
-              >
-                <Link
-                  to="/privacy"
-                  aria-label="Privacy policy"
-                  onClick={handlePrivacyClick}
-                >
-                  <Shield className="h-4 w-4" />
-                </Link>
-              </Button>
               <Button variant="ghost" size="icon" asChild>
                 <a
                   href="https://github.com/matymm347/maparium"
@@ -298,20 +274,6 @@ export default function Navbar({
                   <Info className="h-4 w-4" />
                 )}
                 <span>About</span>
-              </Link>
-            </Button>
-            <Button
-              variant={isPrivacyRoute ? "secondary" : "ghost"}
-              size="icon"
-              asChild
-            >
-              <Link
-                to="/privacy"
-                aria-label="Privacy policy"
-                onClick={handlePrivacyClick}
-              >
-                <Shield className="h-4 w-4" />
-                <span className="sr-only">Privacy</span>
               </Link>
             </Button>
             <Button variant="ghost" size="sm" asChild>

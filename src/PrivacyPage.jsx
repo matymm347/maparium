@@ -48,7 +48,7 @@ export default function PrivacyPage() {
             <p className="mt-3 leading-relaxed text-muted-foreground">
               Maparium is operated by Mateusz Jochimiak. If you need to contact
               the website operator about privacy matters, please contact the
-              website operator at maparium.contact@gmail.com
+              website operator at contact@maparium.pl
             </p>
           </article>
 
@@ -163,7 +163,7 @@ export default function PrivacyPage() {
                 Depending on the laws that apply to you, you may have rights to
                 request access, correction, deletion, restriction, or objection
                 regarding personal data processing. Privacy questions can be
-                directed to maparium.contact@gmail.com.
+                directed to contact@maparium.pl.
               </p>
             </article>
           </div>

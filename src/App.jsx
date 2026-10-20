@@ -119,10 +119,6 @@ function App() {
     navigateFromMapTo("/about");
   };
 
-  const handlePrivacyNavigate = () => {
-    navigateFromMapTo("/privacy");
-  };
-
   const handleHomeNavigate = () => {
     if (isMapRoute) {
       setLegendEntries([]);
@@ -166,7 +162,6 @@ function App() {
         onHomeNavigate={handleHomeNavigate}
         onThemeToggle={toggleTheme}
         onAboutNavigate={handleAboutNavigate}
-        onPrivacyNavigate={handlePrivacyNavigate}
         pathname={location.pathname}
         showSearch={isMapRoute && !isNavigatingAwayFromMap}
         onOffsetChange={setNavbarOffset}

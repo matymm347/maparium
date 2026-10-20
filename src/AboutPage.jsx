@@ -226,6 +226,21 @@ export default function AboutPage() {
           </div>
         </section>
 
+        <section className="rounded-2xl border border-border/80 bg-card/70 p-6 shadow-sm motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-2 motion-safe:delay-150 md:p-8">
+          <div className="flex items-center gap-3">
+            <div>
+              <h2 className="text-xl font-semibold md:text-2xl">Contact</h2>
+              <p className="mt-1 text-muted-foreground">Get in touch.</p>
+            </div>
+          </div>
+          <a
+            href="mailto:contact@maparium.pl"
+            className="mt-4 inline-block font-medium underline underline-offset-4"
+          >
+            contact@maparium.pl
+          </a>
+        </section>
+
         <footer className="flex justify-center pt-2 pb-4 motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-2 motion-safe:delay-200">
           <Button variant="ghost" size="sm" asChild>
             <Link to="/privacy">
