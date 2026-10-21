@@ -37,7 +37,34 @@ export default function AddressSearch({ apiKey, mapInstance }) {
   const [isOpen, setIsOpen] = useState(false);
   const wrapperRef = useRef(null);
   const requestIdRef = useRef(0);
+  const skipSearchRef = useRef(false);
   const listboxId = useId();
+  const [activeIndex, setActiveIndex] = useState(-1);
+
+  useEffect(() => {
+    setActiveIndex(-1);
+  }, [results]);
+
+  const handleKeyDown = (event) => {
+    if (event.key === "Escape") {
+      setIsOpen(false);
+      return;
+    }
+    if (results.length === 0) return;
+
+    if (event.key === "ArrowDown") {
+      event.preventDefault();
+      setIsOpen(true);
+      setActiveIndex((i) => (i + 1) % results.length);
+    } else if (event.key === "ArrowUp") {
+      event.preventDefault();
+      setIsOpen(true);
+      setActiveIndex((i) => (i <= 0 ? results.length - 1 : i - 1));
+    } else if (event.key === "Enter" && isOpen && activeIndex >= 0) {
+      event.preventDefault();
+      handleSelect(results[activeIndex]);
+    }
+  };
 
   useEffect(() => {
     if (!isOpen) {
@@ -57,6 +84,11 @@ export default function AddressSearch({ apiKey, mapInstance }) {
   }, [isOpen]);
 
   useEffect(() => {
+    if (skipSearchRef.current) {
+      skipSearchRef.current = false;
+      return undefined;
+    }
+
     const trimmedQuery = query.trim();
 
     if (!apiKey || !mapInstance || trimmedQuery.length < MIN_QUERY_LENGTH) {
@@ -124,7 +156,12 @@ export default function AddressSearch({ apiKey, mapInstance }) {
       });
     }
 
-    setQuery(feature?.place_name ?? feature?.text ?? "");
+    const nextQuery = feature?.place_name ?? feature?.text ?? "";
+    // Prevent the query change from triggering a new search that reopens the list
+    requestIdRef.current += 1;
+    skipSearchRef.current = nextQuery !== query;
+    setQuery(nextQuery);
+    setStatus("ready");
     setIsOpen(false);
   };
 
@@ -148,9 +185,15 @@ export default function AddressSearch({ apiKey, mapInstance }) {
       <div className="input-group flex min-w-0 items-center gap-2 px-3">
         <Search className="h-4 w-4 shrink-0 text-muted-foreground" />
         <input
-          type="search"
+          type="text"
           value={query}
           onChange={(event) => setQuery(event.target.value)}
+          onKeyDown={handleKeyDown}
+          aria-activedescendant={
+            isOpen && activeIndex >= 0
+              ? `${listboxId}-option-${activeIndex}`
+              : undefined
+          }
           onFocus={() => {
             if (
               results.length > 0 ||
@@ -207,15 +250,22 @@ export default function AddressSearch({ apiKey, mapInstance }) {
               role="listbox"
               className="mt-2 overflow-hidden p-1"
             >
-              {results.map((feature) => {
+              {results.map((feature, index) => {
                 const key = feature.id ?? feature.place_name ?? feature.text;
 
                 return (
-                  <li key={key}>
+                  <li
+                    key={key}
+                    id={`${listboxId}-option-${index}`}
+                    role="option"
+                    aria-selected={index === activeIndex}
+                  >
                     <button
                       type="button"
+                      tabIndex={-1}
                       onClick={() => handleSelect(feature)}
-                      className="selected flex w-full flex-col items-start rounded-xl px-3 py-2 text-left transition-colors hover:bg-accent/60 focus:bg-accent/60 focus:outline-none"
+                      onMouseEnter={() => setActiveIndex(index)}
+                      className={`selected flex w-full flex-col items-start rounded-xl px-3 py-2 text-left transition-colors hover:bg-accent/60 focus:bg-accent/60 focus:outline-none ${index === activeIndex ? "bg-accent/60" : ""}`}
                     >
                       <span className="primary text-sm font-medium">
                         {feature.place_name ?? feature.text ?? "Unnamed place"}
