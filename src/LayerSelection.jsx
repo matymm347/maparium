@@ -49,6 +49,9 @@ export default function LayerSelection({
             className="data-[state=checked]:bg-blue-600 data-[state=unchecked]:bg-gray-300 dark:data-[state=checked]:bg-blue-500 dark:data-[state=unchecked]:bg-gray-700"
           />
         </div>
+        <p className="text-xs text-muted-foreground">
+          Layers data as of 22 October 2026
+        </p>
       </div>
       <Accordion
         type="single"
